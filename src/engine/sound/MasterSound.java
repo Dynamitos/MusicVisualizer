@@ -14,11 +14,13 @@ import image.MasterRenderer;
 public class MasterSound {
 	private long duration;
 	private float[] values;
+	private float[] bands;
 	private Minim minim;
 	private AudioPlayer song;
 	private FFT fft;
 	private float[][] prevValues;
 	private int SMOOTHING_LEVEL = 8;
+	private float bassGain = 0;
 	public static final int TESS_LEVEL = 16;
 
 	public String sketchPath(String fileName) {
@@ -41,6 +43,7 @@ public class MasterSound {
 		fft = new FFT(song.bufferSize(), song.sampleRate());
 		MasterRenderer.NUM_SAMPLES = 64;
 		values = new float[MasterRenderer.NUM_SAMPLES * TESS_LEVEL];
+		bands = new float[MasterRenderer.NUM_SAMPLES];
 		prevValues = new float[SMOOTHING_LEVEL][];
 		for (int i = 0; i < SMOOTHING_LEVEL; i++) {
 			prevValues[i] = new float[values.length];
@@ -55,10 +58,11 @@ public class MasterSound {
 		Arrays.fill(values, 0);
 		for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
 			float value = fft.getBand(i);
+			bands[i] = value/1000;
 			if (value > values[i * TESS_LEVEL]) {
 				values[i * TESS_LEVEL + TESS_LEVEL / 2] = value;
 			} else {
-				values[i * TESS_LEVEL + TESS_LEVEL / 2] -= 1f;
+				values[i * TESS_LEVEL + TESS_LEVEL / 2] /= 2;
 			}
 		}
 		for(int i = 0; i < MasterRenderer.NUM_SAMPLES-1; i++)
@@ -71,11 +75,20 @@ public class MasterSound {
 				values[i*TESS_LEVEL+TESS_LEVEL/2+j] = Math.max(temp, values[i*TESS_LEVEL+TESS_LEVEL/2+j]);
 			}
 		}
+		bassGain = 0;
+		for(int i = 0; i < bands.length; i++)
+		{
+			bassGain+=bands[i]/(i+2);
+		}
 		for (int i = 0; i < values.length; i++) {
 			values[i] /= 1000.0f;
 			if (values[i] < 0)
 				values[i] = 0;
 		}
+	}
+	public float getBass()
+	{
+		return bassGain;
 	}
 	public void end() {
 		song.close();
@@ -89,13 +102,6 @@ public class MasterSound {
 		return values;
 	}
 
-	public float getMean() {
-		return 0;
-	}
-
-	public float getAbsoluteMean() {
-		return 0;
-	}
 
 	public long getDuration() {
 		return duration;

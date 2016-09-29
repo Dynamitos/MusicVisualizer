@@ -1,6 +1,8 @@
 package engine.renderEngine;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.vulkan.VK10.*;
+import static org.lwjgl.vulkan.VK.*;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
@@ -13,6 +15,9 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
+import org.lwjgl.vulkan.VkApplicationInfo;
+import org.lwjgl.vulkan.VkInstance;
+import org.lwjgl.vulkan.VkInstanceCreateInfo;
 
 import engine.math.Vector3f;
 import engine.toolbox.Input;
@@ -34,6 +39,8 @@ public class DisplayManager {
 	private static boolean mouseLocked = false;
 
 	private static float mouseSpeed = 0.1f;
+	private static int nbFrames;
+	private static float lastPrintTime;
 
 	public static Input input;
 	public static MouseInput mouseWheel;
@@ -42,13 +49,14 @@ public class DisplayManager {
 	public static float deltaX, deltaY;
 	public static boolean buffering = false;
 
+	public static VkInstance instance;
+
 	public static void setDimension(Dimension dimension) {
 		WIDTH = dimension.getWIDTH();
 		HEIGHT = dimension.getHEIGHT();
 	}
 
 	public static void createDisplay() {
-
 		System.setProperty("java.library.path", "C:\\Program Files\\Java\\lwjgl\\native");
 		if (!glfwInit())
 			throw new IllegalStateException();
@@ -68,14 +76,24 @@ public class DisplayManager {
 		glfwShowWindow(window);
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
-		glfwSwapInterval(1);
+		//glfwSwapInterval(1);
 		glEnable(GL_MULTISAMPLE);
 		lastFrameTime = System.currentTimeMillis();
 		lightPosition = new Vector3f(0, 0, -1);
+		lastPrintTime = (float) glfwGetTime();
+
 	}
 
 	public static void updateDisplay() {
 		glfwPollEvents();
+		double currentTime = glfwGetTime();
+		nbFrames++;
+		if(currentTime - lastPrintTime >= 1.0f)
+		{
+			System.out.println(1000.0f/(double)nbFrames+" ms per frame");
+			nbFrames = 0;
+			lastPrintTime += 1.0f;
+		}
 		glfwSwapBuffers(window);
 		updateMouse();
 		long currentFrameTime = System.currentTimeMillis();
@@ -105,7 +123,7 @@ public class DisplayManager {
 			deltaY = (float) (newY - (HEIGHT / 2)) * mouseSpeed;
 
 			glfwSetCursorPos(window, WIDTH / 2, HEIGHT / 2);
-		
+
 	}
 
 	public static float getFrameTimeSeconds() {

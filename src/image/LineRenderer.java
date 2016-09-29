@@ -22,6 +22,7 @@ import org.lwjglx.BufferUtils;
 
 import engine.math.Vector2f;
 import engine.math.Vector4f;
+import engine.sound.MasterSound;
 
 public class LineRenderer {
 	private int vaoID;
@@ -29,6 +30,7 @@ public class LineRenderer {
 	private LineShader shader;
 	private Vector4f lineColor;
 	private Vector2f lineNormal;
+	FloatBuffer dataBuffer;
 	public LineRenderer(int numPoints, Line line)
 	{
 		this.lineColor = line.color;
@@ -61,6 +63,7 @@ public class LineRenderer {
 		glVertexAttribPointer(1, 1, GL_FLOAT, false, 0, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
+		dataBuffer = BufferUtils.createFloatBuffer(MasterRenderer.NUM_SAMPLES * MasterSound.TESS_LEVEL);
 	}
 	public void render(float[] data)
 	{
@@ -68,11 +71,10 @@ public class LineRenderer {
 		shader.loadColor(lineColor);
 		glBindVertexArray(vaoID);
 		glBindBuffer(GL_ARRAY_BUFFER, displacementVBO);
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
-		buffer.put(data);
-		buffer.flip();
+		dataBuffer.put(data);
+		dataBuffer.flip();
 		glBufferData(GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(data.length), GL_STREAM_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, dataBuffer);
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glDrawArrays(GL_LINE_STRIP, 0, data.length);

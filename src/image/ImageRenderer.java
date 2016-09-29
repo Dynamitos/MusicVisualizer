@@ -73,20 +73,23 @@ public class ImageRenderer extends Thread {
 		shader.loadProjection(projectionMatrix);
 		shader.loadIntensity(intensityScale, intensityOffset);
 		shader.stop();
-
+		transformationMatrix = new Matrix4f();
 	}
 
 	public void render(float mean, FloatBuffer data) {
 		shader.start();
 		cam.move();
 		if (isScaling) {
-			transformationMatrix = Maths.createTransformationMatrix(new Vector2f(0, 0),
-					new Vector2f(1 + mean, 1 + mean));
+			Maths.createTransformationMatrix(transformationMatrix, 0, 0, 1 + mean, 1 + mean);
+			//transformationMatrix = Maths.createTransformationMatrix(new Vector2f(0, 0),
+			//		new Vector2f(1 + mean, 1 + mean));
 		} else {
-			transformationMatrix = Maths.createTransformationMatrix(new Vector2f(0, 0), new Vector2f(1, 1));
+			Maths.createTransformationMatrix(transformationMatrix, 0, 0, 1, 1);
+			//transformationMatrix = Maths.createTransformationMatrix(new Vector2f(0, 0), new Vector2f(1, 1));
 		}
 		shader.loadTransformationMatrix(transformationMatrix);
 		shader.loadViewMatrix(Maths.createViewMatrix(cam));
+
 
 		// System.out.println(String.format("%.5f | %.5f", minAVG, maxAVG));
 		glBindVertexArray(rawModel.getVaoID());

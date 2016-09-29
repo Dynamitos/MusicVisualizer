@@ -41,4 +41,16 @@ public class Maths {
 		Matrix4f.scale(new Vector3f(scale.x, scale.y, 1f), matrix, matrix);
 		return matrix;
 	}
+	private static Vector2f translation = new Vector2f();
+	private static Vector3f scale = new Vector3f(0, 0, 1);
+	public static void createTransformationMatrix(Matrix4f transformationMatrix, int rx, int ry, float sx,
+			float sy) {
+		transformationMatrix.setIdentity();
+		translation.x = rx;
+		translation.y = ry;
+		scale.x = sx;
+		scale.y = sy;
+		Matrix4f.translate(translation, transformationMatrix, transformationMatrix);
+		Matrix4f.scale(scale, transformationMatrix, transformationMatrix);
+	}
 }

@@ -235,6 +235,7 @@ public class MusicMain extends Application {
 		Input.keys[GLFW.GLFW_KEY_ESCAPE] = false;
 	}
 
+	
 	private boolean checkProfile() {
 		if (currentProfile.getMusicFile() == null) {
 			JOptionPane.showMessageDialog(null, "Please choose a song with the 'Browse' Button.");

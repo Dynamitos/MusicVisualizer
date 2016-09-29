@@ -68,10 +68,11 @@ public class MasterRenderer {
 	public void render() {
 		sound.run();
 		float[] data = sound.getValues();
+		float bassGain = sound.getBass();
 		musicBuffer.put(data);
 		musicBuffer.flip();
 		postRenderer.bindPostProcessor();
-		image.render(data[16], musicBuffer);
+		image.render(bassGain, musicBuffer);
 
 		for (LineRenderer f : lines) {
 			f.render(data);
@@ -93,10 +94,10 @@ public class MasterRenderer {
 			currentText++;
 			Input.keys[GLFW.GLFW_KEY_ENTER] = false;
 		}
-		System.out.println(currentText);
+		//System.out.println(currentText);
 		DisplayManager.updateDisplay();
+		data = null;
 	}
-
 	public void terminate() {
 		sound.end();
 		DisplayManager.closeDisplay();
