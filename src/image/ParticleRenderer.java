@@ -18,7 +18,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.nio.FloatBuffer;
 
-import org.lwjglx.BufferUtils;
+import org.lwjgl.BufferUtils;
 
 import engine.math.Matrix4f;
 import engine.math.Vector3f;

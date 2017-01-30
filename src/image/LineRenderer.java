@@ -18,9 +18,8 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.nio.FloatBuffer;
 
-import org.lwjglx.BufferUtils;
+import org.lwjgl.BufferUtils;
 
-import engine.math.Vector2f;
 import engine.math.Vector4f;
 import engine.sound.MasterSound;
 
@@ -29,7 +28,6 @@ public class LineRenderer {
 	private int displacementVBO;
 	private LineShader shader;
 	private Vector4f lineColor;
-	private Vector2f lineNormal;
 	FloatBuffer dataBuffer;
 	public LineRenderer(int numPoints, Line line)
 	{

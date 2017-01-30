@@ -14,8 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.datatype.Artwork;
 import org.lwjgl.glfw.GLFW;
 
 import engine.math.Vector2f;
@@ -25,7 +31,6 @@ import engine.renderEngine.DisplayManager;
 import engine.toolbox.Input;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -45,7 +50,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class MusicMain extends Application {
-	private File f;
+	private File musicFile;
 	private String image;
 	private Profile currentProfile;
 	private Map<String, Profile> profiles;
@@ -57,15 +62,16 @@ public class MusicMain extends Application {
 	private Slider intensitySlider;
 	private ComboBox<Dimension> resolutionBox;
 	private TextField profileTextBox;
-	public static String RES_PATH;
+	private boolean isRunning = false;
+	public static String SHADER_PATH;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+
 		primaryStage.setTitle("OpenGL Music Visualizer");
 		profiles = new HashMap<>();
-		currentProfile = new Profile("Untitled Profile", null, new ArrayList<>(), "", null, null, 0, 0, false, false,
-				0);
-		RES_PATH = "";
+		currentProfile = new Profile("Untitled Profile", null, new ArrayList<>(), "", "", null, 0, 0, false, false, 0);
+		SHADER_PATH = "";
 
 		primaryStage.show();
 		GridPane grid = new GridPane();
@@ -104,6 +110,11 @@ public class MusicMain extends Application {
 		java.awt.Dimension temp = Toolkit.getDefaultToolkit().getScreenSize();
 		Set<Dimension> dimensions = new HashSet<>();
 		dimensions.add(new Dimension((int) temp.getWidth(), (int) temp.getHeight()));
+		dimensions.add(new Dimension(640, 360));
+		dimensions.add(new Dimension(960, 540));
+		dimensions.add(new Dimension(1024, 600));
+		dimensions.add(new Dimension(1270, 720));
+		dimensions.add(new Dimension(1600, 900));
 		dimensions.add(new Dimension(1920, 1080));
 		dimensions.add(new Dimension(3840, 2160));
 		resolutionBox.getItems().addAll(dimensions);
@@ -149,10 +160,10 @@ public class MusicMain extends Application {
 		Button saveButton = new Button("Save Profile");
 		grid.add(saveButton, 1, 11);
 
-		Button btn = new Button("Finished");
+		Button finishButton = new Button("Finished");
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().add(btn);
+		hbBtn.getChildren().add(finishButton);
 		grid.add(hbBtn, 1, 12);
 		imageChooser = new FileChooser();
 		imageChooser.setInitialDirectory(new File("./"));
@@ -163,79 +174,89 @@ public class MusicMain extends Application {
 		chooser.setInitialFileName("Nightcore - Faded.mp3");
 		chooser.getExtensionFilters().add(new ExtensionFilter("MPEG3 Files (*.mp3)", "*.mp3"));
 		chooser.getExtensionFilters().add(new ExtensionFilter("Wavefront Files (*.wav)", "*.wav"));
-		lineButton.setOnAction((ActionEvent e) ->{
-				OverlayManager.startManager(currentProfile);
-			
+		lineButton.setOnAction((ActionEvent e) -> {
+			OverlayManager.startManager(currentProfile);
+
 		});
-		musicButton.setOnAction((ActionEvent e) ->{
-				setFile(chooser.showOpenDialog(null));
-				update();
-			
+		musicButton.setOnAction((ActionEvent e) -> {
+			setMusicFile(chooser.showOpenDialog(null));
+			update();
+
 		});
-		imageButton.setOnAction((ActionEvent e) ->{
+		imageButton.setOnAction((ActionEvent e) -> {
+			try {
 				setImage(imageChooser.showOpenDialog(null).getAbsolutePath());
-				update();
-			
-		});
-		loadButton.setOnAction((ActionEvent e) ->{
+			} catch (NullPointerException ex) {
+				return;
+			}
+			update();
 
-				FileChooser profileSaver = new FileChooser();
-				profileSaver.setInitialDirectory(new File("./"));
-				profileSaver.getExtensionFilters().add(new ExtensionFilter("Profile Files (*.prof)", "*.prof"));
-				File file = profileSaver.showOpenDialog(null);
-				if (file == null)
-					return;
-				currentProfile = loadProfile(file);
+		});
+		loadButton.setOnAction((ActionEvent e) -> {
 
-				profileNames.getItems().add(currentProfile.getName());
-				profiles.put(currentProfile.getName(), currentProfile);
-				updateComponents();
-			
+			FileChooser profileSaver = new FileChooser();
+			profileSaver.setInitialDirectory(new File("./"));
+			profileSaver.getExtensionFilters().add(new ExtensionFilter("Profile Files (*.prof)", "*.prof"));
+			File file = profileSaver.showOpenDialog(null);
+			if (file == null)
+				return;
+			currentProfile = loadProfile(file);
+
+			profileNames.getItems().add(currentProfile.getName());
+			profiles.put(currentProfile.getName(), currentProfile);
+			updateComponents();
+
 		});
-		saveButton.setOnAction((ActionEvent e) ->{
-				update();
-				FileChooser profileOpener = new FileChooser();
-				profileOpener.setInitialDirectory(new File("./"));
-				profileOpener.initialFileNameProperty().set(currentProfile.getName()+".prof");
-				profileOpener.getExtensionFilters().add(new ExtensionFilter("Profile Files (*.prof)", "*.prof"));
-				File f = profileOpener.showSaveDialog(null);
-				if (f == null)
-					return;
-				System.out.println(f);
-				saveProfile(currentProfile, f);
-			
+		saveButton.setOnAction((ActionEvent e) -> {
+			update();
+			FileChooser profileOpener = new FileChooser();
+			profileOpener.setInitialDirectory(new File("./"));
+			profileOpener.initialFileNameProperty().set(currentProfile.getName() + ".prof");
+			profileOpener.getExtensionFilters().add(new ExtensionFilter("Profile Files (*.prof)", "*.prof"));
+			File f = profileOpener.showSaveDialog(null);
+			if (f == null)
+				return;
+			System.out.println(f);
+			saveProfile(currentProfile, f);
+
 		});
-		profileNames.setOnAction((ActionEvent e) ->{
-				update();
-			
+		profileNames.setOnAction((ActionEvent e) -> {
+			update();
+
 		});
-		btn.setOnAction((ActionEvent e)-> {
-				OverlayManager.close();
-				update();
+		finishButton.setOnAction((ActionEvent e) -> {
+			OverlayManager.close();
+			update();
+			if (!isRunning)
 				initializeRenderer();
-			
+			else
+				updateRenderer();
 		});
-		primaryStage.setOnCloseRequest((WindowEvent e) ->{
-				OverlayManager.close();
-				System.exit(0);
-			
+		primaryStage.setOnCloseRequest((WindowEvent e) -> {
+			OverlayManager.close();
+			System.exit(0);
+
 		});
+	}
+
+	private void updateRenderer() {
+		MasterRenderer.updateProfile(currentProfile);
 	}
 
 	private void initializeRenderer() {
-		if(!checkProfile())
+		if (!checkProfile())
 			return;
 		DisplayManager.setDimension(currentProfile.getResolution());
 		MasterRenderer renderer = new MasterRenderer(currentProfile);
-
-		while (!Input.keys[GLFW.GLFW_KEY_ESCAPE] || DisplayManager.shouldClose()) {
+		isRunning = true;
+		while (!Input.keys[GLFW.GLFW_KEY_ESCAPE] && !DisplayManager.shouldClose()) {
 			renderer.render();
 		}
 		renderer.terminate();
+		isRunning = false;
 		Input.keys[GLFW.GLFW_KEY_ESCAPE] = false;
 	}
 
-	
 	private boolean checkProfile() {
 		if (currentProfile.getMusicFile() == null) {
 			JOptionPane.showMessageDialog(null, "Please choose a song with the 'Browse' Button.");
@@ -245,8 +266,7 @@ public class MusicMain extends Application {
 			JOptionPane.showMessageDialog(null, "Please select a background image with the 'Browse' Button");
 			return false;
 		}
-		if(currentProfile.getOverlay() == null)
-		{
+		if (currentProfile.getOverlay() == null) {
 			JOptionPane.showMessageDialog(null, "Please select an overlay image from the Overlay Manager");
 			return false;
 		}
@@ -270,8 +290,8 @@ public class MusicMain extends Application {
 			float intensityOffset = Float.parseFloat(tokens[counter++]);
 			boolean scaling = Boolean.parseBoolean(tokens[counter++]);
 			boolean vSync = Boolean.parseBoolean(tokens[counter++]);
-			File overlay = new File(tokens[counter++]);
-			this.f = music;
+			String overlay = tokens[counter++];
+			this.musicFile = music;
 			this.image = image;
 			this.profileTextBox.setText(name);
 			int numSamples = Integer.parseInt(tokens[counter++]);
@@ -352,22 +372,48 @@ public class MusicMain extends Application {
 		currentProfile.setName(profileNames.getValue());
 		currentProfile.setResolution(resolutionBox.getValue());
 		currentProfile.setScaling(scalingCheckBox.isSelected());
-		currentProfile.setMusicFile(f);
+		currentProfile.setMusicFile(musicFile);
 		currentProfile.setvSync(true);
 		currentProfile.setName(profileTextBox.getText());
 	}
 
-	private void setFile(File f) {
-		this.f = f;
+	private void setMusicFile(File f) {
+		this.musicFile = f;
+		if (currentProfile.getImage().equals("")) {
+			try {
+
+				AudioFile audioFile = AudioFileIO.read(f);
+				Tag t = audioFile.getTag();
+				Artwork artwork = t.getFirstArtwork();
+				File out = new File(t.getFirst(FieldKey.ARTIST) + ".png");
+				ImageIO.write(artwork.getImage(), "PNG", out);
+				this.image = out.getAbsolutePath();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (currentProfile.getName().equals("Untitled Profile")) {
+			try {
+
+				AudioFile audioFile = AudioFileIO.read(f);
+				Tag t = audioFile.getTag();
+				profileNames.setValue(t.getFirst(FieldKey.TITLE));
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void setImage(String image) {
 		this.image = image;
-		currentProfile.setImage(image);
 	}
 
 	public static void main(String[] args) {
 		System.setProperty("file.separator", "/");
+		// System.setProperty("org.lwjgl.librarypath", "/target/natives");
 		launch(args);
 	}
 }

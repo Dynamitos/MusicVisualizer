@@ -9,6 +9,7 @@ import java.util.Arrays;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import ddf.minim.analysis.FFT;
+import engine.renderEngine.DisplayManager;
 import image.MasterRenderer;
 
 public class MasterSound {
@@ -58,38 +59,41 @@ public class MasterSound {
 		Arrays.fill(values, 0);
 		for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
 			float value = fft.getBand(i);
-			bands[i] = value/1000;
+			bands[i] = value / 1000;
 			if (value > values[i * TESS_LEVEL]) {
 				values[i * TESS_LEVEL + TESS_LEVEL / 2] = value;
 			} else {
-				values[i * TESS_LEVEL + TESS_LEVEL / 2] /= 2;
+				values[i * TESS_LEVEL + TESS_LEVEL / 2] -= 0.0001f;
 			}
 		}
-		for(int i = 0; i < MasterRenderer.NUM_SAMPLES-1; i++)
-		{
-			float value = values[i*TESS_LEVEL+TESS_LEVEL/2];
-			for(int j = -TESS_LEVEL/2; j<=TESS_LEVEL/2; j++)
-			{
-				float temp = (float) (value-Math.pow(j*1.0f, 2f));
-				if(j!=0)
-				values[i*TESS_LEVEL+TESS_LEVEL/2+j] = Math.max(temp, values[i*TESS_LEVEL+TESS_LEVEL/2+j]);
+		for (int i = 0; i < MasterRenderer.NUM_SAMPLES - 1; i++) {
+			float value = values[i * TESS_LEVEL + TESS_LEVEL / 2];
+			for (int j = -TESS_LEVEL / 2; j <= TESS_LEVEL / 2; j++) {
+				float temp = (float) (value - Math.pow(j * 1.0f, 2f));
+				if (j != 0)
+					values[i * TESS_LEVEL + TESS_LEVEL / 2 + j] = Math.max(temp,
+							values[i * TESS_LEVEL + TESS_LEVEL / 2 + j]);
 			}
 		}
-		bassGain = 0;
-		for(int i = 0; i < bands.length; i++)
-		{
-			bassGain+=bands[i]/(i+2);
+		float tempGain = 0;
+		for (int i = 0; i < bands.length; i++) {
+			tempGain += bands[i] / (1 + i * i);
 		}
+		if (tempGain < bassGain)
+			bassGain -= 0.1f*DisplayManager.getFrameTimeSeconds();
+		else
+			bassGain = tempGain;
 		for (int i = 0; i < values.length; i++) {
 			values[i] /= 1000.0f;
 			if (values[i] < 0)
 				values[i] = 0;
 		}
 	}
-	public float getBass()
-	{
+
+	public float getBass() {
 		return bassGain;
 	}
+
 	public void end() {
 		song.close();
 	}
@@ -102,7 +106,6 @@ public class MasterSound {
 		return values;
 	}
 
-
 	public long getDuration() {
 		return duration;
 	}
@@ -114,7 +117,8 @@ public class MasterSound {
 	public void pause() {
 		song.pause();
 	}
-	public void resume(){
+
+	public void resume() {
 		song.play();
 	}
 }

@@ -31,6 +31,7 @@ public class EdgeDetector {
 		}
 		return null;
 	}
+	@SuppressWarnings("unused")
 	private int[] getNearPixels(BufferedImage image, int startX, int startY)
 	{
 		int[] pixels = new int[8];

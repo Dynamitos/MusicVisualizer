@@ -3,8 +3,8 @@ package image;
 import engine.shaders.ShaderProgram;
 
 public class PostShader extends ShaderProgram {
-	private static String VERT_FILE = MusicMain.RES_PATH + "/shaders/postVertex.shader",
-			FRAG_FILE = MusicMain.RES_PATH + "/shaders/postFragment.shader";
+	private static String VERT_FILE = MusicMain.SHADER_PATH + "/shaders/postVertex.shader",
+			FRAG_FILE = MusicMain.SHADER_PATH + "/shaders/postFragment.shader";
 	private int location_texture;
 	private int location_time;
 	private int location_overlay;

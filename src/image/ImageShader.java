@@ -1,16 +1,11 @@
 package image;
 
-import java.nio.FloatBuffer;
 import java.util.List;
 
-import org.lwjgl.BufferUtils;
-
-import engine.entities.Camera;
 import engine.math.Matrix4f;
 import engine.math.Vector3f;
 import engine.math.Vector4f;
 import engine.shaders.ShaderProgram;
-import engine.sound.MasterSound;
 
 public class ImageShader extends ShaderProgram {
 	private class LineLocation {
@@ -18,8 +13,8 @@ public class ImageShader extends ShaderProgram {
 		private int location_color;
 	}
 
-	private static final String VERT_FILE = MusicMain.RES_PATH + "/shaders/imageVertex.shader",
-			FRAG_FILE = MusicMain.RES_PATH + "/shaders/imageFragment.shader";
+	private static final String VERT_FILE = MusicMain.SHADER_PATH + "/shaders/imageVertex.shader",
+			FRAG_FILE = MusicMain.SHADER_PATH + "/shaders/imageFragment.shader";
 	private int location_texture;
 	private int location_transformationMatrix;
 	private int location_lightPosition;

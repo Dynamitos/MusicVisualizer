@@ -1,18 +1,13 @@
 package image;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
-import com.xuggle.mediatool.IMediaReader;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
-import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IRational;
-import com.xuggle.xuggler.IStream;
-import com.xuggle.xuggler.IStreamCoder;
 
 import engine.renderEngine.DisplayManager;
 

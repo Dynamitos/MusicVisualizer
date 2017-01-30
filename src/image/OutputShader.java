@@ -3,8 +3,8 @@ package image;
 import engine.shaders.ShaderProgram;
 
 public class OutputShader extends ShaderProgram {
-	private static String VERT_FILE = MusicMain.RES_PATH + "/shaders/outputVertex.shader",
-			FRAG_FILE = MusicMain.RES_PATH + "/shaders/outputFragment.shader";
+	private static String VERT_FILE = MusicMain.SHADER_PATH + "/shaders/outputVertex.shader",
+			FRAG_FILE = MusicMain.SHADER_PATH + "/shaders/outputFragment.shader";
 	private int location_texture;
 
 	public OutputShader() {

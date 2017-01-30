@@ -1,12 +1,1 @@
-*.mp3
-*.png
-*.jpg
-*.prof
-*.log
-*.ucls
-*.fnt
-*.ttf
-*.wav
-*.db
-*.ini
-/Undertale Soundtrack/
+/target/

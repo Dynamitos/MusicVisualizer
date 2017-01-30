@@ -85,7 +85,6 @@ public class Loader {
 		return new RawModel(vaoID, positions.length / dimensions, null);
 	}
 
-
 	public int loadCubeMap(String[] textureFiles) {
 		int texID = glGenTextures();
 		glActiveTexture(GL_TEXTURE0);
@@ -105,20 +104,31 @@ public class Loader {
 		int width = 0;
 		int height = 0;
 		ByteBuffer buffer = null;
+		InputStream in = null;
 		try {
-			FileInputStream in = new FileInputStream(fileName);
+			in = new FileInputStream(fileName);
+		} catch (Exception e) {
+			System.out.println("Couldnt find a image in file system, searching in binary tree");
+			System.out.println(fileName);
+		}
+		if(in == null)
+			in = Class.class.getResourceAsStream(fileName);
+		try {
 			PNGDecoder decoder = new PNGDecoder(in);
 			width = decoder.getWidth();
 			height = decoder.getHeight();
 			buffer = ByteBuffer.allocateDirect(4 * width * height);
 			decoder.decode(buffer, width * 4, Format.RGBA);
 			buffer.flip();
-			in.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("Tried to load texture " + fileName + ", didn't work");
-			System.exit(-1);
 		}
+		try {
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return new TextureData(buffer, width, height);
 	}
 

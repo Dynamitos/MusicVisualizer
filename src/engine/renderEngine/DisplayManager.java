@@ -1,9 +1,27 @@
 package engine.renderEngine;
 
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.vulkan.VK10.*;
-import static org.lwjgl.vulkan.VK.*;
-import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.GLFW_SAMPLES;
+import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
+import static org.lwjgl.glfw.GLFW.glfwGetMouseButton;
+import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
+import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -11,13 +29,8 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import java.nio.DoubleBuffer;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GLCapabilities;
-import org.lwjgl.vulkan.VkApplicationInfo;
-import org.lwjgl.vulkan.VkInstance;
-import org.lwjgl.vulkan.VkInstanceCreateInfo;
 
 import engine.math.Vector3f;
 import engine.toolbox.Input;
@@ -49,15 +62,14 @@ public class DisplayManager {
 	public static float deltaX, deltaY;
 	public static boolean buffering = false;
 
-	public static VkInstance instance;
-
 	public static void setDimension(Dimension dimension) {
 		WIDTH = dimension.getWIDTH();
 		HEIGHT = dimension.getHEIGHT();
 	}
 
 	public static void createDisplay() {
-		System.setProperty("java.library.path", "C:\\Program Files\\Java\\lwjgl\\native");
+		// System.setProperty("java.library.path", "C:\\Program
+		// Files\\Java\\lwjgl\\native");
 		if (!glfwInit())
 			throw new IllegalStateException();
 		glfwWindowHint(GLFW_SAMPLES, 4);
@@ -72,11 +84,11 @@ public class DisplayManager {
 		input = new Input();
 		glfwSetKeyCallback(window, input);
 		glfwSetScrollCallback(window, mouseWheel);
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		glfwShowWindow(window);
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
-		//glfwSwapInterval(1);
+		glfwSwapInterval(0);
 		glEnable(GL_MULTISAMPLE);
 		lastFrameTime = System.currentTimeMillis();
 		lightPosition = new Vector3f(0, 0, -1);
@@ -88,19 +100,19 @@ public class DisplayManager {
 		glfwPollEvents();
 		double currentTime = glfwGetTime();
 		nbFrames++;
-		if(currentTime - lastPrintTime >= 1.0f)
-		{
-			System.out.println(1000.0f/(double)nbFrames+" ms per frame");
+		if (currentTime - lastPrintTime >= 1.0f) {
+			System.out.println(1000.0f / (double) nbFrames + " ms per frame");
 			nbFrames = 0;
 			lastPrintTime += 1.0f;
 		}
 		glfwSwapBuffers(window);
-		updateMouse();
+		// updateMouse();
 		long currentFrameTime = System.currentTimeMillis();
 		delta = (currentFrameTime - lastFrameTime) / 1000f;
 		lastFrameTime = currentFrameTime;
 	}
 
+	@SuppressWarnings("unused")
 	private static void updateMouse() {
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
 			glfwSetCursorPos(window, WIDTH / 2, HEIGHT / 2);
@@ -108,21 +120,21 @@ public class DisplayManager {
 			mouseLocked = true;
 		}
 
-			DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
-			DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
+		DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
+		DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
 
-			glfwGetCursorPos(window, x, y);
+		glfwGetCursorPos(window, x, y);
 
-			x.rewind();
-			y.rewind();
+		x.rewind();
+		y.rewind();
 
-			newX = x.get();
-			newY = y.get();
+		newX = x.get();
+		newY = y.get();
 
-			deltaX = (float) (newX - (WIDTH / 2)) * mouseSpeed;
-			deltaY = (float) (newY - (HEIGHT / 2)) * mouseSpeed;
+		deltaX = (float) (newX - (WIDTH / 2)) * mouseSpeed;
+		deltaY = (float) (newY - (HEIGHT / 2)) * mouseSpeed;
 
-			glfwSetCursorPos(window, WIDTH / 2, HEIGHT / 2);
+		glfwSetCursorPos(window, WIDTH / 2, HEIGHT / 2);
 
 	}
 

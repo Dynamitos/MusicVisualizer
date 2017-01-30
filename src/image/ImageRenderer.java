@@ -1,52 +1,36 @@
 package image;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_RED;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_1D;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLE_STRIP;
 import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexImage1D;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
-import static image.MasterRenderer.*;
-
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.lwjgl.glfw.GLFW;
-import org.lwjglx.BufferUtils;
 
 import engine.entities.Camera;
 import engine.math.Matrix4f;
-import engine.math.Vector2f;
 import engine.math.Vector3f;
-import engine.math.Vector4f;
 import engine.model.RawModel;
 import engine.renderEngine.DisplayManager;
 import engine.renderEngine.Loader;
 import engine.sound.MasterSound;
-import engine.toolbox.Input;
 import engine.toolbox.Maths;
-import image.Line;
 
 public class ImageRenderer extends Thread {
 	private Matrix4f transformationMatrix;
 	private Matrix4f projectionMatrix;
-	private Matrix4f viewMatrix;
 	private ImageShader shader;
 	private boolean isScaling;
 	private RawModel rawModel;

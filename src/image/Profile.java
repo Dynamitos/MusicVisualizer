@@ -1,16 +1,10 @@
 package image;
 
 import java.io.File;
-import java.sql.Time;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import engine.font.FontType;
-import engine.font.GUIText;
 import engine.renderEngine.Dimension;
-import engine.renderEngine.Loader;
 
 public class Profile {
 	private File musicFile;
@@ -20,10 +14,10 @@ public class Profile {
 	private boolean scaling;
 	private boolean vSync;
 	private String name;
-	private File overlay;
+	private String overlay;
 	private List<Line> lines;
 	private int numSamples;
-	private FontType font;
+	//private FontType font;
 	private List<String> texts;
 
 	/**
@@ -40,7 +34,7 @@ public class Profile {
 	 * @param vSync Flag to indicate if VSync is turned on
 	 * @param numSamples The number of points per fft-line
 	 */
-	public Profile(String name, File musicFile, List<Line> lines, String image, File overlay, Dimension resolution,
+	public Profile(String name, File musicFile, List<Line> lines, String image, String overlay, Dimension resolution,
 			float intensityScale, float intensityOffset, boolean scaling, boolean vSync, int numSamples) {
 		this.setNumSamples(numSamples);
 		this.musicFile = musicFile;
@@ -141,11 +135,11 @@ public class Profile {
 		this.numSamples = numSamples;
 	}
 
-	public File getOverlay() {
+	public String getOverlay() {
 		return overlay;
 	}
 
-	public void setOverlay(File overlay) {
+	public void setOverlay(String overlay) {
 		this.overlay = overlay;
 	}
 

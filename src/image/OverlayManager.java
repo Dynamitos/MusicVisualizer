@@ -3,13 +3,13 @@ package image;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import engine.math.Vector2f;
 import engine.math.Vector4f;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -67,9 +67,15 @@ public class OverlayManager {
 			System.out.println(p.getImage() + " not found");
 		}
 		try {
-			if (p.getOverlay() != null)
+			if (!p.getOverlay().equals(""))
 				overlayImage = new Image(new FileInputStream(p.getOverlay()));
+			else {
+				InputStream in = Class.class.getResourceAsStream("/tex/Overlay.png");
+				overlayImage = new Image(in);
+				p.setOverlay("/tex/Overlay.png");
+			}
 		} catch (FileNotFoundException e1) {
+			System.out.println(p.getOverlay()+": Not found");
 			e1.printStackTrace();
 		}
 		canvas = new Canvas(WIDTH, HEIGHT);
@@ -97,11 +103,18 @@ public class OverlayManager {
 		gridTools.add(new Label("Edit Lyrics: "), 0, 2);
 		Button textButton = new Button("Edit...");
 		gridTools.add(textButton, 1, 2);
+		Button clearButton = new Button("Clear");
+		gridTools.add(clearButton, 0, 3);
 		Button finishButton = new Button("Finish");
-		gridTools.add(finishButton, 0, 3, 2, 1);
+		gridTools.add(finishButton, 1, 3);
+
+		clearButton.setOnAction((ActionEvent e) -> {
+			lines.clear();
+			repaint();
+		});
 
 		overlayButton.setOnAction((ActionEvent e) -> {
-			setOverlay(overlayChooser.showOpenDialog(null));
+			setOverlay(overlayChooser.showOpenDialog(null).getAbsolutePath());
 
 		});
 		imageButton.setOnAction((ActionEvent e) -> {
@@ -175,13 +188,13 @@ public class OverlayManager {
 			stageOverlay.close();
 	}
 
-	private static void setOverlay(File f) {
+	private static void setOverlay(String f) {
 		if (f == null)
 			return;
 		try {
 			overlayImage = new Image(new FileInputStream(f));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			overlayImage = new Image(Class.class.getResourceAsStream(f));
 		}
 		profile.setOverlay(f);
 		repaint();
