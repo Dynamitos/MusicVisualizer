@@ -1,5 +1,6 @@
 package image;
 
+
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,6 +25,8 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.lwjgl.glfw.GLFW;
 
+import com.aquafx_project.AquaFx;
+
 import engine.math.Vector2f;
 import engine.math.Vector4f;
 import engine.renderEngine.Dimension;
@@ -47,7 +50,9 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+
 
 public class MusicMain extends Application {
 	private File musicFile;
@@ -58,6 +63,7 @@ public class MusicMain extends Application {
 	private FileChooser chooser;
 	private ComboBox<String> profileNames;
 	private CheckBox scalingCheckBox;
+	private CheckBox vsyncCheckBox;
 	private Slider intensityOffSlider;
 	private Slider intensitySlider;
 	private ComboBox<Dimension> resolutionBox;
@@ -67,44 +73,49 @@ public class MusicMain extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
 		primaryStage.setTitle("OpenGL Music Visualizer");
 		profiles = new HashMap<>();
-		currentProfile = new Profile("Untitled Profile", null, new ArrayList<>(), "", "", null, 0, 0, false, false, 0);
 		SHADER_PATH = "";
-
-		primaryStage.show();
+		
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
 		grid.setVgap(10);
+		
+		int rowCounter = -1;
 
-		Scene scene = new Scene(grid, 300 * 4, 275 * 4);
+		
+		Scene scene = new Scene(grid);
+		scene.getStylesheets().add("/css/darktheme.css");
 		primaryStage.setScene(scene);
-		Text scenetitle = new Text("Presets");
-		scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		grid.add(scenetitle, 0, 0, 2, 1);
+		Label scenetitle = new Label("Presets");
+		scenetitle.getStyleClass().add("header");
+		
+		grid.add(scenetitle, 0, ++rowCounter, 2, 1);
 
 		Label musicLabel = new Label("Music File(mp3):");
-		grid.add(musicLabel, 0, 1);
+		grid.add(musicLabel, 0, ++rowCounter);
 
 		Button musicButton = new Button("Browse...");
-		grid.add(musicButton, 1, 1);
+		grid.add(musicButton, 1, rowCounter);
 
 		Label imageLabel = new Label("Image File(png):");
-		grid.add(imageLabel, 0, 2);
+		grid.add(imageLabel, 0, ++rowCounter);
 
 		Button imageButton = new Button("Browse...");
-		grid.add(imageButton, 1, 2);
+		grid.add(imageButton, 1, rowCounter);
+		
+		Button defaultButton = new Button("Use default cover");
+		grid.add(defaultButton, 1, ++rowCounter);
 
 		Label colorLabel = new Label("Manage Overlay: ");
-		grid.add(colorLabel, 0, 3);
+		grid.add(colorLabel, 0, ++rowCounter);
 
 		Button lineButton = new Button("Manage");
-		grid.add(lineButton, 1, 3);
+		grid.add(lineButton, 1, rowCounter);
 
 		Label resolutionLabel = new Label("Resolution: ");
-		grid.add(resolutionLabel, 0, 4);
+		grid.add(resolutionLabel, 0, ++rowCounter);
 
 		resolutionBox = new ComboBox<>();
 		java.awt.Dimension temp = Toolkit.getDefaultToolkit().getScreenSize();
@@ -119,61 +130,69 @@ public class MusicMain extends Application {
 		dimensions.add(new Dimension(3840, 2160));
 		resolutionBox.getItems().addAll(dimensions);
 		resolutionBox.setValue(resolutionBox.getItems().get(0));
-		grid.add(resolutionBox, 1, 4);
+		grid.add(resolutionBox, 1, rowCounter);
 
 		Label intensityLabel = new Label("Intensity Scale: ");
-		grid.add(intensityLabel, 0, 5);
+		grid.add(intensityLabel, 0, ++rowCounter);
 
 		intensitySlider = new Slider(0, 5, 2);
-		grid.add(intensitySlider, 1, 5);
+		grid.add(intensitySlider, 1, rowCounter);
 
 		Label intensityOffLabel = new Label("Intensity Offset: ");
-		grid.add(intensityOffLabel, 0, 6);
+		grid.add(intensityOffLabel, 0, ++rowCounter);
 
 		intensityOffSlider = new Slider(0, 1, 0.7);
-		grid.add(intensityOffSlider, 1, 6);
+		grid.add(intensityOffSlider, 1, rowCounter);
 
 		Label scaling = new Label("Scaling: ");
-		grid.add(scaling, 0, 8);
+		grid.add(scaling, 0, ++rowCounter);
 
 		scalingCheckBox = new CheckBox();
-		grid.add(scalingCheckBox, 1, 8);
+		grid.add(scalingCheckBox, 1, rowCounter);
+
+		Label vsyncLabel = new Label("V-Sync");
+		grid.add(vsyncLabel, 0, ++rowCounter);
+
+		vsyncCheckBox = new CheckBox();
+		grid.add(vsyncCheckBox, 1, rowCounter);
 
 		Label profileLabel = new Label("Profile Name: ");
-		grid.add(profileLabel, 0, 9);
+		grid.add(profileLabel, 0, ++rowCounter);
 
 		profileTextBox = new TextField("Untitled Profile");
-		grid.add(profileTextBox, 1, 9);
+		grid.add(profileTextBox, 1, rowCounter);
 
 		Label profileName = new Label("Profile: ");
-		grid.add(profileName, 0, 10);
-
+		grid.add(profileName, 0, ++rowCounter);
+		currentProfile = loadProfile(new File(Class.class.getResource("/tex/Unknown.prof").getFile()));
+		
 		profileNames = new ComboBox<>();
 
 		profileNames.getItems().add(currentProfile.getName());
 		profiles.put(currentProfile.getName(), currentProfile);
-		grid.add(profileNames, 1, 10);
+		grid.add(profileNames, 1, rowCounter);
 
 		Button loadButton = new Button("Load Profile");
-		grid.add(loadButton, 0, 11);
+		grid.add(loadButton, 0, ++rowCounter);
 
 		Button saveButton = new Button("Save Profile");
-		grid.add(saveButton, 1, 11);
+		grid.add(saveButton, 1, rowCounter);
 
 		Button finishButton = new Button("Finished");
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(finishButton);
-		grid.add(hbBtn, 1, 12);
+		grid.add(hbBtn, 1, ++rowCounter);
+		
+		primaryStage.show();
+		
 		imageChooser = new FileChooser();
 		imageChooser.setInitialDirectory(new File("./"));
-		imageChooser.setInitialFileName("default3.png");
 		imageChooser.getExtensionFilters().add(new ExtensionFilter("Portable Network Graphics (*.png)", "*.png"));
 		chooser = new FileChooser();
-		chooser.setInitialDirectory(new File("./"));
-		chooser.setInitialFileName("Nightcore - Faded.mp3");
 		chooser.getExtensionFilters().add(new ExtensionFilter("MPEG3 Files (*.mp3)", "*.mp3"));
 		chooser.getExtensionFilters().add(new ExtensionFilter("Wavefront Files (*.wav)", "*.wav"));
+
 		lineButton.setOnAction((ActionEvent e) -> {
 			OverlayManager.startManager(currentProfile);
 
@@ -192,6 +211,10 @@ public class MusicMain extends Application {
 			update();
 
 		});
+		defaultButton.setOnAction((ActionEvent e) -> {
+			currentProfile.setImage("");
+			setMusicFile(currentProfile.getMusicFile());
+		});
 		loadButton.setOnAction((ActionEvent e) -> {
 
 			FileChooser profileSaver = new FileChooser();
@@ -204,6 +227,7 @@ public class MusicMain extends Application {
 
 			profileNames.getItems().add(currentProfile.getName());
 			profiles.put(currentProfile.getName(), currentProfile);
+			System.out.println("V-Sync: " + currentProfile.isvSync());
 			updateComponents();
 
 		});
@@ -220,10 +244,6 @@ public class MusicMain extends Application {
 			saveProfile(currentProfile, f);
 
 		});
-		profileNames.setOnAction((ActionEvent e) -> {
-			update();
-
-		});
 		finishButton.setOnAction((ActionEvent e) -> {
 			OverlayManager.close();
 			update();
@@ -237,7 +257,8 @@ public class MusicMain extends Application {
 			System.exit(0);
 
 		});
-	}
+		updateComponents();
+		}
 
 	private void updateRenderer() {
 		MasterRenderer.updateProfile(currentProfile);
@@ -256,18 +277,20 @@ public class MusicMain extends Application {
 		isRunning = false;
 		Input.keys[GLFW.GLFW_KEY_ESCAPE] = false;
 	}
-
 	private boolean checkProfile() {
-		if (currentProfile.getMusicFile() == null) {
-			JOptionPane.showMessageDialog(null, "Please choose a song with the 'Browse' Button.");
+		if (currentProfile.getMusicFile() == null || currentProfile.getMusicFile().getPath().isEmpty()) {
+//			JOptionPane.showMessageDialog(null, "Please choose a song with the 'Browse' Button.");
+			System.out.println("Please select a file");
 			return false;
 		}
-		if (currentProfile.getImage() == null) {
-			JOptionPane.showMessageDialog(null, "Please select a background image with the 'Browse' Button");
+		if (currentProfile.getImage() == null || currentProfile.getImage().isEmpty()) {
+			System.out.println("Please select a background");
+//			JOptionPane.showConfirmDialog(null, "Please select a background image with the 'Browse' Button");
 			return false;
 		}
-		if (currentProfile.getOverlay() == null) {
-			JOptionPane.showMessageDialog(null, "Please select an overlay image from the Overlay Manager");
+		if (currentProfile.getOverlay() == null || currentProfile.getOverlay().isEmpty()) {
+			System.out.println("Please select an overlay");
+//			JOptionPane.showMessageDialog(null, "Please select an overlay image from the Overlay Manager");
 			return false;
 		}
 		return true;
@@ -351,12 +374,15 @@ public class MusicMain extends Application {
 	}
 
 	private void updateComponents() {
+		System.out.println("CurrentProfile: " + currentProfile.isvSync());
 		intensityOffSlider.setValue(currentProfile.getIntensityOffset());
 		intensitySlider.setValue(currentProfile.getIntensityScale());
 		profileNames.setValue(currentProfile.getName());
 		scalingCheckBox.setSelected(currentProfile.isScaling());
+		vsyncCheckBox.setSelected(currentProfile.isvSync());
+		System.out.println("CurrentProfile: " + currentProfile.isvSync());
 		resolutionBox.setValue(currentProfile.getResolution());
-		System.out.println("Music: " + currentProfile.getMusicFile());
+		//System.out.println("Music: " + currentProfile.getMusicFile());
 		chooser.setInitialDirectory(currentProfile.getMusicFile().getAbsoluteFile().getParentFile());
 		chooser.setInitialFileName(currentProfile.getMusicFile().getAbsoluteFile().getName());
 		imageChooser.setInitialDirectory(new File(currentProfile.getImage()).getAbsoluteFile().getParentFile());
@@ -373,15 +399,17 @@ public class MusicMain extends Application {
 		currentProfile.setResolution(resolutionBox.getValue());
 		currentProfile.setScaling(scalingCheckBox.isSelected());
 		currentProfile.setMusicFile(musicFile);
-		currentProfile.setvSync(true);
+		currentProfile.setvSync(vsyncCheckBox.isSelected());
 		currentProfile.setName(profileTextBox.getText());
 	}
 
 	private void setMusicFile(File f) {
+		if(f == null)
+			return;
+		
 		this.musicFile = f;
 		if (currentProfile.getImage().equals("")) {
 			try {
-
 				AudioFile audioFile = AudioFileIO.read(f);
 				Tag t = audioFile.getTag();
 				Artwork artwork = t.getFirstArtwork();

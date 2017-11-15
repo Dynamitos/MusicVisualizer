@@ -71,7 +71,7 @@ public class LineRenderer {
 		glBindBuffer(GL_ARRAY_BUFFER, displacementVBO);
 		dataBuffer.put(data);
 		dataBuffer.flip();
-		glBufferData(GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(data.length), GL_STREAM_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, dataBuffer, GL_STREAM_DRAW);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, dataBuffer);
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);

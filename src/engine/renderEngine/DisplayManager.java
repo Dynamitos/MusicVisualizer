@@ -67,7 +67,7 @@ public class DisplayManager {
 		HEIGHT = dimension.getHEIGHT();
 	}
 
-	public static void createDisplay() {
+	public static void createDisplay(boolean b) {
 		// System.setProperty("java.library.path", "C:\\Program
 		// Files\\Java\\lwjgl\\native");
 		if (!glfwInit())
@@ -88,7 +88,7 @@ public class DisplayManager {
 		glfwShowWindow(window);
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
-		glfwSwapInterval(0);
+		glfwSwapInterval(b ? 1 : 0);
 		glEnable(GL_MULTISAMPLE);
 		lastFrameTime = System.currentTimeMillis();
 		lightPosition = new Vector3f(0, 0, -1);

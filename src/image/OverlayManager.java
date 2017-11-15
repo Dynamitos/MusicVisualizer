@@ -78,12 +78,12 @@ public class OverlayManager {
 			System.out.println(p.getOverlay()+": Not found");
 			e1.printStackTrace();
 		}
-		canvas = new Canvas(WIDTH, HEIGHT);
+		canvas = new Canvas(bgImage.getWidth(), bgImage.getHeight());
 		gc = canvas.getGraphicsContext2D();
 		repaint();
 		gridOverlay.add(canvas, 0, 0);
 
-		Scene sceneOverlay = new Scene(gridOverlay, WIDTH, HEIGHT);
+		Scene sceneOverlay = new Scene(gridOverlay);
 		stageOverlay.setScene(sceneOverlay);
 		stageOverlay.setTitle("Overlay Manager");
 		stageOverlay.show();
@@ -161,7 +161,7 @@ public class OverlayManager {
 
 		});
 
-		Scene sceneTools = new Scene(gridTools, 800, HEIGHT);
+		Scene sceneTools = new Scene(gridTools);
 		stageTools.setScene(sceneTools);
 		stageTools.setTitle("Tools");
 		stageTools.show();
@@ -214,8 +214,8 @@ public class OverlayManager {
 
 	public static void repaint() {
 
-		gc.drawImage(bgImage, 0, 0, WIDTH, HEIGHT);
-		gc.drawImage(overlayImage, 0, 0, WIDTH, HEIGHT);
+		gc.drawImage(bgImage, 0, 0, canvas.getWidth(), canvas.getHeight());
+		gc.drawImage(overlayImage, 0, 0, canvas.getWidth(), canvas.getHeight());
 		gc.setStroke(currentColor);
 		for (Line l : lines) {
 			gc.strokeLine(l.start.x * canvas.getWidth(), l.start.y * canvas.getHeight(), l.end.x * canvas.getWidth(),

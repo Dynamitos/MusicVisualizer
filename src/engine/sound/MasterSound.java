@@ -40,7 +40,8 @@ public class MasterSound {
 
 	public MasterSound(File f) {
 		minim = new Minim(this);
-		song = minim.loadFile(f.getAbsolutePath(), 1024);
+		song = minim.loadFile(f.getAbsolutePath(), 64);
+		song.loop();
 		fft = new FFT(song.bufferSize(), song.sampleRate());
 		MasterRenderer.NUM_SAMPLES = 64;
 		values = new float[MasterRenderer.NUM_SAMPLES * TESS_LEVEL];
@@ -63,7 +64,7 @@ public class MasterSound {
 			if (value > values[i * TESS_LEVEL]) {
 				values[i * TESS_LEVEL + TESS_LEVEL / 2] = value;
 			} else {
-				values[i * TESS_LEVEL + TESS_LEVEL / 2] -= 0.0001f;
+				values[i * TESS_LEVEL + TESS_LEVEL / 2] -= 0.1f*DisplayManager.getFrameTimeSeconds();
 			}
 		}
 		for (int i = 0; i < MasterRenderer.NUM_SAMPLES - 1; i++) {

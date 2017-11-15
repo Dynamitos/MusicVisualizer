@@ -31,7 +31,7 @@ public class MasterRenderer {
 	public MasterRenderer(Profile p) {
 		NUM_SAMPLES = p.getNumSamples();
 		sound = new MasterSound(p.getMusicFile());
-		DisplayManager.createDisplay();
+		DisplayManager.createDisplay(p.isvSync());
 		loader = new Loader();
 		image = new ImageRenderer(loader, p.getImage(), p.getLines(), p.isScaling(), p.getIntensityScale(),
 				p.getIntensityOffset());
@@ -48,7 +48,7 @@ public class MasterRenderer {
 		glClearColor(1, 0, 1, 1f);
 		glLineWidth(5f);
 		musicBuffer = BufferUtils.createFloatBuffer(NUM_SAMPLES * MasterSound.TESS_LEVEL);
-		sound.play();
+		//sound.play();
 	}
 
 	public void render() {
