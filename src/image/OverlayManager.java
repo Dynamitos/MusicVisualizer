@@ -41,7 +41,6 @@ public class OverlayManager {
 	private static GridPane gridOverlay;
 	private static ColorPicker colorChooser;
 	private static Canvas canvas;
-	private static final int WIDTH = 1920, HEIGHT = 1080;
 
 	public static void startManager(Profile p) {
 		profile = p;

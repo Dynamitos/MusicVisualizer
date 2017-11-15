@@ -40,7 +40,7 @@ public class MasterSound {
 
 	public MasterSound(File f) {
 		minim = new Minim(this);
-		song = minim.loadFile(f.getAbsolutePath(), 64);
+		song = minim.loadFile(f.getAbsolutePath(), 1024);
 		song.loop();
 		fft = new FFT(song.bufferSize(), song.sampleRate());
 		MasterRenderer.NUM_SAMPLES = 64;
@@ -61,21 +61,42 @@ public class MasterSound {
 		for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
 			float value = fft.getBand(i);
 			bands[i] = value / 1000;
-			if (value > values[i * TESS_LEVEL]) {
-				values[i * TESS_LEVEL + TESS_LEVEL / 2] = value;
-			} else {
-				values[i * TESS_LEVEL + TESS_LEVEL / 2] -= 0.1f*DisplayManager.getFrameTimeSeconds();
+		}
+		
+		int offset = TESS_LEVEL / 2;
+		for(int i = 0; i < bands.length; ++i)
+		{
+			float value = bands[i];
+			int valueIndex = i * TESS_LEVEL + offset;
+			//for(int j = 0; j < values.length; ++j)
+			{
+				int j = values.length/2;
+				//float distance = j - valueIndex;
+				//float newVal = (float) (value - Math.pow(distance, 2)/10000.f);
+				float signum = 1;
+				double part1 = 1.f/(Math.sqrt(2*Math.PI)*signum);
+				double exponent = -0.5f*Math.pow(((j-valueIndex)/signum), 2.f);
+				double distribution = part1 * Math.pow(Math.E, exponent);
+				values[j] = (float) Math.max(values[j], distribution);
 			}
 		}
-		for (int i = 0; i < MasterRenderer.NUM_SAMPLES - 1; i++) {
+		for(int i = 0; i < values.length; ++i)
+		{
+			values[i] -= 0.1f * DisplayManager.getFrameTimeSeconds();
+		}
+		
+		/*for (int i = 0; i < MasterRenderer.NUM_SAMPLES - 1; i++) {
 			float value = values[i * TESS_LEVEL + TESS_LEVEL / 2];
-			for (int j = -TESS_LEVEL / 2; j <= TESS_LEVEL / 2; j++) {
-				float temp = (float) (value - Math.pow(j * 1.0f, 2f));
+			for (int j = -TESS_LEVEL / 2; j <= TESS_LEVEL / 2+1; j++) {
+				float temp = (float) (value - Math.pow(j * 1.0f, 2f)/10.f);
 				if (j != 0)
 					values[i * TESS_LEVEL + TESS_LEVEL / 2 + j] = Math.max(temp,
 							values[i * TESS_LEVEL + TESS_LEVEL / 2 + j]);
 			}
-		}
+		}*/
+		
+		
+	
 		float tempGain = 0;
 		for (int i = 0; i < bands.length; i++) {
 			tempGain += bands[i] / (1 + i * i);
@@ -84,11 +105,7 @@ public class MasterSound {
 			bassGain -= 0.1f*DisplayManager.getFrameTimeSeconds();
 		else
 			bassGain = tempGain;
-		for (int i = 0; i < values.length; i++) {
-			values[i] /= 1000.0f;
-			if (values[i] < 0)
-				values[i] = 0;
-		}
+		
 	}
 
 	public float getBass() {

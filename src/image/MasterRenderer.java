@@ -46,7 +46,7 @@ public class MasterRenderer {
 			postRenderer = new PostRenderer(loader, p.getOverlay());
 		}
 		glClearColor(1, 0, 1, 1f);
-		glLineWidth(5f);
+		glLineWidth(2f);
 		musicBuffer = BufferUtils.createFloatBuffer(NUM_SAMPLES * MasterSound.TESS_LEVEL);
 		//sound.play();
 	}

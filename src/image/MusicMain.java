@@ -1,6 +1,5 @@
 package image;
 
-
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -24,8 +22,6 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.lwjgl.glfw.GLFW;
-
-import com.aquafx_project.AquaFx;
 
 import engine.math.Vector2f;
 import engine.math.Vector4f;
@@ -44,15 +40,10 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-
 
 public class MusicMain extends Application {
 	private File musicFile;
@@ -76,7 +67,7 @@ public class MusicMain extends Application {
 		primaryStage.setTitle("OpenGL Music Visualizer");
 		profiles = new HashMap<>();
 		SHADER_PATH = "";
-		
+
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(10);
@@ -84,13 +75,12 @@ public class MusicMain extends Application {
 		
 		int rowCounter = -1;
 
-		
 		Scene scene = new Scene(grid);
-		scene.getStylesheets().add("/css/darktheme.css");
+		scene.getStylesheets().add("/css/bootstrap3.css");
 		primaryStage.setScene(scene);
 		Label scenetitle = new Label("Presets");
-		scenetitle.getStyleClass().add("header");
-		
+		scenetitle.setId("head-line");
+
 		grid.add(scenetitle, 0, ++rowCounter, 2, 1);
 
 		Label musicLabel = new Label("Music File(mp3):");
@@ -104,7 +94,7 @@ public class MusicMain extends Application {
 
 		Button imageButton = new Button("Browse...");
 		grid.add(imageButton, 1, rowCounter);
-		
+
 		Button defaultButton = new Button("Use default cover");
 		grid.add(defaultButton, 1, ++rowCounter);
 
@@ -164,8 +154,8 @@ public class MusicMain extends Application {
 
 		Label profileName = new Label("Profile: ");
 		grid.add(profileName, 0, ++rowCounter);
-		currentProfile = loadProfile(new File(Class.class.getResource("/tex/Unknown.prof").getFile()));
-		
+		currentProfile = loadProfile(new File(Class.class.getResource("/Unknown.prof").getFile()));
+
 		profileNames = new ComboBox<>();
 
 		profileNames.getItems().add(currentProfile.getName());
@@ -183,9 +173,9 @@ public class MusicMain extends Application {
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(finishButton);
 		grid.add(hbBtn, 1, ++rowCounter);
-		
+
 		primaryStage.show();
-		
+
 		imageChooser = new FileChooser();
 		imageChooser.setInitialDirectory(new File("./"));
 		imageChooser.getExtensionFilters().add(new ExtensionFilter("Portable Network Graphics (*.png)", "*.png"));
@@ -258,7 +248,7 @@ public class MusicMain extends Application {
 
 		});
 		updateComponents();
-		}
+	}
 
 	private void updateRenderer() {
 		MasterRenderer.updateProfile(currentProfile);
@@ -277,20 +267,24 @@ public class MusicMain extends Application {
 		isRunning = false;
 		Input.keys[GLFW.GLFW_KEY_ESCAPE] = false;
 	}
+
 	private boolean checkProfile() {
 		if (currentProfile.getMusicFile() == null || currentProfile.getMusicFile().getPath().isEmpty()) {
-//			JOptionPane.showMessageDialog(null, "Please choose a song with the 'Browse' Button.");
+			// JOptionPane.showMessageDialog(null, "Please choose a song with
+			// the 'Browse' Button.");
 			System.out.println("Please select a file");
 			return false;
 		}
 		if (currentProfile.getImage() == null || currentProfile.getImage().isEmpty()) {
 			System.out.println("Please select a background");
-//			JOptionPane.showConfirmDialog(null, "Please select a background image with the 'Browse' Button");
+			// JOptionPane.showConfirmDialog(null, "Please select a background
+			// image with the 'Browse' Button");
 			return false;
 		}
 		if (currentProfile.getOverlay() == null || currentProfile.getOverlay().isEmpty()) {
 			System.out.println("Please select an overlay");
-//			JOptionPane.showMessageDialog(null, "Please select an overlay image from the Overlay Manager");
+			// JOptionPane.showMessageDialog(null, "Please select an overlay
+			// image from the Overlay Manager");
 			return false;
 		}
 		return true;
@@ -305,8 +299,8 @@ public class MusicMain extends Application {
 			String[] tokens = data.split("#");
 			int counter = 0;
 			String name = tokens[counter++];
-			File music = new File(tokens[counter++]).getAbsoluteFile();
-			String image = tokens[counter++];
+			File music = tokens[counter++].isEmpty() ? null : new File(tokens[counter]).getAbsoluteFile();
+			String image = tokens[counter++].isEmpty() ? null : tokens[counter];
 			Dimension resolution = new Dimension(Integer.parseInt(tokens[counter++]),
 					Integer.parseInt(tokens[counter++]));
 			float intensityScale = Float.parseFloat(tokens[counter++]);
@@ -382,12 +376,16 @@ public class MusicMain extends Application {
 		vsyncCheckBox.setSelected(currentProfile.isvSync());
 		System.out.println("CurrentProfile: " + currentProfile.isvSync());
 		resolutionBox.setValue(currentProfile.getResolution());
-		//System.out.println("Music: " + currentProfile.getMusicFile());
-		chooser.setInitialDirectory(currentProfile.getMusicFile().getAbsoluteFile().getParentFile());
-		chooser.setInitialFileName(currentProfile.getMusicFile().getAbsoluteFile().getName());
-		imageChooser.setInitialDirectory(new File(currentProfile.getImage()).getAbsoluteFile().getParentFile());
-		imageChooser.setInitialFileName(new File(currentProfile.getImage()).getAbsoluteFile().getName());
+		// System.out.println("Music: " + currentProfile.getMusicFile());
 		profileTextBox.setText(currentProfile.getName());
+		if (currentProfile.getMusicFile() != null) {
+			chooser.setInitialDirectory(currentProfile.getMusicFile().getAbsoluteFile().getParentFile());
+			chooser.setInitialFileName(currentProfile.getMusicFile().getAbsoluteFile().getName());
+		}
+		if (currentProfile.getImage() != null) {
+			imageChooser.setInitialDirectory(new File(currentProfile.getImage()).getAbsoluteFile().getParentFile());
+			imageChooser.setInitialFileName(new File(currentProfile.getImage()).getAbsoluteFile().getName());
+		}
 	}
 
 	private void update() {
@@ -404,11 +402,11 @@ public class MusicMain extends Application {
 	}
 
 	private void setMusicFile(File f) {
-		if(f == null)
+		if (f == null)
 			return;
-		
+
 		this.musicFile = f;
-		if (currentProfile.getImage().equals("")) {
+		if (currentProfile.getImage() == null) {
 			try {
 				AudioFile audioFile = AudioFileIO.read(f);
 				Tag t = audioFile.getTag();
@@ -421,7 +419,7 @@ public class MusicMain extends Application {
 				e.printStackTrace();
 			}
 		}
-		if (currentProfile.getName().equals("Untitled Profile")) {
+		if (currentProfile.getName().equals("Unknown")) {
 			try {
 
 				AudioFile audioFile = AudioFileIO.read(f);

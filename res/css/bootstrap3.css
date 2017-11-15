@@ -1,14 +1,19 @@
 .root {
 	-fx-body-color : #F5F5F5;
 	-fx-outer-border : #cecece;
+	-fx-padding: 5, 5, 5, 5;
 }
 .label {
-	-fx-font-size: 14;
+	-fx-font-size: 14pt;
 	-fx-text-alignment: center;
 	-fx-alignment: center;
 }
 .text-field {
-	-fx-font-size: 12pt;	
+	-fx-font-size: 11pt;	
+}
+#head-line {
+	-fx-font-size: 36pt;
+	-fx-alignment: center;
 }
 
 .button:focused, .toggle-button:focused,
