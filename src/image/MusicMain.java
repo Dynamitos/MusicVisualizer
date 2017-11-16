@@ -70,13 +70,14 @@ public class MusicMain extends Application {
 
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
+		
 		grid.setHgap(10);
 		grid.setVgap(10);
 		
 		int rowCounter = -1;
 
 		Scene scene = new Scene(grid);
-		scene.getStylesheets().add("/css/bootstrap3.css");
+		scene.getStylesheets().add("/css/darktheme.css");
 		primaryStage.setScene(scene);
 		Label scenetitle = new Label("Presets");
 		scenetitle.setId("head-line");
@@ -114,7 +115,7 @@ public class MusicMain extends Application {
 		dimensions.add(new Dimension(640, 360));
 		dimensions.add(new Dimension(960, 540));
 		dimensions.add(new Dimension(1024, 600));
-		dimensions.add(new Dimension(1270, 720));
+		dimensions.add(new Dimension(1280, 720));
 		dimensions.add(new Dimension(1600, 900));
 		dimensions.add(new Dimension(1920, 1080));
 		dimensions.add(new Dimension(3840, 2160));
@@ -299,8 +300,8 @@ public class MusicMain extends Application {
 			String[] tokens = data.split("#");
 			int counter = 0;
 			String name = tokens[counter++];
-			File music = tokens[counter++].isEmpty() ? null : new File(tokens[counter]).getAbsoluteFile();
-			String image = tokens[counter++].isEmpty() ? null : tokens[counter];
+			File music = tokens[counter++].isEmpty() ? null : new File(tokens[counter-1]).getAbsoluteFile();
+			String image = tokens[counter++].isEmpty() ? null : tokens[counter-1];
 			Dimension resolution = new Dimension(Integer.parseInt(tokens[counter++]),
 					Integer.parseInt(tokens[counter++]));
 			float intensityScale = Float.parseFloat(tokens[counter++]);

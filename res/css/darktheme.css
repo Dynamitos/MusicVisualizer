@@ -8,9 +8,10 @@
 
 .root{
 	-fx-background-color: #1d1d1d;
+	-fx-padding: 5, 5, 5, 5;
 }
 
-.header{
+#head-line{
     -fx-font-size: 3.5em;
     -fx-font-family: "Segoe UI Light";
     -fx-text-fill: white;
@@ -56,10 +57,11 @@
 }
 
 .combo-box:focused {
-    -fx-background-color: transparent, white, transparent, #d2d2d2;
-    -fx-background-insets: -1.4, 0, 1, 2;
-
-    -fx-background-radius: 0, 0, 0, 0;
+    -fx-border-color: white, white;
+    -fx-border-width: 1, 2;
+    -fx-border-style: solid, segments(1, 2);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
 }
 
 .combo-box:focused:hover {
@@ -76,8 +78,11 @@
     -fx-background-color: transparent, transparent, transparent;
 }
 
-.combo-box > .text {
+.combo-box .list-cell {
 	-fx-text-fill: #d8d8d8;
+}
+.combo-box .list-cell:focused {
+	
 }
 
 /* ------- ARROW* ------- */
@@ -115,7 +120,7 @@
 }
 
 .combo-box-popup > .list-view .list-cell:filled:selected{
-    -fx-background-color: #55c4fe;  /* TODO: this probably is the "accent" color" */
+    -fx-background-color: #d8d8d8;  /* TODO: this probably is the "accent" color" */
 }
 
 .combo-box-popup  > .list-view > .virtual-flow > .scroll-bar > .thumb:hover {
@@ -190,7 +195,7 @@
   -fx-text-fill: #1d1d1d;
 }
 
-.button:focused
+.button:focused .combo-box:focused
 {
     -fx-border-color: white, white;
     -fx-border-width: 1, 2;
@@ -283,7 +288,7 @@
     -fx-background-radius: 0;
     -fx-border-color: #d1d1d1;
     -fx-border-width: 2px;
-    -fx-borders-style: solid;
+    -fx-border-style: solid;
     -fx-padding: 1;
 }
 
@@ -1081,8 +1086,8 @@
     -fx-background-radius: 0, 0, 0, 0;
     -fx-padding: 0em 0.166667em 0em 0.166667em; /* 0 2px 0 2px*/
 
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    -fx-font-size: 1.333333em; /* 16 */
+    /*-fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 1.333333em;*/ /* 16 */
 }
 
 .choice-box:hover {

@@ -16,11 +16,13 @@ public class MasterSound {
 	private long duration;
 	private float[] values;
 	private float[] bands;
+	private float[] prevBands;
+	private float[] sigmas;
 	private Minim minim;
 	private AudioPlayer song;
 	private FFT fft;
-	private float[][] prevValues;
-	private int SMOOTHING_LEVEL = 8;
+	//private float[][] prevValues;
+	//private int SMOOTHING_LEVEL = 8;
 	private float bassGain = 0;
 	public static final int TESS_LEVEL = 16;
 
@@ -46,15 +48,15 @@ public class MasterSound {
 		MasterRenderer.NUM_SAMPLES = 64;
 		values = new float[MasterRenderer.NUM_SAMPLES * TESS_LEVEL];
 		bands = new float[MasterRenderer.NUM_SAMPLES];
-		prevValues = new float[SMOOTHING_LEVEL][];
-		for (int i = 0; i < SMOOTHING_LEVEL; i++) {
-			prevValues[i] = new float[values.length];
-			for (int j = 0; j < prevValues.length; j++) {
-				prevValues[i][j] = 0;
-			}
-		}
+		prevBands = new float[MasterRenderer.NUM_SAMPLES];
+		sigmas = new float[MasterRenderer.NUM_SAMPLES];
 	}
-
+	private float distribution(float x, float mue, float signum)
+	{
+		double part1 = 1.f/(Math.sqrt(Math.PI * 2) * signum);
+		double exponent = -0.5f*Math.pow(((x-mue)/signum), 2.f);
+		return (float) (part1 * Math.pow(Math.E, exponent));
+	}
 	public void run() {
 		fft.forward(song.mix);
 		Arrays.fill(values, 0);
@@ -67,35 +69,22 @@ public class MasterSound {
 		for(int i = 0; i < bands.length; ++i)
 		{
 			float value = bands[i];
-			int valueIndex = i * TESS_LEVEL + offset;
-			//for(int j = 0; j < values.length; ++j)
+			int mue = i * TESS_LEVEL + offset;
+			if(value > prevBands[i])
 			{
-				int j = values.length/2;
-				//float distance = j - valueIndex;
-				//float newVal = (float) (value - Math.pow(distance, 2)/10000.f);
-				float signum = 1;
-				double part1 = 1.f/(Math.sqrt(2*Math.PI)*signum);
-				double exponent = -0.5f*Math.pow(((j-valueIndex)/signum), 2.f);
-				double distribution = part1 * Math.pow(Math.E, exponent);
-				values[j] = (float) Math.max(values[j], distribution);
+				sigmas[i] = 1.6f;//value of maximum = 0.25
+			}
+			else
+			{
+				sigmas[i] -= 0.1f * DisplayManager.getFrameTimeSeconds();
+			}
+			for(int j = 0; j < values.length; ++j)
+			{
+				float distance = j/values.length;
+				distance *= 5f;
+				values[j] = Math.max(values[j], value - distribution(j, mue, sigmas[i])*4f);
 			}
 		}
-		for(int i = 0; i < values.length; ++i)
-		{
-			values[i] -= 0.1f * DisplayManager.getFrameTimeSeconds();
-		}
-		
-		/*for (int i = 0; i < MasterRenderer.NUM_SAMPLES - 1; i++) {
-			float value = values[i * TESS_LEVEL + TESS_LEVEL / 2];
-			for (int j = -TESS_LEVEL / 2; j <= TESS_LEVEL / 2+1; j++) {
-				float temp = (float) (value - Math.pow(j * 1.0f, 2f)/10.f);
-				if (j != 0)
-					values[i * TESS_LEVEL + TESS_LEVEL / 2 + j] = Math.max(temp,
-							values[i * TESS_LEVEL + TESS_LEVEL / 2 + j]);
-			}
-		}*/
-		
-		
 	
 		float tempGain = 0;
 		for (int i = 0; i < bands.length; i++) {
