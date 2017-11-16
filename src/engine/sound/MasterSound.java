@@ -62,7 +62,7 @@ public class MasterSound {
 		Arrays.fill(values, 0);
 		for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
 			float value = fft.getBand(i);
-			bands[i] = value / 1000;
+			bands[i] = value / 1000.f;
 		}
 		
 		int offset = TESS_LEVEL / 2;
@@ -72,20 +72,28 @@ public class MasterSound {
 			int mue = i * TESS_LEVEL + offset;
 			if(value > prevBands[i])
 			{
-				sigmas[i] = 1.6f;//value of maximum = 0.25
+				sigmas[i] = 70.f;//value of maximum = 0.25
 			}
 			else
 			{
-				sigmas[i] -= 0.1f * DisplayManager.getFrameTimeSeconds();
+				value = prevBands[i];
+				bands[i] = prevBands[i] - 0.1f * DisplayManager.getFrameTimeSeconds();
+				//sigmas[i] -= 0.1f * DisplayManager.getFrameTimeSeconds();
 			}
 			for(int j = 0; j < values.length; ++j)
 			{
-				float distance = j/values.length;
-				distance *= 5f;
-				values[j] = Math.max(values[j], value - distribution(j, mue, sigmas[i])*4f);
+				values[j] = Math.max(values[j], distribution(j, mue, sigmas[i])*value*250.f);
 			}
 		}
-	
+		System.arraycopy(bands, 0, prevBands, 0, bands.length);
+
+//		float sigma = 50.f;
+//		for(int i = 0; i < values.length; ++i)
+//		{
+//			System.out.println(bands[0]);
+//			values[i] = distribution(i, values.length/2, sigma)*bands[2]*100.f;
+//		}
+//		
 		float tempGain = 0;
 		for (int i = 0; i < bands.length; i++) {
 			tempGain += bands[i] / (1 + i * i);
