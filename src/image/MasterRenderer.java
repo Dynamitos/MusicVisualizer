@@ -19,6 +19,7 @@ public class MasterRenderer {
 	private ImageRenderer image;
 	private List<LineRenderer> lines;
 	private PostRenderer postRenderer;
+	private ParticleRenderer particles;
 	private MasterSound sound;
 	private Loader loader;
 	public static final float[] vertices = { -1f, -1f, -1f, 1f, -1f, -1f, -1f, 1f, -1f, 1f, 1f, -1f, };
@@ -40,6 +41,7 @@ public class MasterRenderer {
 		for (int i = 0; i < p.getLines().size(); i++) {
 			lines.add(new LineRenderer(NUM_SAMPLES * MasterSound.TESS_LEVEL, p.getLines().get(i)));
 		}
+		particles = new ParticleRenderer();
 		if (p.getOverlay() == null) {
 			postRenderer = new PostRenderer(loader, "");
 		} else {
@@ -59,7 +61,7 @@ public class MasterRenderer {
 		musicBuffer.flip();
 		postRenderer.bindPostProcessor();
 		image.render(bassGain, musicBuffer);
-
+		particles.render(bassGain);
 		for (LineRenderer f : lines) {
 			f.render(data);
 		}

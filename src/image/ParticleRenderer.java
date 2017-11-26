@@ -92,14 +92,14 @@ public class ParticleRenderer extends Thread {
 	public void render(float intensity) {
 		shader.start();
 		shader.loadColor(color);
-		int numParticles = (int) (50000 * intensity * DisplayManager.getFrameTimeSeconds());
+		int numParticles = (int) (5000 * intensity * DisplayManager.getFrameTimeSeconds());
 		for (int i = 0; i < numParticles; i++) {
 			int index = findUnusedParticle();
 			if (particles[index] == null)
 				particles[index] = new Particle();
 			particles[index].position = new Vector3f(0, 0, -1);
 			particles[index].speed = new Vector3f((float) (Math.random() * 2) - 1, (float) (Math.random() * 2) - 1, 0)
-					.normalize().scale(1000);
+					.normalize();
 			particles[index].life = 5;
 		}
 		int length = 0;
@@ -107,8 +107,7 @@ public class ParticleRenderer extends Thread {
 			if (particles[i] != null) {
 				if (particles[i].life > 0) {
 					// particles[i].speed = particles[i].speed.scale(0.1f);
-					// particles[i].position =
-					// particles[i].speed.scale(intensity);
+					particles[i].position = particles[i].position.add(particles[i].speed.scale(intensity*0.05f));
 					particles[i].life -= DisplayManager.getFrameTimeSeconds();
 					positionBuffer[length * 3 + 0] = particles[i].position.x;
 					positionBuffer[length * 3 + 1] = particles[i].position.y;
@@ -117,7 +116,7 @@ public class ParticleRenderer extends Thread {
 				}
 			}
 		}
-		glPointSize(20);
+		glPointSize(5);
 		glBindVertexArray(vaoID);
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(MAX_PARTICLES * 3);
@@ -131,7 +130,6 @@ public class ParticleRenderer extends Thread {
 		shader.stop();
 		if (length >= maxParticles) {
 			maxParticles = length;
-			System.out.println(maxParticles);
 		}
 	}
 

@@ -5,8 +5,8 @@ import engine.math.Vector4f;
 import engine.shaders.ShaderProgram;
 
 public class ParticleShader extends ShaderProgram {
-	private static final String VERT_FILE = MusicMain.SHADER_PATH + "/shaders/particleVertex.shader",
-			FRAG_FILE = MusicMain.SHADER_PATH + "/shaders/particleFragment.shader";
+	private static final String VERT_FILE = MusicController.SHADER_PATH + "/shaders/particleVertex.shader",
+			FRAG_FILE = MusicController.SHADER_PATH + "/shaders/particleFragment.shader";
 	private int location_color;
 	private int location_projectionMatrix;
 

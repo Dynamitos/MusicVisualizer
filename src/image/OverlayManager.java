@@ -65,17 +65,18 @@ public class OverlayManager {
 		} catch (FileNotFoundException e) {
 			System.out.println(p.getImage() + " not found");
 		}
-		try {
-			if (!p.getOverlay().equals(""))
+		try{
+			InputStream in = Class.class.getResourceAsStream(p.getOverlay());
+			if(in == null)
+			{
 				overlayImage = new Image(new FileInputStream(p.getOverlay()));
-			else {
-				InputStream in = Class.class.getResourceAsStream("/tex/Overlay.png");
-				overlayImage = new Image(in);
-				p.setOverlay("/tex/Overlay.png");
 			}
-		} catch (FileNotFoundException e1) {
-			System.out.println(p.getOverlay()+": Not found");
-			e1.printStackTrace();
+		}
+		catch (FileNotFoundException e1)
+		{
+			InputStream in = Class.class.getResourceAsStream("/tex/Overlay.png");
+			overlayImage = new Image(in);
+			p.setOverlay("/tex/Overlay.png");
 		}
 		canvas = new Canvas(bgImage.getWidth(), bgImage.getHeight());
 		gc = canvas.getGraphicsContext2D();
@@ -114,7 +115,6 @@ public class OverlayManager {
 
 		overlayButton.setOnAction((ActionEvent e) -> {
 			setOverlay(overlayChooser.showOpenDialog(null).getAbsolutePath());
-
 		});
 		imageButton.setOnAction((ActionEvent e) -> {
 			setImage(overlayChooser.showOpenDialog(null));

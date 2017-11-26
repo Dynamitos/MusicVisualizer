@@ -4,8 +4,8 @@ import engine.math.Vector4f;
 import engine.shaders.ShaderProgram;
 
 public class LineShader extends ShaderProgram {
-	private static final String VERT_FILE = MusicMain.SHADER_PATH + "/shaders/lineVertex.shader",
-			FRAG_FILE = MusicMain.SHADER_PATH + "/shaders/lineFragment.shader";
+	private static final String VERT_FILE = MusicController.SHADER_PATH + "/shaders/lineVertex.shader",
+			FRAG_FILE = MusicController.SHADER_PATH + "/shaders/lineFragment.shader";
 	private int location_Color;
 
 	public LineShader() {

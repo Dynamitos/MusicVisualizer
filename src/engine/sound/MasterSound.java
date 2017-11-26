@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
+import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
 import engine.renderEngine.DisplayManager;
 import image.MasterRenderer;
@@ -16,11 +17,10 @@ public class MasterSound {
 	private long duration;
 	private float[] values;
 	private float[] bands;
-	private float[] prevBands;
-	private float[] sigmas;
 	private Minim minim;
 	private AudioPlayer song;
 	private FFT fft;
+	private BeatDetect beatDetect;
 	//private float[][] prevValues;
 	//private int SMOOTHING_LEVEL = 8;
 	private float bassGain = 0;
@@ -48,8 +48,8 @@ public class MasterSound {
 		MasterRenderer.NUM_SAMPLES = 64;
 		values = new float[MasterRenderer.NUM_SAMPLES * TESS_LEVEL];
 		bands = new float[MasterRenderer.NUM_SAMPLES];
-		prevBands = new float[MasterRenderer.NUM_SAMPLES];
-		sigmas = new float[MasterRenderer.NUM_SAMPLES];
+		beatDetect = new BeatDetect();
+		beatDetect.detectMode(BeatDetect.FREQ_ENERGY);
 	}
 	private float distribution(float x, float mue, float signum)
 	{
@@ -62,38 +62,22 @@ public class MasterSound {
 		Arrays.fill(values, 0);
 		for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
 			float value = fft.getBand(i);
-			bands[i] = value / 1000.f;
-		}
-		
-		int offset = TESS_LEVEL / 2;
-		for(int i = 0; i < bands.length; ++i)
-		{
-			float value = bands[i];
-			int mue = i * TESS_LEVEL + offset;
-			if(value > prevBands[i])
-			{
-				sigmas[i] = 70.f;//value of maximum = 0.25
-			}
-			else
-			{
-				value = prevBands[i];
-				bands[i] = prevBands[i] - 0.1f * DisplayManager.getFrameTimeSeconds();
-				//sigmas[i] -= 0.1f * DisplayManager.getFrameTimeSeconds();
-			}
-			for(int j = 0; j < values.length; ++j)
-			{
-				values[j] = Math.max(values[j], distribution(j, mue, sigmas[i])*value*250.f);
+			bands[i] = value / 1000;
+			if (value > values[i * TESS_LEVEL]) {
+				values[i * TESS_LEVEL + TESS_LEVEL / 2] = value;
+			} else {
+				values[i * TESS_LEVEL + TESS_LEVEL / 2] -= 0.0001f;
 			}
 		}
-		System.arraycopy(bands, 0, prevBands, 0, bands.length);
-
-//		float sigma = 50.f;
-//		for(int i = 0; i < values.length; ++i)
-//		{
-//			System.out.println(bands[0]);
-//			values[i] = distribution(i, values.length/2, sigma)*bands[2]*100.f;
-//		}
-//		
+		for (int i = 0; i < MasterRenderer.NUM_SAMPLES - 1; i++) {
+			float value = values[i * TESS_LEVEL + TESS_LEVEL / 2];
+			for (int j = -TESS_LEVEL / 2; j <= TESS_LEVEL / 2; j++) {
+				float temp = (float) (value - Math.pow(j * 1.0f, 2f));
+				if (j != 0)
+					values[i * TESS_LEVEL + TESS_LEVEL / 2 + j] = Math.max(temp,
+							values[i * TESS_LEVEL + TESS_LEVEL / 2 + j]);
+			}
+		}
 		float tempGain = 0;
 		for (int i = 0; i < bands.length; i++) {
 			tempGain += bands[i] / (1 + i * i);
@@ -102,7 +86,11 @@ public class MasterSound {
 			bassGain -= 0.1f*DisplayManager.getFrameTimeSeconds();
 		else
 			bassGain = tempGain;
-		
+		for (int i = 0; i < values.length; i++) {
+			values[i] /= 1000.0f;
+			if (values[i] < 0)
+				values[i] = 0;
+		}
 	}
 
 	public float getBass() {

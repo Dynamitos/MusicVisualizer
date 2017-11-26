@@ -155,7 +155,7 @@ public class MusicMain extends Application {
 
 		Label profileName = new Label("Profile: ");
 		grid.add(profileName, 0, ++rowCounter);
-		currentProfile = loadProfile(new File(Class.class.getResource("/Unknown.prof").getFile()));
+		currentProfile = loadProfile(new File(Class.class.getResource("/tex/Unknown.prof").getFile()));
 
 		profileNames = new ComboBox<>();
 

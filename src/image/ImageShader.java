@@ -13,8 +13,8 @@ public class ImageShader extends ShaderProgram {
 		private int location_color;
 	}
 
-	private static final String VERT_FILE = MusicMain.SHADER_PATH + "/shaders/imageVertex.shader",
-			FRAG_FILE = MusicMain.SHADER_PATH + "/shaders/imageFragment.shader";
+	private static final String VERT_FILE = MusicController.SHADER_PATH + "/shaders/imageVertex.shader",
+			FRAG_FILE = MusicController.SHADER_PATH + "/shaders/imageFragment.shader";
 	private int location_texture;
 	private int location_transformationMatrix;
 	private int location_lightPosition;
