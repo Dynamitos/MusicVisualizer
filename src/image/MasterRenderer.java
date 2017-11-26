@@ -41,7 +41,7 @@ public class MasterRenderer {
 		for (int i = 0; i < p.getLines().size(); i++) {
 			lines.add(new LineRenderer(NUM_SAMPLES * MasterSound.TESS_LEVEL, p.getLines().get(i)));
 		}
-		particles = new ParticleRenderer();
+		particles = new ParticleRenderer(loader);
 		if (p.getOverlay() == null) {
 			postRenderer = new PostRenderer(loader, "");
 		} else {

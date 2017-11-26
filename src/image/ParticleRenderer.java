@@ -18,6 +18,8 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.nio.FloatBuffer;
 
+import de.matthiasmann.twl.utils.PNGDecoder;
+import engine.renderEngine.Loader;
 import org.lwjgl.BufferUtils;
 
 import engine.math.Matrix4f;
@@ -34,23 +36,23 @@ public class ParticleRenderer extends Thread {
 	private int maxParticles;
 	private static final int MAX_PARTICLES = 100000;
 	private Vector4f color;
-	/*
-	 * private boolean colorFlagx = false; private boolean colorFlagy = false;
-	 * private boolean colorFlagz = false;
-	 */
 	private Matrix4f projectionMatrix;
 	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 10000f;
+	private Loader loader;
+	private int atlasTexture;
+	private final int WIDTH = 2048;
+	private final int NUM_PER_ROW = 8;
 
 	private static class Particle {
 		Vector3f position;
-		@SuppressWarnings("unused")
-		private Vector3f speed;
+		Vector3f speed;
+		Matrix4f transformation;
 		float life;
 	}
 
-	public ParticleRenderer() {
+	public ParticleRenderer(Loader loader) {
 		shader = new ParticleShader();
 		color = new Vector4f(1f, 0f, 0f, 1);
 		particles = new Particle[MAX_PARTICLES];
@@ -65,6 +67,9 @@ public class ParticleRenderer extends Thread {
 		glBindVertexArray(0);
 		createProjectionMatrix();
 		shader.loadProjectionMatrix(projectionMatrix);
+
+		this.loader = loader;
+		atlasTexture = loader.loadTexture("/res/tex/snow.png");
 	}
 
 	private int lastUsedParticle = 0;
@@ -116,7 +121,7 @@ public class ParticleRenderer extends Thread {
 				}
 			}
 		}
-		glPointSize(5);
+		glPointSize(1);
 		glBindVertexArray(vaoID);
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(MAX_PARTICLES * 3);

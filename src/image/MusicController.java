@@ -106,7 +106,7 @@ public class MusicController{
 	}
 	@FXML
 	public void onDefaultCoverAction(ActionEvent e){
-		currentProfile.setImage("");
+		currentProfile.setImage(null);
 		setMusicFile(currentProfile.getMusicFile());
 	}
 

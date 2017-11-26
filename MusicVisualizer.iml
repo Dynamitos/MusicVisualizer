@@ -11,6 +11,15 @@
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org:jaudiotagger:2.0.3" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/res" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="library" name="Maven: org.lwjgl:lwjgl:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.lwjgl:lwjgl-glfw:3.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.lwjgl:lwjgl-jemalloc:3.1.1" level="project" />
@@ -43,14 +52,5 @@
     <orderEntry type="library" name="Maven: org:jaudiotagger:2.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.kordamp.bootstrapfx:bootstrapfx-core:0.2.1" level="project" />
     <orderEntry type="library" name="Maven: com.aquafx-project:aquafx:0.1" level="project" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES />
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/res" />
-        </SOURCES>
-      </library>
-    </orderEntry>
   </component>
 </module>
