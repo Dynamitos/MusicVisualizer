@@ -1,9 +1,8 @@
 package image;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_POINTS;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL11.glPointSize;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STREAM_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
@@ -16,9 +15,10 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
-import de.matthiasmann.twl.utils.PNGDecoder;
+import engine.model.RawModel;
 import engine.renderEngine.Loader;
 import org.lwjgl.BufferUtils;
 
@@ -28,9 +28,9 @@ import engine.math.Vector4f;
 import engine.renderEngine.DisplayManager;
 
 public class ParticleRenderer extends Thread {
-	private int vaoID;
-	private int vboID;
+	private int vboParticle;
 	private Particle[] particles;
+	private ByteBuffer particleBuffer;
 	private float[] positionBuffer;
 	private ParticleShader shader;
 	private int maxParticles;
@@ -44,32 +44,41 @@ public class ParticleRenderer extends Thread {
 	private int atlasTexture;
 	private final int WIDTH = 2048;
 	private final int NUM_PER_ROW = 8;
+	private final float[] vertices = {-0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f};
+	private RawModel particleModel;
 
 	private static class Particle {
 		Vector3f position;
 		Vector3f speed;
-		Matrix4f transformation;
+		Vector3f rotation;
 		float life;
 	}
 
 	public ParticleRenderer(Loader loader) {
 		shader = new ParticleShader();
-		color = new Vector4f(1f, 0f, 0f, 1);
 		particles = new Particle[MAX_PARTICLES];
-		positionBuffer = new float[MAX_PARTICLES * 3];
-		vaoID = glGenVertexArrays();
-		glBindVertexArray(vaoID);
-		vboID = glGenBuffers();
-		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        particleBuffer = BufferUtils.createByteBuffer(MAX_PARTICLES * 3);
+
+        particleModel = loader.loadToVAO(vertices, 2);
+
+        glBindVertexArray(particleModel.getVaoID());
+
+		vboParticle = glGenBuffers();
+		glBindBuffer(GL_ARRAY_BUFFER, vboParticle);
+
+
 		glBufferData(GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(MAX_PARTICLES * 3), GL_STREAM_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
+		glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
+
 		createProjectionMatrix();
 		shader.loadProjectionMatrix(projectionMatrix);
 
+
 		this.loader = loader;
-		atlasTexture = loader.loadTexture("/res/tex/snow.png");
+		atlasTexture = loader.loadTexture("/tex/snow.png");
 	}
 
 	private int lastUsedParticle = 0;
@@ -96,7 +105,8 @@ public class ParticleRenderer extends Thread {
 
 	public void render(float intensity) {
 		shader.start();
-		shader.loadColor(color);
+
+
 		int numParticles = (int) (5000 * intensity * DisplayManager.getFrameTimeSeconds());
 		for (int i = 0; i < numParticles; i++) {
 			int index = findUnusedParticle();
@@ -107,30 +117,29 @@ public class ParticleRenderer extends Thread {
 					.normalize();
 			particles[index].life = 5;
 		}
+
 		int length = 0;
+
 		for (int i = 0; i < MAX_PARTICLES; i++) {
 			if (particles[i] != null) {
 				if (particles[i].life > 0) {
-					// particles[i].speed = particles[i].speed.scale(0.1f);
-					particles[i].position = particles[i].position.add(particles[i].speed.scale(intensity*0.05f));
-					particles[i].life -= DisplayManager.getFrameTimeSeconds();
-					positionBuffer[length * 3 + 0] = particles[i].position.x;
-					positionBuffer[length * 3 + 1] = particles[i].position.y;
-					positionBuffer[length * 3 + 2] = particles[i].position.z;
-					length++;
+				    //TODO
 				}
 			}
 		}
 		glPointSize(1);
-		glBindVertexArray(vaoID);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID);
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(MAX_PARTICLES * 3);
-		buffer.put(positionBuffer);
-		buffer.flip();
+		glBindVertexArray(particleModel.getVaoID());
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE0, atlasTexture);
+
+        glBindBuffer(GL_ARRAY_BUFFER, vboParticle);
+
 		glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
-		glEnableVertexAttribArray(0);
+
+
 		glDrawArrays(GL_POINTS, 0, length);
-		glDisableVertexAttribArray(0);
+
 		glBindVertexArray(0);
 		shader.stop();
 		if (length >= maxParticles) {

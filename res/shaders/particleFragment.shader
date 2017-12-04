@@ -1,12 +1,12 @@
 #version 440
 
-in vec3 position_FS_in;
+in vec2 texCoords_FS_in;
 
-out vec4 out_Color;
+out vec4 color_FS_out;
 
-uniform vec4 color;
+uniform sampler2D tex;
 
 void main(void)
 {
-	out_Color = color;
+	color_FS_out = texture(tex, texCoords_FS_in);
 }

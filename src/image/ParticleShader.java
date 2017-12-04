@@ -7,7 +7,7 @@ import engine.shaders.ShaderProgram;
 public class ParticleShader extends ShaderProgram {
 	private static final String VERT_FILE = MusicController.SHADER_PATH + "/shaders/particleVertex.shader",
 			FRAG_FILE = MusicController.SHADER_PATH + "/shaders/particleFragment.shader";
-	private int location_color;
+	private int location_texture;
 	private int location_projectionMatrix;
 
 	public ParticleShader() {
@@ -16,12 +16,15 @@ public class ParticleShader extends ShaderProgram {
 
 	@Override
 	protected void bindAttributes() {
-		super.bindAttribute(0, "position");
+		super.bindAttribute(0, "vertex_VS_in");
+		super.bindAttribute(1, "position_VS_in");
+		super.bindAttribute(2, "rotation_VS_in");
+		super.bindAttribute(3, "atlasCoords_VS_in");
 	}
 
 	@Override
 	protected void getAllUniformLocations() {
-		location_color = super.getUniformLocation("color");
+		location_texture = super.getUniformLocation("tex");
 		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
 	}
 
@@ -29,7 +32,7 @@ public class ParticleShader extends ShaderProgram {
 		super.loadMatrix(location_projectionMatrix, projectionMatrix);
 	}
 
-	public void loadColor(Vector4f color) {
-		super.loadVector(location_color, color);
+	public void loadTexture() {
+		super.loadInt(location_texture, 0);
 	}
 }

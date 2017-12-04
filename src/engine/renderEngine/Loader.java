@@ -125,7 +125,7 @@ public class Loader {
 		}
 		try {
 			in.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
