@@ -16,6 +16,7 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import data.Profile;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;

@@ -1,6 +1,6 @@
 #version 440
 
-in vec2 texCoords_FS_in;
+layout(location = 0) in vec2 texCoords_FS_in;
 
 out vec4 color_FS_out;
 

@@ -59,6 +59,8 @@
         <dependency><groupId>org</groupId><artifactId>jaudiotagger</artifactId><version>2.0.3</version></dependency>
         <dependency><groupId>org.kordamp.bootstrapfx</groupId><artifactId>bootstrapfx-core</artifactId><version>0.2.1</version></dependency>
         <dependency><groupId>com.aquafx-project</groupId><artifactId>aquafx</artifactId><version>0.1</version></dependency>
+        <dependency><groupId>org</groupId><artifactId>jaudiotagger</artifactId><version>2.0.3</version></dependency>
+        <dependency><groupId>javax.xml.bind</groupId><artifactId>jaxb-api</artifactId><version>2.3.0</version></dependency>
 
     </dependencies>
     <build>

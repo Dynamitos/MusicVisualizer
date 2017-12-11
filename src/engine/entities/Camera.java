@@ -3,6 +3,7 @@ package engine.entities;
 import engine.math.Matrix4f;
 import engine.math.Vector3f;
 import engine.renderEngine.DisplayManager;
+import engine.toolbox.Maths;
 
 public class Camera {
 
@@ -22,22 +23,7 @@ public class Camera {
 	public void move() {
 		position.x += DisplayManager.deltaX;
 		position.y += DisplayManager.deltaY;
-		lookAt(position, new Vector3f(0, 0, 0), new Vector3f(0, 1, 0));
-	}
-
-	private void lookAt(Vector3f position, Vector3f center, Vector3f upVector) {
-		/*
-		 * Vector3f forward = center.copy().subtract(position).normalize();
-		 * Vector3f side = forward.copy().cross(upVector).normalize(); upVector
-		 * = side.copy().cross(forward);
-		 *
-		 * viewMatrix.m00 = side.x; viewMatrix.m01 = side.y; viewMatrix.m02 =
-		 * side.z; viewMatrix.m10 = upVector.x; viewMatrix.m11 = upVector.y;
-		 * viewMatrix.m12 = upVector.z; viewMatrix.m20 = -forward.x;
-		 * viewMatrix.m21 = -forward.y; viewMatrix.m22 = -forward.z;
-		 */
-		viewMatrix.setIdentity();
-		Matrix4f.translate(position, viewMatrix, viewMatrix);
+		Maths.lookAt(viewMatrix, position, new Vector3f(0, 0, 0), new Vector3f(0, 1, 0));
 	}
 
 	public Matrix4f getViewMatrix() {

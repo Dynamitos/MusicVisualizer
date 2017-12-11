@@ -1,11 +1,18 @@
-package image;
+package data;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import engine.renderEngine.Dimension;
+import image.Line;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+@XmlRootElement
 public class Profile {
 	private File musicFile;
 	private String image;
@@ -18,8 +25,9 @@ public class Profile {
 	private List<Line> lines;
 	private int numSamples;
 	//private FontType font;
+	@XmlTransient
 	private List<String> texts;
-
+	public Profile(){}
 	/**
 	 *
 	 * @param name Name of the profile
@@ -55,6 +63,8 @@ public class Profile {
 		return texts;
 	}
 
+	@XmlElement
+	@XmlJavaTypeAdapter(FileNameAdapter.class)
 	public File getMusicFile() {
 		return musicFile;
 	}
@@ -63,6 +73,7 @@ public class Profile {
 		this.musicFile = musicFile;
 	}
 
+	@XmlElement
 	public String getImage() {
 		return image;
 	}

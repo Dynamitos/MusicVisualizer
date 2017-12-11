@@ -31,6 +31,7 @@
  */
 package engine.math;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.nio.FloatBuffer;
 
@@ -45,7 +46,7 @@ import java.nio.FloatBuffer;
 public class Vector2f extends Vector implements Serializable, ReadableVector2f, WritableVector2f {
 
 	private static final long serialVersionUID = 1L;
-
+	@XmlTransient
 	public float x, y;
 
 	/**

@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.Profile;
 import org.lwjgl.BufferUtils;
 
 import engine.renderEngine.Loader;

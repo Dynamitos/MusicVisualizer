@@ -1,5 +1,6 @@
 package image;
 
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glLineWidth;
 
@@ -7,6 +8,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.Profile;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
@@ -47,7 +49,7 @@ public class MasterRenderer {
 		} else {
 			postRenderer = new PostRenderer(loader, p.getOverlay());
 		}
-		glClearColor(1, 0, 1, 1f);
+		glClearColor(0, 0, 0, 1f);
 		glLineWidth(2f);
 		musicBuffer = BufferUtils.createFloatBuffer(NUM_SAMPLES * MasterSound.TESS_LEVEL);
 		//sound.play();
@@ -60,7 +62,10 @@ public class MasterRenderer {
 		musicBuffer.put(data);
 		musicBuffer.flip();
 		postRenderer.bindPostProcessor();
-		image.render(bassGain, musicBuffer);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//image.render(bassGain, musicBuffer);
 		particles.render(bassGain);
 		for (LineRenderer f : lines) {
 			f.render(data);

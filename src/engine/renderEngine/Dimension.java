@@ -8,6 +8,8 @@ package engine.renderEngine;
 public class Dimension {
 	private int WIDTH, HEIGHT;
 
+	public Dimension(){}
+
 	public Dimension(int width, int height) {
 		super();
 		WIDTH = width;

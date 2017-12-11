@@ -1,18 +1,19 @@
 package image;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
+import data.Profile;
+import engine.math.Vector2f;
+import engine.math.Vector4f;
 import javafx.scene.control.*;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -21,20 +22,13 @@ import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.lwjgl.glfw.GLFW;
 
-import engine.math.Vector2f;
-import engine.math.Vector4f;
 import engine.renderEngine.Dimension;
 import engine.renderEngine.DisplayManager;
 import engine.toolbox.Input;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 
 public class MusicController{
 	private FileChooser imageChooser;
@@ -76,10 +70,9 @@ public class MusicController{
         chooser = new FileChooser();
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPEG3 Files (*.mp3)", "*.mp3"));
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront Files (*.wav)", "*.wav"));
-        currentProfile = loadProfile(new File("res/tex/Unknown.prof"));
+        currentProfile = loadProfile(new File("../Party Troll.prof"));
         profiles = new HashMap<>();
         updateComponents();
-
     }
 
 
@@ -196,90 +189,108 @@ public class MusicController{
 		return true;
 	}
 
-	private Profile loadProfile(File f) {
-		Profile p = null;
+	public Profile loadProfile(File f) {
+    	Profile p = null;
 		try {
+			JAXBContext context = JAXBContext.newInstance(Profile.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			p = (Profile)unmarshaller.unmarshal(f);
+		} catch(Exception e)
+		{
+			try {
 
-			BufferedReader br = new BufferedReader(new FileReader(f));
-			String data = br.readLine();
-			String[] tokens = data.split("#");
-			int counter = 0;
-			String name = tokens[counter++];
-			File music = tokens[counter++].isEmpty() ? null : new File(tokens[counter-1]).getAbsoluteFile();
-			String image = tokens[counter++].isEmpty() ? null : tokens[counter-1];
-			Dimension resolution = new Dimension(Integer.parseInt(tokens[counter++]),
-					Integer.parseInt(tokens[counter++]));
-			float intensityScale = Float.parseFloat(tokens[counter++]);
-			float intensityOffset = Float.parseFloat(tokens[counter++]);
-			boolean scaling = Boolean.parseBoolean(tokens[counter++]);
-			boolean vSync = Boolean.parseBoolean(tokens[counter++]);
-			String overlay = tokens[counter++];
-			this.musicFile = music;
-			this.image = image;
-			int numSamples = Integer.parseInt(tokens[counter++]);
-			int numLines = Integer.parseInt(tokens[counter++]);
-			List<Line> lines = new ArrayList<>(numLines);
-			for (int i = 0; i < numLines; i++) {
-				Line line = new Line();
-				float startX = Float.parseFloat(tokens[counter++]);
-				float startY = Float.parseFloat(tokens[counter++]);
-				float endX = Float.parseFloat(tokens[counter++]);
-				float endY = Float.parseFloat(tokens[counter++]);
-				float height = Float.parseFloat(tokens[counter++]);
-				float colorX = Float.parseFloat(tokens[counter++]);
-				float colorY = Float.parseFloat(tokens[counter++]);
-				float colorZ = Float.parseFloat(tokens[counter++]);
-				float colorW = Float.parseFloat(tokens[counter++]);
-				line.start = new Vector2f(startX, startY);
-				line.end = new Vector2f(endX, endY);
-				line.height = height;
-				line.color = new Vector4f(colorX, colorY, colorZ, colorW);
-				lines.add(line);
+				BufferedReader br = new BufferedReader(new FileReader(f));
+				String data = br.readLine();
+				String[] tokens = data.split("#");
+				int counter = 0;
+				String name = tokens[counter++];
+				File music = tokens[counter++].isEmpty() ? null : new File(tokens[counter-1]).getAbsoluteFile();
+				String image = tokens[counter++].isEmpty() ? null : tokens[counter-1];
+				Dimension resolution = new Dimension(Integer.parseInt(tokens[counter++]),
+						Integer.parseInt(tokens[counter++]));
+				float intensityScale = Float.parseFloat(tokens[counter++]);
+				float intensityOffset = Float.parseFloat(tokens[counter++]);
+				boolean scaling = Boolean.parseBoolean(tokens[counter++]);
+				boolean vSync = Boolean.parseBoolean(tokens[counter++]);
+				String overlay = tokens[counter++];
+				this.musicFile = music;
+				this.image = image;
+				int numSamples = Integer.parseInt(tokens[counter++]);
+				int numLines = Integer.parseInt(tokens[counter++]);
+				List<Line> lines = new ArrayList<>(numLines);
+				for (int i = 0; i < numLines; i++) {
+					Line line = new Line();
+					float startX = Float.parseFloat(tokens[counter++]);
+					float startY = Float.parseFloat(tokens[counter++]);
+					float endX = Float.parseFloat(tokens[counter++]);
+					float endY = Float.parseFloat(tokens[counter++]);
+					float height = Float.parseFloat(tokens[counter++]);
+					float colorX = Float.parseFloat(tokens[counter++]);
+					float colorY = Float.parseFloat(tokens[counter++]);
+					float colorZ = Float.parseFloat(tokens[counter++]);
+					float colorW = Float.parseFloat(tokens[counter++]);
+					line.start = new Vector2f(startX, startY);
+					line.end = new Vector2f(endX, endY);
+					line.height = height;
+					line.color = new Vector4f(colorX, colorY, colorZ, colorW);
+					lines.add(line);
+				}
+				p = new Profile(name, music, lines, image, overlay, resolution, intensityScale, intensityOffset, scaling,
+						vSync, numSamples);
+				br.close();
+			} catch (IOException ex) {
+				System.err.println("Message: " + ex.getMessage());
 			}
-			p = new Profile(name, music, lines, image, overlay, resolution, intensityScale, intensityOffset, scaling,
-					vSync, numSamples);
-			br.close();
-		} catch (IOException e) {
-			System.err.println("Message: " + e.getMessage());
 		}
 		return p;
 	}
 
 	private void saveProfile(Profile p, File f) {
-		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-			String data = "";
-			data += p.getName() + "#";
-			data += p.getMusicFile() + "#";
-			data += p.getImage() + "#";
-			data += p.getResolution().getWIDTH() + "#" + p.getResolution().getHEIGHT() + "#";
-			data += p.getIntensityScale() + "#";
-			data += p.getIntensityOffset() + "#";
-			data += p.isScaling() + "#";
-			data += p.isvSync() + "#";
-			data += p.getOverlay() + "#";
-			data += p.getNumSamples() + "#";
-			data += p.getLines().size() + "#";
-			for (Line line : p.getLines()) {
-				data += line.toString();
-			}
+    	try
+		{
+			JAXBContext context = JAXBContext.newInstance(Profile.class);
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(p, f);
+		}
+		catch (Exception e)
+		{
+		    e.printStackTrace();
+			try {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+				String data = "";
+				data += p.getName() + "#";
+				data += p.getMusicFile() + "#";
+				data += p.getImage() + "#";
+				data += p.getResolution().getWIDTH() + "#" + p.getResolution().getHEIGHT() + "#";
+				data += p.getIntensityScale() + "#";
+				data += p.getIntensityOffset() + "#";
+				data += p.isScaling() + "#";
+				data += p.isvSync() + "#";
+				data += p.getOverlay() + "#";
+				data += p.getNumSamples() + "#";
+				data += p.getLines().size() + "#";
+				for (Line line : p.getLines()) {
+					data += line.toString();
+				}
 
-			bw.write(data);
-			bw.flush();
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+				bw.write(data);
+				bw.flush();
+				bw.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 
 	private void updateComponents() {
-		System.out.println("CurrentProfile: " + currentProfile.isvSync());
+		//System.out.println("CurrentProfile: " + currentProfile.isvSync());
 		slIntensityOff.setValue(currentProfile.getIntensityOffset());
 		slIntensity.setValue(currentProfile.getIntensityScale());
 		cbProfileNames.setValue(currentProfile.getName());
 		cbScaling.setSelected(currentProfile.isScaling());
 		cbVSync.setSelected(currentProfile.isvSync());
-		System.out.println("CurrentProfile: " + currentProfile.isvSync());
+		//System.out.println("CurrentProfile: " + currentProfile.isvSync());
 		cbResolution.setValue(currentProfile.getResolution());
 		// System.out.println("Music: " + currentProfile.getMusicFile());
 		tfProfile.setText(currentProfile.getName());

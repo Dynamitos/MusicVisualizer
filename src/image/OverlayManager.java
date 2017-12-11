@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.Profile;
 import engine.math.Vector2f;
 import engine.math.Vector4f;
 import javafx.event.ActionEvent;

@@ -14,12 +14,16 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
+import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
+import engine.math.Vector2f;
 import engine.model.RawModel;
 import engine.renderEngine.Loader;
+import engine.toolbox.Maths;
 import org.lwjgl.BufferUtils;
 
 import engine.math.Matrix4f;
@@ -29,14 +33,18 @@ import engine.renderEngine.DisplayManager;
 
 public class ParticleRenderer extends Thread {
 	private int vboParticle;
+	private final int VERTEX_SIZE = 3+3+2+1;
 	private Particle[] particles;
-	private ByteBuffer particleBuffer;
-	private float[] positionBuffer;
+	private FloatBuffer particleBuffer;
+	private float[] particleData;
 	private ParticleShader shader;
 	private int maxParticles;
-	private static final int MAX_PARTICLES = 100000;
-	private Vector4f color;
+	private static final int MAX_PARTICLES = 100;
 	private Matrix4f projectionMatrix;
+	private Matrix4f viewMatrix;
+	private Vector3f position;
+	private Vector3f center;
+	private Vector3f up;
 	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 10000f;
@@ -48,37 +56,65 @@ public class ParticleRenderer extends Thread {
 	private RawModel particleModel;
 
 	private static class Particle {
-		Vector3f position;
+		Vector3f position;/*1*/
+		Vector3f rotation;/*2*/
+		Vector2f texCoords;/*3*/
+		float scale;/*4*/
 		Vector3f speed;
-		Vector3f rotation;
 		float life;
 	}
 
 	public ParticleRenderer(Loader loader) {
 		shader = new ParticleShader();
 		particles = new Particle[MAX_PARTICLES];
-        particleBuffer = BufferUtils.createByteBuffer(MAX_PARTICLES * 3);
+        particleBuffer = BufferUtils.createFloatBuffer(MAX_PARTICLES * VERTEX_SIZE);
+        particleData = new float[MAX_PARTICLES * VERTEX_SIZE];
+        viewMatrix = new Matrix4f();
+
+        position = new Vector3f(0, 0, 10);
+        center = new Vector3f(0, 0, 0);
+        up = new Vector3f(0, 1, 0);
 
         particleModel = loader.loadToVAO(vertices, 2);
 
         glBindVertexArray(particleModel.getVaoID());
 
+
 		vboParticle = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vboParticle);
 
+		glBufferData(GL_ARRAY_BUFFER, particleBuffer, GL_STREAM_DRAW);
 
-		glBufferData(GL_ARRAY_BUFFER, BufferUtils.createFloatBuffer(MAX_PARTICLES * 3), GL_STREAM_DRAW);
+		glVertexAttribPointer(1, 3, GL_FLOAT, false, VERTEX_SIZE, 0);
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, VERTEX_SIZE, 3);
+		glVertexAttribPointer(3, 2, GL_FLOAT, false, VERTEX_SIZE, 6);
+		glVertexAttribPointer(4, 1, GL_FLOAT, false, VERTEX_SIZE, 8);
 
-		glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+		glEnableVertexAttribArray(3);
+		glEnableVertexAttribArray(4);
+
+		glVertexAttribDivisor(0, 0);
+		glVertexAttribDivisor(1, 1);
+		glVertexAttribDivisor(2, 1);
+		glVertexAttribDivisor(3, 1);
+		glVertexAttribDivisor(4, 1);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		createProjectionMatrix();
+		shader.start();
 		shader.loadProjectionMatrix(projectionMatrix);
-
+		shader.loadTexture();
+		shader.loadWidth(WIDTH);
+		shader.stop();
 
 		this.loader = loader;
 		atlasTexture = loader.loadTexture("/tex/snow.png");
+
+		glCullFace(GL_NONE);
 	}
 
 	private int lastUsedParticle = 0;
@@ -105,16 +141,20 @@ public class ParticleRenderer extends Thread {
 
 	public void render(float intensity) {
 		shader.start();
-
-
-		int numParticles = (int) (5000 * intensity * DisplayManager.getFrameTimeSeconds());
+        position.x += DisplayManager.getFrameTimeSeconds();
+        Maths.lookAt(viewMatrix, position, center, up);
+        shader.loadViewMatrix(viewMatrix);
+		int numParticles = (int) (500 * intensity * DisplayManager.getFrameTimeSeconds());
 		for (int i = 0; i < numParticles; i++) {
 			int index = findUnusedParticle();
 			if (particles[index] == null)
 				particles[index] = new Particle();
-			particles[index].position = new Vector3f(0, 0, -1);
+			particles[index].position = new Vector3f(0, 0, 1);
 			particles[index].speed = new Vector3f((float) (Math.random() * 2) - 1, (float) (Math.random() * 2) - 1, 0)
 					.normalize();
+			particles[index].rotation = new Vector3f(0, 0, 0);
+			particles[index].texCoords = new Vector2f(0, 0);
+			particles[index].scale = 0.1f;
 			particles[index].life = 5;
 		}
 
@@ -123,22 +163,33 @@ public class ParticleRenderer extends Thread {
 		for (int i = 0; i < MAX_PARTICLES; i++) {
 			if (particles[i] != null) {
 				if (particles[i].life > 0) {
-				    //TODO
+                    //particles[i].position = particles[i].position.add(particles[i].speed.multiply(0.1f));
+
+					particleData[length * VERTEX_SIZE + 0] = particles[i].position.x;
+					particleData[length * VERTEX_SIZE + 1] = particles[i].position.y;
+					particleData[length * VERTEX_SIZE + 2] = particles[i].position.z;
+					particleData[length * VERTEX_SIZE + 3] = particles[i].rotation.x;
+					particleData[length * VERTEX_SIZE + 4] = particles[i].rotation.y;
+					particleData[length * VERTEX_SIZE + 5] = particles[i].rotation.z;
+					particleData[length * VERTEX_SIZE + 6] = particles[i].texCoords.x;
+					particleData[length * VERTEX_SIZE + 7] = particles[i].texCoords.y;
+					particleData[length * VERTEX_SIZE + 8] = particles[i].scale;
+					length++;
 				}
 			}
 		}
-		glPointSize(1);
 		glBindVertexArray(particleModel.getVaoID());
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE0, atlasTexture);
+        glBindTexture(GL_TEXTURE_2D, atlasTexture);
 
         glBindBuffer(GL_ARRAY_BUFFER, vboParticle);
 
-		glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
+        particleBuffer.put(particleData);
+        particleBuffer.flip();
+		glBufferSubData(GL_ARRAY_BUFFER, 0, particleBuffer);
 
-
-		glDrawArrays(GL_POINTS, 0, length);
+		glDrawArraysInstanced(GL_TRIANGLE_FAN, 0, 4, length);
 
 		glBindVertexArray(0);
 		shader.stop();

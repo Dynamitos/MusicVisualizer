@@ -9,6 +9,8 @@ public class ParticleShader extends ShaderProgram {
 			FRAG_FILE = MusicController.SHADER_PATH + "/shaders/particleFragment.shader";
 	private int location_texture;
 	private int location_projectionMatrix;
+	private int location_viewMatrix;
+	private int location_width;
 
 	public ParticleShader() {
 		super(VERT_FILE, FRAG_FILE);
@@ -20,19 +22,31 @@ public class ParticleShader extends ShaderProgram {
 		super.bindAttribute(1, "position_VS_in");
 		super.bindAttribute(2, "rotation_VS_in");
 		super.bindAttribute(3, "atlasCoords_VS_in");
+		super.bindAttribute(4, "scale_VS_in");
 	}
 
 	@Override
 	protected void getAllUniformLocations() {
 		location_texture = super.getUniformLocation("tex");
 		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
+		location_viewMatrix = super.getUniformLocation("viewMatrix");
+		location_width = super.getUniformLocation("width");
 	}
+
 
 	public void loadProjectionMatrix(Matrix4f projectionMatrix) {
 		super.loadMatrix(location_projectionMatrix, projectionMatrix);
 	}
+	public void loadViewMatrix(Matrix4f viewMatrix)
+	{
+		super.loadMatrix(location_viewMatrix, viewMatrix);
+	}
 
 	public void loadTexture() {
 		super.loadInt(location_texture, 0);
+	}
+	public void loadWidth(int width)
+	{
+		super.loadInt(location_width, width);
 	}
 }
