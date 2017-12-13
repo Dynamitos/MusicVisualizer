@@ -9,18 +9,21 @@ public class Maths {
     public static void lookAt(Matrix4f viewMatrix, Vector3f position, Vector3f center, Vector3f upVector) {
         Vector3f forward = center.copy().subtract(position).normalize();
         Vector3f side = forward.copy().cross(upVector).normalize();
-        upVector = side.copy().cross(forward);
+        Vector3f up = side.copy().cross(forward);
 
         viewMatrix.setIdentity();
         viewMatrix.m00 = side.x;
         viewMatrix.m01 = side.y;
         viewMatrix.m02 = side.z;
-        viewMatrix.m10 = upVector.x;
-        viewMatrix.m11 = upVector.y;
-        viewMatrix.m12 = upVector.z;
+        viewMatrix.m10 = up.x;
+        viewMatrix.m11 = up.y;
+        viewMatrix.m12 = up.z;
         viewMatrix.m20 = -forward.x;
         viewMatrix.m21 = -forward.y;
         viewMatrix.m22 = -forward.z;
+
+        Matrix4f.translate(new Vector3f(-position.x, -position.y, -position.z), viewMatrix, viewMatrix);
+
 
     }
 

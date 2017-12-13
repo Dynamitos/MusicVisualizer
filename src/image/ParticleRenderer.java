@@ -39,7 +39,7 @@ public class ParticleRenderer extends Thread {
 	private float[] particleData;
 	private ParticleShader shader;
 	private int maxParticles;
-	private static final int MAX_PARTICLES = 100;
+	private static final int MAX_PARTICLES = 2000;
 	private Matrix4f projectionMatrix;
 	private Matrix4f viewMatrix;
 	private Vector3f position;
@@ -71,7 +71,7 @@ public class ParticleRenderer extends Thread {
         particleData = new float[MAX_PARTICLES * VERTEX_SIZE];
         viewMatrix = new Matrix4f();
 
-        position = new Vector3f(0, 0, 10);
+        position = new Vector3f(0, 0, -10);
         center = new Vector3f(0, 0, 0);
         up = new Vector3f(0, 1, 0);
 
@@ -85,10 +85,10 @@ public class ParticleRenderer extends Thread {
 
 		glBufferData(GL_ARRAY_BUFFER, particleBuffer, GL_STREAM_DRAW);
 
-		glVertexAttribPointer(1, 3, GL_FLOAT, false, VERTEX_SIZE, 0);
-		glVertexAttribPointer(2, 3, GL_FLOAT, false, VERTEX_SIZE, 3);
-		glVertexAttribPointer(3, 2, GL_FLOAT, false, VERTEX_SIZE, 6);
-		glVertexAttribPointer(4, 1, GL_FLOAT, false, VERTEX_SIZE, 8);
+		glVertexAttribPointer(1, 3, GL_FLOAT, false, VERTEX_SIZE*4, 0*4);
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, VERTEX_SIZE*4, 3*4);
+		glVertexAttribPointer(3, 2, GL_FLOAT, false, VERTEX_SIZE*4, 6*4);
+		glVertexAttribPointer(4, 1, GL_FLOAT, false, VERTEX_SIZE*4, 8*4);
 
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
@@ -141,29 +141,31 @@ public class ParticleRenderer extends Thread {
 
 	public void render(float intensity) {
 		shader.start();
-        position.x += DisplayManager.getFrameTimeSeconds();
+
         Maths.lookAt(viewMatrix, position, center, up);
         shader.loadViewMatrix(viewMatrix);
+
 		int numParticles = (int) (500 * intensity * DisplayManager.getFrameTimeSeconds());
 		for (int i = 0; i < numParticles; i++) {
 			int index = findUnusedParticle();
 			if (particles[index] == null)
 				particles[index] = new Particle();
-			particles[index].position = new Vector3f(0, 0, 1);
+			particles[index].position = new Vector3f(0, 0, 0);
 			particles[index].speed = new Vector3f((float) (Math.random() * 2) - 1, (float) (Math.random() * 2) - 1, 0)
 					.normalize();
 			particles[index].rotation = new Vector3f(0, 0, 0);
 			particles[index].texCoords = new Vector2f(0, 0);
-			particles[index].scale = 0.1f;
-			particles[index].life = 5;
+			particles[index].scale = 0.01f;
+			particles[index].life = 2;
 		}
 
-		int length = 0;
 
+		int length = 0;
 		for (int i = 0; i < MAX_PARTICLES; i++) {
 			if (particles[i] != null) {
 				if (particles[i].life > 0) {
-                    //particles[i].position = particles[i].position.add(particles[i].speed.multiply(0.1f));
+                    particles[i].position = particles[i].position.add(particles[i].speed.multiply(0.1f));
+                    particles[i].rotation.z += DisplayManager.getFrameTimeSeconds();
 
 					particleData[length * VERTEX_SIZE + 0] = particles[i].position.x;
 					particleData[length * VERTEX_SIZE + 1] = particles[i].position.y;
@@ -175,6 +177,8 @@ public class ParticleRenderer extends Thread {
 					particleData[length * VERTEX_SIZE + 7] = particles[i].texCoords.y;
 					particleData[length * VERTEX_SIZE + 8] = particles[i].scale;
 					length++;
+
+					particles[i].life -= DisplayManager.getFrameTimeSeconds();
 				}
 			}
 		}
