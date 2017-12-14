@@ -9,7 +9,6 @@ import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glBufferSubData;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -17,7 +16,6 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import engine.math.Vector2f;
@@ -28,7 +26,6 @@ import org.lwjgl.BufferUtils;
 
 import engine.math.Matrix4f;
 import engine.math.Vector3f;
-import engine.math.Vector4f;
 import engine.renderEngine.DisplayManager;
 
 public class ParticleRenderer extends Thread {
@@ -45,24 +42,14 @@ public class ParticleRenderer extends Thread {
 	private Vector3f position;
 	private Vector3f center;
 	private Vector3f up;
+	private Wind wind;
 	private static final float FOV = 70;
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 10000f;
 	private Loader loader;
 	private int atlasTexture;
-	private final int WIDTH = 2048;
-	private final int NUM_PER_ROW = 8;
 	private final float[] vertices = {-0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f};
 	private RawModel particleModel;
-
-	private static class Particle {
-		Vector3f position;/*1*/
-		Vector3f rotation;/*2*/
-		Vector2f texCoords;/*3*/
-		float scale;/*4*/
-		Vector3f speed;
-		float life;
-	}
 
 	public ParticleRenderer(Loader loader) {
 		shader = new ParticleShader();
@@ -75,10 +62,11 @@ public class ParticleRenderer extends Thread {
         center = new Vector3f(0, 0, 0);
         up = new Vector3f(0, 1, 0);
 
+        wind = new Wind(new Vector3f(-20, 0, 0), new Vector3f(20, 0, 0));
+
         particleModel = loader.loadToVAO(vertices, 2);
 
         glBindVertexArray(particleModel.getVaoID());
-
 
 		vboParticle = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vboParticle);
@@ -108,13 +96,11 @@ public class ParticleRenderer extends Thread {
 		shader.start();
 		shader.loadProjectionMatrix(projectionMatrix);
 		shader.loadTexture();
-		shader.loadWidth(WIDTH);
 		shader.stop();
 
 		this.loader = loader;
-		atlasTexture = loader.loadTexture("/tex/snow.png");
+		atlasTexture = loader.loadTexture("/tex/particle.png");
 
-		glCullFace(GL_NONE);
 	}
 
 	private int lastUsedParticle = 0;
@@ -142,30 +128,32 @@ public class ParticleRenderer extends Thread {
 	public void render(float intensity) {
 		shader.start();
 
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         Maths.lookAt(viewMatrix, position, center, up);
         shader.loadViewMatrix(viewMatrix);
 
-		int numParticles = (int) (500 * intensity * DisplayManager.getFrameTimeSeconds());
+		int numParticles = (int)Math.max(random(-6, 10), 0);
 		for (int i = 0; i < numParticles; i++) {
 			int index = findUnusedParticle();
 			if (particles[index] == null)
 				particles[index] = new Particle();
-			particles[index].position = new Vector3f(0, 0, 0);
-			particles[index].speed = new Vector3f((float) (Math.random() * 2) - 1, (float) (Math.random() * 2) - 1, 0)
-					.normalize();
+			particles[index].position = new Vector3f(random(-10, 10), -10, random(-10, 10));
+			particles[index].speed = new Vector3f(random(0, 0), 1, random(0, 0));
 			particles[index].rotation = new Vector3f(0, 0, 0);
-			particles[index].texCoords = new Vector2f(0, 0);
-			particles[index].scale = 0.01f;
-			particles[index].life = 2;
+			particles[index].dimensions = new Vector2f(1, 1);
+			particles[index].scale = 0.5f;
+			particles[index].life = 5;
 		}
-
 
 		int length = 0;
 		for (int i = 0; i < MAX_PARTICLES; i++) {
 			if (particles[i] != null) {
 				if (particles[i].life > 0) {
                     particles[i].position = particles[i].position.add(particles[i].speed.multiply(0.1f));
-                    particles[i].rotation.z += DisplayManager.getFrameTimeSeconds();
+                    particles[i].rotation = particles[i].rotation.add(particles[i].speed.multiply(0.1f));
+
+                    wind.influence(particles[i]);
 
 					particleData[length * VERTEX_SIZE + 0] = particles[i].position.x;
 					particleData[length * VERTEX_SIZE + 1] = particles[i].position.y;
@@ -173,8 +161,8 @@ public class ParticleRenderer extends Thread {
 					particleData[length * VERTEX_SIZE + 3] = particles[i].rotation.x;
 					particleData[length * VERTEX_SIZE + 4] = particles[i].rotation.y;
 					particleData[length * VERTEX_SIZE + 5] = particles[i].rotation.z;
-					particleData[length * VERTEX_SIZE + 6] = particles[i].texCoords.x;
-					particleData[length * VERTEX_SIZE + 7] = particles[i].texCoords.y;
+					particleData[length * VERTEX_SIZE + 6] = particles[i].dimensions.x;
+					particleData[length * VERTEX_SIZE + 7] = particles[i].dimensions.y;
 					particleData[length * VERTEX_SIZE + 8] = particles[i].scale;
 					length++;
 
@@ -200,7 +188,13 @@ public class ParticleRenderer extends Thread {
 		if (length >= maxParticles) {
 			maxParticles = length;
 		}
+		glDisable(GL_BLEND);
 	}
+
+	private float random(float min, float max)
+    {
+        return (float) (Math.random() * (max - min)) + min;
+    }
 
 	private void createProjectionMatrix() {
 		float aspectRatio = (float) DisplayManager.WIDTH / (float) DisplayManager.HEIGHT;

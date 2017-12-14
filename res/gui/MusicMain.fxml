@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="553.0" prefWidth="381.0" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="image.MusicController">
+<BorderPane prefHeight="553.0" prefWidth="381.0" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="image.MusicController">
    <center>
       <GridPane prefHeight="490.0" prefWidth="428.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -51,8 +51,8 @@
             <Button fx:id="btOverlay" mnemonicParsing="false" onAction="#onOverlayAction" text="Browse..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Button fx:id="btLoad" mnemonicParsing="false" onAction="#onLoadProfileAction" text="Load Profile" GridPane.rowIndex="13" />
             <Button fx:id="btSave" mnemonicParsing="false" onAction="#onSaveProfileAction" text="Save Profile" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-            <Slider fx:id="slIntensity" value="50.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Slider fx:id="slIntensityOff" value="70.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Slider fx:id="slIntensity" blockIncrement="0.1" max="5.0" value="2.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Slider fx:id="slIntensityOff" blockIncrement="0.05" max="1.0" value="0.7" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <CheckBox fx:id="cbScaling" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Scale background" GridPane.columnIndex="1" GridPane.rowIndex="9" />
             <CheckBox fx:id="cbVSync" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="V-Sync" GridPane.columnIndex="1" GridPane.rowIndex="10" />
             <ComboBox fx:id="cbResolution" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />

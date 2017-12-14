@@ -3,7 +3,7 @@
 layout(location = 0) in vec2 vertex_VS_in;
 layout(location = 1) in vec3 position_VS_in;
 layout(location = 2) in vec3 rotation_VS_in;
-layout(location = 3) in vec2 atlasCoords_VS_in;
+layout(location = 3) in vec2 dimensions_VS_in;
 layout(location = 4) in float scale_VS_in;
 
 layout(location = 0) out vec2 texCoords_FS_in;
@@ -46,8 +46,8 @@ void main(void)
 
     mat4 rotMat = mz * my * mx;
     mat4 scaleMat;
-    scaleMat[0] = vec4(scale_VS_in, 0, 0, 0);
-    scaleMat[1] = vec4(0, scale_VS_in, 0, 0);
+    scaleMat[0] = vec4(scale_VS_in * dimensions_VS_in.x, 0, 0, 0);
+    scaleMat[1] = vec4(0, scale_VS_in * dimensions_VS_in.y, 0, 0);
     scaleMat[2] = vec4(0, 0, scale_VS_in, 0);
     scaleMat[3] = vec4(0, 0, 0, 1);
     mat4 posMat;
@@ -56,7 +56,7 @@ void main(void)
     posMat[2] = vec4(0, 0, 1, 0);
     posMat[3] = vec4(position_VS_in.x, position_VS_in.y, position_VS_in.z, 1);
 
-    vec4 worldPos = posMat * rotMat * vec4(vertex_VS_in, 0, 1);
+    vec4 worldPos = posMat * rotMat * scaleMat * vec4(vertex_VS_in, 0, 1);
     position_FS_in = worldPos.xyz;
 	gl_Position = projectionMatrix * viewMatrix * worldPos;
 }

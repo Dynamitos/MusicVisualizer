@@ -51,6 +51,7 @@ public class MasterRenderer {
 		}
 		glClearColor(0, 0, 0, 1f);
 		glLineWidth(2f);
+		//glCullFace(GL_NONE);
 		musicBuffer = BufferUtils.createFloatBuffer(NUM_SAMPLES * MasterSound.TESS_LEVEL);
 		//sound.play();
 	}
@@ -63,15 +64,12 @@ public class MasterRenderer {
 		musicBuffer.flip();
 		postRenderer.bindPostProcessor();
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//image.render(bassGain, musicBuffer);
+		image.render(bassGain, musicBuffer);
 		particles.render(bassGain);
 		for (LineRenderer f : lines) {
 			f.render(data);
 		}
 		postRenderer.render();
-
 
 		if (Input.keys[GLFW.GLFW_KEY_SPACE]) {
 			paused = !paused;
