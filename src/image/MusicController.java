@@ -70,7 +70,7 @@ public class MusicController{
         chooser = new FileChooser();
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPEG3 Files (*.mp3)", "*.mp3"));
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront Files (*.wav)", "*.wav"));
-        currentProfile = loadProfile(new File("../Fractures.prof"));
+        currentProfile = loadProfile(new File("../Lone Digger.prof"));
         profiles = new HashMap<>();
         updateComponents();
     }
@@ -213,8 +213,6 @@ public class MusicController{
 				boolean scaling = Boolean.parseBoolean(tokens[counter++]);
 				boolean vSync = Boolean.parseBoolean(tokens[counter++]);
 				String overlay = tokens[counter++];
-				this.musicFile = music;
-				this.image = image;
 				int numSamples = Integer.parseInt(tokens[counter++]);
 				int numLines = Integer.parseInt(tokens[counter++]);
 				List<Line> lines = new ArrayList<>(numLines);
@@ -242,6 +240,8 @@ public class MusicController{
 				System.err.println("Message: " + ex.getMessage());
 			}
 		}
+		this.musicFile = p.getMusicFile();
+		this.image = p.getImage();
 		return p;
 	}
 

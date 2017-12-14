@@ -10,7 +10,6 @@ public class ParticleShader extends ShaderProgram {
 	private int location_texture;
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
-	private int location_width;
 
 	public ParticleShader() {
 		super(VERT_FILE, FRAG_FILE);
@@ -21,7 +20,7 @@ public class ParticleShader extends ShaderProgram {
 		super.bindAttribute(0, "vertex_VS_in");
 		super.bindAttribute(1, "position_VS_in");
 		super.bindAttribute(2, "rotation_VS_in");
-		super.bindAttribute(3, "atlasCoords_VS_in");
+		super.bindAttribute(3, "dimensions_VS_in");
 		super.bindAttribute(4, "scale_VS_in");
 	}
 
@@ -30,7 +29,6 @@ public class ParticleShader extends ShaderProgram {
 		location_texture = super.getUniformLocation("tex");
 		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
 		location_viewMatrix = super.getUniformLocation("viewMatrix");
-		location_width = super.getUniformLocation("width");
 	}
 
 
@@ -45,8 +43,5 @@ public class ParticleShader extends ShaderProgram {
 	public void loadTexture() {
 		super.loadInt(location_texture, 0);
 	}
-	public void loadWidth(int width)
-	{
-		super.loadInt(location_width, width);
-	}
+
 }

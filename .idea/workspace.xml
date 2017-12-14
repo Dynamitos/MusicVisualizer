@@ -2,45 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_aquafx_project_aquafx_0_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__ddf_minim_ddf_minim_2_2_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_clojars_automata_jl_1_0_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_clojars_automata_mp3spi_1_9_4.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_clojars_automata_tritonus_aos_1_0_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_clojars_automata_tritonus_share_1_0_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_clojure_clojure_1_5_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jaudiotagger_2_0_3.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_kordamp_bootstrapfx_bootstrapfx_core_0_2_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_l33tlabs_twl_pngdecoder_1_0.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_glfw_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_glfw_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_jemalloc_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_jemalloc_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_nanovg_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_nanovg_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_nfd_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_nfd_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_nuklear_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_nuklear_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_opengl_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_opengl_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_par_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_par_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_stb_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_stb_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_tinyfd_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_tinyfd_natives_windows_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_lwjgl_lwjgl_vulkan_3_1_1.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__xuggle_xuggle_xuggler_5_4.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/org_jaudiotagger_2_0_3.xml" afterPath="" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/image/Particle.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/src/image/Wind.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/res/gui/MusicMain.fxml" afterPath="$PROJECT_DIR$/res/gui/MusicMain.fxml" />
       <change beforePath="$PROJECT_DIR$/res/shaders/particleFragment.shader" afterPath="$PROJECT_DIR$/res/shaders/particleFragment.shader" />
       <change beforePath="$PROJECT_DIR$/res/shaders/particleVertex.shader" afterPath="$PROJECT_DIR$/res/shaders/particleVertex.shader" />
-      <change beforePath="$PROJECT_DIR$/src/engine/toolbox/Maths.java" afterPath="$PROJECT_DIR$/src/engine/toolbox/Maths.java" />
+      <change beforePath="$PROJECT_DIR$/src/image/MasterRenderer.java" afterPath="$PROJECT_DIR$/src/image/MasterRenderer.java" />
       <change beforePath="$PROJECT_DIR$/src/image/MusicController.java" afterPath="$PROJECT_DIR$/src/image/MusicController.java" />
       <change beforePath="$PROJECT_DIR$/src/image/ParticleRenderer.java" afterPath="$PROJECT_DIR$/src/image/ParticleRenderer.java" />
+      <change beforePath="$PROJECT_DIR$/src/image/ParticleShader.java" afterPath="$PROJECT_DIR$/src/image/ParticleShader.java" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -99,46 +70,60 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/image/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="560">
-              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="MusicController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/image/MusicController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1760">
-              <caret line="72" column="59" lean-forward="false" selection-start-line="72" selection-start-column="59" selection-end-line="72" selection-end-column="59" />
+            <state relative-caret-position="0">
+              <caret line="242" column="34" lean-forward="false" selection-start-line="242" selection-start-column="34" selection-end-line="242" selection-end-column="34" />
               <folding>
-                <element signature="e#11371#11372#0" expanded="true" />
-                <element signature="e#11396#11397#0" expanded="true" />
+                <element signature="e#11387#11388#0" expanded="true" />
+                <element signature="e#11412#11413#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ParticleRenderer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ParticleRenderer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/image/ParticleRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="800">
-              <caret line="166" column="100" lean-forward="false" selection-start-line="166" selection-start-column="100" selection-end-line="166" selection-end-column="100" />
+            <state relative-caret-position="320">
+              <caret line="64" column="71" lean-forward="false" selection-start-line="64" selection-start-column="71" selection-end-line="64" selection-end-column="71" />
               <folding>
+                <element signature="e#6380#6381#0" expanded="true" />
+                <element signature="e#6446#6447#0" expanded="true" />
                 <element signature="method#run#0;class#ParticleRenderer#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Maths.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/engine/toolbox/Maths.java">
+      <file leaf-file-name="Wind.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/image/Wind.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="23" lean-forward="false" selection-start-line="0" selection-start-column="23" selection-end-line="0" selection-end-column="23" />
+            <state relative-caret-position="720">
+              <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Particle.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/image/Particle.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="5" column="6" lean-forward="false" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ParticleShader.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/image/ParticleShader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="280">
+              <caret line="9" column="33" lean-forward="false" selection-start-line="9" selection-start-column="33" selection-end-line="9" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -147,8 +132,8 @@
       <file leaf-file-name="MasterRenderer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/image/MasterRenderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3240">
-              <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+            <state relative-caret-position="760">
+              <caret line="67" column="21" lean-forward="true" selection-start-line="67" selection-start-column="21" selection-end-line="67" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -167,18 +152,8 @@
       <file leaf-file-name="particleVertex.shader" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/shaders/particleVertex.shader">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1133">
-              <caret line="60" column="50" lean-forward="false" selection-start-line="60" selection-start-column="50" selection-end-line="60" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Profile.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/data/Profile.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2000">
-              <caret line="63" column="5" lean-forward="false" selection-start-line="63" selection-start-column="5" selection-end-line="63" selection-end-column="5" />
+            <state relative-caret-position="813">
+              <caret line="53" column="31" lean-forward="true" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -198,7 +173,11 @@
       <find>MusicMain</find>
       <find>f</find>
       <find>po</find>
+      <find>glBlend</find>
     </findStrings>
+    <replaceStrings>
+      <replace />
+    </replaceStrings>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -222,11 +201,8 @@
         <option value="$PROJECT_DIR$/src/image/OutputShader.java" />
         <option value="$PROJECT_DIR$/src/image/LineShader.java" />
         <option value="$PROJECT_DIR$/src/image/PostShader.java" />
-        <option value="$PROJECT_DIR$/src/engine/sound/MasterSound.java" />
         <option value="$PROJECT_DIR$/src/image/OverlayManager.java" />
-        <option value="$PROJECT_DIR$/res/gui/MusicMain.fxml" />
         <option value="$PROJECT_DIR$/src/engine/renderEngine/Loader.java" />
-        <option value="$PROJECT_DIR$/src/image/ParticleShader.java" />
         <option value="$PROJECT_DIR$/src/engine/entities/Camera.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/image/Profile.java" />
@@ -234,12 +210,18 @@
         <option value="$PROJECT_DIR$/src/engine/renderEngine/Dimension.java" />
         <option value="$PROJECT_DIR$/src/data/FileNameAdapter.java" />
         <option value="$PROJECT_DIR$/src/data/Profile.java" />
-        <option value="$PROJECT_DIR$/src/image/MasterRenderer.java" />
-        <option value="$PROJECT_DIR$/src/image/MusicController.java" />
         <option value="$PROJECT_DIR$/src/engine/toolbox/Maths.java" />
+        <option value="$PROJECT_DIR$/src/image/ParticleShader.java" />
+        <option value="$PROJECT_DIR$/src/image/MusicController.java" />
+        <option value="$PROJECT_DIR$/src/engine/sound/MasterSound.java" />
+        <option value="$PROJECT_DIR$/src/image/ImageRenderer.java" />
+        <option value="$PROJECT_DIR$/res/gui/MusicMain.fxml" />
+        <option value="$PROJECT_DIR$/src/image/MasterRenderer.java" />
         <option value="$PROJECT_DIR$/res/shaders/particleFragment.shader" />
         <option value="$PROJECT_DIR$/res/shaders/particleVertex.shader" />
+        <option value="$PROJECT_DIR$/src/image/Particle.java" />
         <option value="$PROJECT_DIR$/src/image/ParticleRenderer.java" />
+        <option value="$PROJECT_DIR$/src/image/Wind.java" />
       </list>
     </option>
   </component>
@@ -258,8 +240,8 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="792" />
-    <option name="y" value="-42" />
+    <option name="x" value="1881" />
+    <option name="y" value="34" />
     <option name="width" value="3868" />
     <option name="height" value="2075" />
   </component>
@@ -282,12 +264,30 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="MusicVisualizer" type="b2602c69:ProjectViewProjectNode" />
               <item name="MusicVisualizer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MusicVisualizer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MusicVisualizer" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MusicVisualizer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MusicVisualizer" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+              <item name="gui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MusicVisualizer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MusicVisualizer" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+              <item name="tex" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MusicVisualizer" type="b2602c69:ProjectViewProjectNode" />
@@ -330,10 +330,9 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
-      <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -634,7 +633,14 @@
       <option name="project" value="LOCAL" />
       <updated>1513003242419</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Particle shader now use transforms">
+      <created>1513170547731</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1513170547731</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -651,12 +657,12 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33333334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16041666" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21727173" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21892188" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33072916" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.66276044" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -678,42 +684,6 @@
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
-    <layout-to-restore>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33333334" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16041666" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39933994" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32948294" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21727173" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3308977" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -724,7 +694,8 @@
     <MESSAGE value="Added gitignore" />
     <MESSAGE value="Merge remote-tracking branch 'origin/master'" />
     <MESSAGE value="Changes to particles" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes to particles" />
+    <MESSAGE value="Particle shader now use transforms" />
+    <option name="LAST_COMMIT_MESSAGE" value="Particle shader now use transforms" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -741,7 +712,7 @@
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="5" />
+      <option name="time" value="6" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -750,59 +721,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/engine/textures/ModelTexture.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/engine/textures/TextureData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/gui/MusicMain.fxml">
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/image/MusicController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9920">
-          <caret line="284" column="52" lean-forward="false" selection-start-line="284" selection-start-column="52" selection-end-line="284" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/image/ParticleRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/engine/renderEngine/Loader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5360">
-          <caret line="134" column="15" lean-forward="false" selection-start-line="134" selection-start-column="15" selection-end-line="134" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/image/MasterRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1200">
-          <caret line="43" column="47" lean-forward="false" selection-start-line="43" selection-start-column="47" selection-end-line="43" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/engine/model/TexturedModel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="400">
@@ -943,16 +861,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/gui/MusicMain.fxml">
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/engine/renderEngine/Loader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2560">
@@ -965,13 +873,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
           <caret line="25" column="33" lean-forward="false" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/image/ParticleShader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1400">
-          <caret line="41" column="56" lean-forward="false" selection-start-line="41" selection-start-column="56" selection-end-line="41" selection-end-column="56" />
         </state>
       </provider>
     </entry>
@@ -1008,6 +909,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1033,14 +935,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/data/Profile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2000">
-          <caret line="63" column="5" lean-forward="false" selection-start-line="63" selection-start-column="5" selection-end-line="63" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="347">
@@ -1057,21 +951,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/image/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
+        <state relative-caret-position="0">
           <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Caravan Palace.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/image/MasterRenderer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3240">
-          <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1087,29 +968,102 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/image/MusicController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1760">
-          <caret line="72" column="59" lean-forward="false" selection-start-line="72" selection-start-column="59" selection-end-line="72" selection-end-column="59" />
-          <folding>
-            <element signature="e#11371#11372#0" expanded="true" />
-            <element signature="e#11396#11397#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/engine/toolbox/Maths.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="23" lean-forward="false" selection-start-line="0" selection-start-column="23" selection-end-line="0" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/tex/SegoeUI.fnt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/tex/particle.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/data/Profile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="445">
+          <caret line="67" column="16" lean-forward="false" selection-start-line="67" selection-start-column="16" selection-end-line="67" selection-end-column="16" />
+          <folding>
+            <element signature="e#2070#2071#0" expanded="false" />
+            <element signature="e#2093#2094#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Caravan Palace.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/engine/sound/MasterSound.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3280">
+          <caret line="96" column="23" lean-forward="false" selection-start-line="96" selection-start-column="23" selection-end-line="96" selection-end-column="23" />
+          <folding>
+            <element signature="e#2737#2738#0" expanded="false" />
+            <element signature="e#2759#2760#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/image/ImageRenderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1360">
+          <caret line="60" column="5" lean-forward="false" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/engine/math/Vector3f.java">
+    <entry file="file://$PROJECT_DIR$/src/image/MusicController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="78" column="20" lean-forward="false" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="20" />
+        <state relative-caret-position="0">
+          <caret line="242" column="34" lean-forward="false" selection-start-line="242" selection-start-column="34" selection-end-line="242" selection-end-column="34" />
+          <folding>
+            <element signature="e#11387#11388#0" expanded="true" />
+            <element signature="e#11412#11413#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/image/MusicMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="48" column="13" lean-forward="false" selection-start-line="48" selection-start-column="13" selection-end-line="48" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/gui/MusicMain.fxml">
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/image/MasterRenderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="760">
+          <caret line="67" column="21" lean-forward="true" selection-start-line="67" selection-start-column="21" selection-end-line="67" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/image/ParticleShader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="9" column="33" lean-forward="false" selection-start-line="9" selection-start-column="33" selection-end-line="9" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1124,19 +1078,50 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/res/shaders/particleVertex.shader">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1133">
-          <caret line="60" column="50" lean-forward="false" selection-start-line="60" selection-start-column="50" selection-end-line="60" selection-end-column="50" />
+        <state relative-caret-position="813">
+          <caret line="53" column="31" lean-forward="true" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/engine/math/Vector3f.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="78" column="20" lean-forward="false" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="20" />
+          <folding>
+            <element signature="e#2105#2106#0" expanded="true" />
+            <element signature="e#2152#2153#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/image/Particle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="5" column="6" lean-forward="false" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/image/ParticleRenderer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="166" column="100" lean-forward="false" selection-start-line="166" selection-start-column="100" selection-end-line="166" selection-end-column="100" />
+        <state relative-caret-position="320">
+          <caret line="64" column="71" lean-forward="false" selection-start-line="64" selection-start-column="71" selection-end-line="64" selection-end-column="71" />
           <folding>
+            <element signature="e#6380#6381#0" expanded="true" />
+            <element signature="e#6446#6447#0" expanded="true" />
             <element signature="method#run#0;class#ParticleRenderer#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/image/Wind.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
