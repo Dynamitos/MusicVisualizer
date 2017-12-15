@@ -70,7 +70,7 @@ public class MusicController{
         chooser = new FileChooser();
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPEG3 Files (*.mp3)", "*.mp3"));
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront Files (*.wav)", "*.wav"));
-        currentProfile = loadProfile(new File("../Lone Digger.prof"));
+        currentProfile = loadProfile(new File("../Where I'll be Waiting.prof"));
         profiles = new HashMap<>();
         updateComponents();
     }

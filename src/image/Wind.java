@@ -18,7 +18,7 @@ public class Wind {
         float scalar = direction.dot(m0m1) / direction.dot(direction);
         Vector3f g = start.add(direction.scale(scalar));
         Vector3f partToG = g.subtract(p.position);
-        Vector3f drag = partToG.add(direction).normalize().scale((float) (1 / Math.pow(partToG.length(), 2)));
-        p.speed = p.speed.add(drag);
+        Vector3f drag = partToG.scale(1 / partToG.length()).add(direction).scale(strength);
+        p.speed.add(drag);
     }
 }
