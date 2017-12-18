@@ -24,6 +24,7 @@ public class MasterSound {
 	//private float[][] prevValues;
 	//private int SMOOTHING_LEVEL = 8;
 	private float bassGain = 0;
+	private float rawBassGain;
 	public static final int TESS_LEVEL = 16;
 
 	public String sketchPath(String fileName) {
@@ -82,10 +83,14 @@ public class MasterSound {
 		for (int i = 0; i < bands.length; i++) {
 			tempGain += bands[i] / (1 + i * i);
 		}
+
+		rawBassGain = tempGain;
+
 		if (tempGain < bassGain)
 			bassGain -= 0.1f*DisplayManager.getFrameTimeSeconds();
 		else
 			bassGain = tempGain;
+
 		for (int i = 0; i < values.length; i++) {
 			values[i] /= 1000.0f;
 			if (values[i] < 0)
@@ -96,6 +101,8 @@ public class MasterSound {
 	public float getBass() {
 		return bassGain;
 	}
+
+	public float getRawBassGain(){return rawBassGain;}
 
 	public void end() {
 		song.close();

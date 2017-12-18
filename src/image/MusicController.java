@@ -1,10 +1,9 @@
 package image;
 
+import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.xml.bind.JAXBContext;
@@ -15,6 +14,8 @@ import data.Profile;
 import engine.math.Vector2f;
 import engine.math.Vector4f;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
@@ -71,6 +72,18 @@ public class MusicController{
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPEG3 Files (*.mp3)", "*.mp3"));
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront Files (*.wav)", "*.wav"));
         currentProfile = loadProfile(new File("../Where I'll be Waiting.prof"));
+
+		java.awt.Dimension temp = Toolkit.getDefaultToolkit().getScreenSize();
+		Set<Dimension> dimensions = new HashSet<>();
+		dimensions.add(new Dimension((int) temp.getWidth(), (int) temp.getHeight()));
+		dimensions.add(new Dimension(640, 360));
+		dimensions.add(new Dimension(960, 540));
+		dimensions.add(new Dimension(1024, 600));
+		dimensions.add(new Dimension(1280, 720));
+		dimensions.add(new Dimension(1600, 900));
+		dimensions.add(new Dimension(1920, 1080));
+		dimensions.add(new Dimension(3840, 2160));
+		cbResolution.getItems().addAll(dimensions);
         profiles = new HashMap<>();
         updateComponents();
     }

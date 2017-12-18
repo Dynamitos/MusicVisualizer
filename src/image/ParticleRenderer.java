@@ -67,7 +67,7 @@ public class ParticleRenderer extends Thread {
         center = new Vector3f(0, 0, 0);
         up = new Vector3f(0, 1, 0);
 
-        perlinNoise = new PerlinNoise(10);
+        perlinNoise = new PerlinNoise(20);
         wind = new Wind(new Vector3f(-20, 0, 0), new Vector3f(20, 0, 0));
         attractor = new Vector3f(0, 1, 0);
 
@@ -131,7 +131,7 @@ public class ParticleRenderer extends Thread {
 
         return 0;
     }
-
+    private float counter = 0;
     public void render(float intensity) {
         shader.start();
 
@@ -144,18 +144,23 @@ public class ParticleRenderer extends Thread {
         attractor.y += random(-5 * frameTime, 5 * frameTime);
         attractor = attractor.normalize();
 
-        int numParticles = (int) Math.max(random(-6, 10), 0);
+        counter+=frameTime*10;
+
+        int numParticles = (int) counter;
+
+        counter -= numParticles;
+
         for (int i = 0; i < numParticles; i++) {
             int index = findUnusedParticle();
             Particle p = particles[index];
             if (p == null)
                 p = new Particle();
             p.position = new Vector3f(random(-5, 5), -10, random(-5, 5));
-            p.speed = new Vector3f(random(-0.5f, 0.5f), 1, random(-0.5f, 0.5f));
+            p.speed = new Vector3f(random(-0.5f, 0.5f), 2, random(-0.5f, 0.5f));
             p.rotation = new Vector3f(0, 0, 0);
             p.dimensions = new Vector2f(1, 1);
             p.scale = 0.1f;
-            p.life = 5;
+            p.life = 10f;
         }
 
         int length = 0;
@@ -163,10 +168,10 @@ public class ParticleRenderer extends Thread {
             Particle p = particles[i];
             if (p != null) {
                 if (p.life > 0) {
-                    p.position = p.position.add(p.speed.multiply(0.1f));
-                    p.rotation = p.rotation.add(p.speed.multiply(0.1f));
-                    p.scale =
+                    p.position = p.position.add(p.speed.scale(frameTime));
+                    p.rotation = p.rotation.add(p.speed.multiply(frameTime));
 
+                    p.speed = p.speed.add(perlinNoise.perlin(p.position.x, p.position.y, p.position.z).scale(0.1f));
 
                     particleData[length * VERTEX_SIZE + 0] = p.position.x;
                     particleData[length * VERTEX_SIZE + 1] = p.position.y;

@@ -65,7 +65,7 @@ public class MasterRenderer {
 		postRenderer.bindPostProcessor();
 
 		image.render(bassGain, musicBuffer);
-		particles.render(bassGain);
+		particles.render(sound.getRawBassGain());
 		for (LineRenderer f : lines) {
 			f.render(data);
 		}

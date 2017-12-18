@@ -1,52 +1,70 @@
 package image;
 
 import engine.math.Vector3f;
+import engine.renderEngine.DisplayManager;
 
 public class PerlinNoise {
-    private Vector3f[][] grid;
+    private float[][][][] grid;
+    private int dimension;
 
-    private float lerp(float a, float b, float w) {
-        return (1.0f - w) * a + w * b;
+    private float[] lerp(float[] a, float b[], float w) {
+        float[] r = new float[3];
+        r[0] = a[0] * (1 - w) + b[0] * w;
+        r[1] = a[1] * (1 - w) + b[1] * w;
+        r[2] = a[2] * (1 - w) + b[2] * w;
+        return r;
     }
 
-    private float dotGridGradient(int ix, int iy, float x, float y) {
-        float dx = x - (float) ix;
-        float dy = y - (float) iy;
+    public Vector3f perlin(float x, float y, float z) {
+        x+=dimension/2;
+        y+=dimension/2;
+        z+=dimension/2;
+        if(x < 0 || y < 0 || z < 0 || x >= dimension-1 || y >= dimension-1 || z >= dimension-1)
+            return new Vector3f();
 
-        return (dx * grid[ix][iy].x + dy * grid[ix][iy].y);
-    }
+        int ix0 = (int) x;
+        int ix1 = ix0 + 1;
+        int iy0 = (int) y;
+        int iy1 = iy0 + 1;
+        int iz0 = (int) z;
+        int iz1 = iz0 + 1;
 
-    private float perlin(float x, float y, float z) {
-        int x0 = (int) x;
-        int x1 = x0 + 1;
-        int y0 = (int) y;
-        int y1 = y0 + 1;
+        float sx = x - (float) ix0;
+        float sy = y - (float) iy0;
+        float sz = z - (float) iz0;
 
-        float sx = x - (float) x0;
-        float sy = y - (float) y0;
+        float[] x0y0z0 = grid[ix0][iy0][iz0];
+        float[] x0y0z1 = grid[ix0][iy0][iz1];
+        float[] x0y1z0 = grid[ix0][iy1][iz0];
+        float[] x0y1z1 = grid[ix0][iy1][iz1];
+        float[] x1y0z0 = grid[ix1][iy0][iz0];
+        float[] x1y0z1 = grid[ix1][iy0][iz1];
+        float[] x1y1z0 = grid[ix1][iy1][iz0];
+        float[] x1y1z1 = grid[ix1][iy1][iz1];
 
-        float n0, n1, ix0, ix1, value;
-        n0 = dotGridGradient(x0, y0, x, y);
-        n1 = dotGridGradient(x1, y0, x, y);
-        ix0 = lerp(n0, n1, sx);
-        n0 = dotGridGradient(x0, y1, x, y);
-        n1 = dotGridGradient(x1, y1, x, y);
-        ix1 = lerp(n0, n1, sx);
-        value = lerp(ix0, ix1, sy);
+        float[] x0y0 = lerp(x0y0z0, x0y0z1, sz);
+        float[] x0y1 = lerp(x0y1z0, x0y1z1, sz);
+        float[] x1y0 = lerp(x1y0z0, x1y0z1, sz);
+        float[] x1y1 = lerp(x1y1z0, x1y1z1, sz);
 
-        return value;
+        float[] x0 = lerp(x0y0, x0y1, sy);
+        float[] x1 = lerp(x1y0, x1y1, sy);
+
+        float[] result = lerp(x0, x1, sx);
+
+        return new Vector3f(result[0], result[1], result[2]);
     }
 
     public PerlinNoise(int dimensions) {
-        grid = new Vector3f[dimensions][dimensions];
+        this.dimension = dimensions;
+        grid = new float[dimensions][dimensions][dimensions][3];
         for (int x = 0; x < dimensions; ++x) {
             for (int y = 0; y < dimensions; ++y) {
-
-                grid[x][y] = new Vector3f(
-                        ParticleRenderer.random(-1, 1),
-                        ParticleRenderer.random(-1, 1),
-                        ParticleRenderer.random(-1, 1)).normalize();
-
+                for(int z = 0; z < dimensions; ++z) {
+                    grid[x][y][z][0] = ParticleRenderer.random(-1, 1);
+                    grid[x][y][z][1] = ParticleRenderer.random(-1, 1);
+                    grid[x][y][z][1] = ParticleRenderer.random(-1, 1);
+                }
             }
         }
     }
