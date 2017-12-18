@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glLineWidth;
 
+import java.io.File;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import engine.toolbox.Input;
 public class MasterRenderer {
 	private ImageRenderer image;
 	private List<LineRenderer> lines;
+	private List<ColumnRenderer> columns;
 	private PostRenderer postRenderer;
 	private ParticleRenderer particles;
 	private MasterSound sound;
@@ -40,8 +42,10 @@ public class MasterRenderer {
 				p.getIntensityOffset());
 		List<String> lyrics = p.getText();
 		lines = new ArrayList<>(8);
+		columns = new ArrayList<>(8);
 		for (int i = 0; i < p.getLines().size(); i++) {
 			lines.add(new LineRenderer(NUM_SAMPLES * MasterSound.TESS_LEVEL, p.getLines().get(i)));
+			columns.add(new ColumnRenderer(NUM_SAMPLES * MasterSound.TESS_LEVEL, p.getLines().get(i)));
 		}
 		particles = new ParticleRenderer(loader);
 		if (p.getOverlay() == null) {
@@ -66,7 +70,7 @@ public class MasterRenderer {
 
 		image.render(bassGain, musicBuffer);
 		particles.render(sound.getRawBassGain());
-		for (LineRenderer f : lines) {
+		for (ColumnRenderer f : columns) {
 			f.render(data);
 		}
 		postRenderer.render();
@@ -93,4 +97,14 @@ public class MasterRenderer {
 		DisplayManager.closeDisplay();
 	}
 
+	public static void main(String[] args) {
+		Profile currentProfile = new MusicController().loadProfile(new File("../Fractures.prof"));
+		DisplayManager.setDimension(currentProfile.getResolution());
+		MasterRenderer renderer = new MasterRenderer(currentProfile);
+		while (!Input.keys[GLFW.GLFW_KEY_ESCAPE] && !DisplayManager.shouldClose()) {
+			renderer.render();
+		}
+		renderer.terminate();
+		Input.keys[GLFW.GLFW_KEY_ESCAPE] = false;
+	}
 }
