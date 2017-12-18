@@ -28,7 +28,7 @@ public class LineRenderer {
 	private int displacementVBO;
 	private LineShader shader;
 	private Vector4f lineColor;
-	FloatBuffer dataBuffer;
+	private FloatBuffer dataBuffer;
 	public LineRenderer(int numPoints, Line line)
 	{
 		this.lineColor = line.color;
