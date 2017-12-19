@@ -210,6 +210,7 @@ public class MusicController{
 			p = (Profile)unmarshaller.unmarshal(f);
 		} catch(Exception e)
 		{
+			e.printStackTrace();
 			try {
 
 				BufferedReader br = new BufferedReader(new FileReader(f));

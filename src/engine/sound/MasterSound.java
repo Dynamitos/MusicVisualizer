@@ -70,10 +70,10 @@ public class MasterSound {
 				values[i * TESS_LEVEL + TESS_LEVEL / 2] -= 0.0001f;
 			}
 		}
-		for (int i = 0; i < MasterRenderer.NUM_SAMPLES - 1; i++) {
+		for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
 			float value = values[i * TESS_LEVEL + TESS_LEVEL / 2];
-			for (int j = -TESS_LEVEL / 2; j <= TESS_LEVEL / 2; j++) {
-				float temp = (float) (value - Math.pow(j * 1.0f, 2f));
+			for (int j = -TESS_LEVEL / 2; j <= TESS_LEVEL / 2-1; j++) {
+				float temp = value;//(float) (value - Math.pow(j * 1.0f, 2f));
 				if (j != 0)
 					values[i * TESS_LEVEL + TESS_LEVEL / 2 + j] = Math.max(temp,
 							values[i * TESS_LEVEL + TESS_LEVEL / 2 + j]);

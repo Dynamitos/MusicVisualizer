@@ -5,10 +5,11 @@ import engine.renderEngine.DisplayManager;
 
 public class PerlinNoise {
     private float[][][][] grid;
+    private float[] x0y0, x0y1, x1y0, x1y1, x0, x1, result;
+    private Vector3f resultVec;
     private int dimension;
 
-    private float[] lerp(float[] a, float b[], float w) {
-        float[] r = new float[3];
+    private float[] lerp(float[] a, float[] b, float w, float[] r) {
         r[0] = a[0] * (1 - w) + b[0] * w;
         r[1] = a[1] * (1 - w) + b[1] * w;
         r[2] = a[2] * (1 - w) + b[2] * w;
@@ -42,20 +43,31 @@ public class PerlinNoise {
         float[] x1y1z0 = grid[ix1][iy1][iz0];
         float[] x1y1z1 = grid[ix1][iy1][iz1];
 
-        float[] x0y0 = lerp(x0y0z0, x0y0z1, sz);
-        float[] x0y1 = lerp(x0y1z0, x0y1z1, sz);
-        float[] x1y0 = lerp(x1y0z0, x1y0z1, sz);
-        float[] x1y1 = lerp(x1y1z0, x1y1z1, sz);
+        lerp(x0y0z0, x0y0z1, sz, x0y0);
+        lerp(x0y1z0, x0y1z1, sz, x0y1);
+        lerp(x1y0z0, x1y0z1, sz, x1y0);
+        lerp(x1y1z0, x1y1z1, sz, x1y1);
 
-        float[] x0 = lerp(x0y0, x0y1, sy);
-        float[] x1 = lerp(x1y0, x1y1, sy);
+        lerp(x0y0, x0y1, sy, x0);
+        lerp(x1y0, x1y1, sy, x1);
 
-        float[] result = lerp(x0, x1, sx);
+        lerp(x0, x1, sx, result);
 
-        return new Vector3f(result[0], result[1], result[2]);
+        resultVec.x = result[0];
+        resultVec.y = result[1];
+        resultVec.z = result[2];
+        return resultVec;
     }
 
     public PerlinNoise(int dimensions) {
+        resultVec = new Vector3f();
+        x0y0 = new float[3];
+        x0y1 = new float[3];
+        x1y0 = new float[3];
+        x1y1 = new float[3];
+        x0 = new float[3];
+        x1 = new float[3];
+        result = new float[3];
         this.dimension = dimensions;
         grid = new float[dimensions][dimensions][dimensions][3];
         for (int x = 0; x < dimensions; ++x) {
