@@ -44,7 +44,7 @@ public class Profile {
 	 */
 	public Profile(String name, File musicFile, List<Line> lines, String image, String overlay, Dimension resolution,
 			float intensityScale, float intensityOffset, boolean scaling, boolean vSync, int numSamples) {
-		this.setNumSamples(numSamples);
+		this.numSamples = numSamples;
 		this.musicFile = musicFile;
 		this.image = image;
 		this.overlay = overlay;

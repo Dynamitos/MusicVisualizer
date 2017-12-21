@@ -7,6 +7,7 @@ public class PerlinNoise {
     private float[][][][] grid;
     private float[] x0y0, x0y1, x1y0, x1y1, x0, x1, result;
     private Vector3f resultVec;
+    private Vector3f defaultVec;
     private int dimension;
 
     private float[] lerp(float[] a, float[] b, float w, float[] r) {
@@ -21,7 +22,7 @@ public class PerlinNoise {
         y+=dimension/2;
         z+=dimension/2;
         if(x < 0 || y < 0 || z < 0 || x >= dimension-1 || y >= dimension-1 || z >= dimension-1)
-            return new Vector3f();
+            return defaultVec;
 
         int ix0 = (int) x;
         int ix1 = ix0 + 1;
@@ -61,6 +62,7 @@ public class PerlinNoise {
 
     public PerlinNoise(int dimensions) {
         resultVec = new Vector3f();
+        defaultVec = new Vector3f();
         x0y0 = new float[3];
         x0y1 = new float[3];
         x1y0 = new float[3];
