@@ -17,6 +17,7 @@ import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 
 import java.nio.FloatBuffer;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import engine.math.Vector2f;
@@ -28,6 +29,7 @@ import org.lwjgl.BufferUtils;
 import engine.math.Matrix4f;
 import engine.math.Vector3f;
 import engine.renderEngine.DisplayManager;
+import sun.nio.ch.ThreadPool;
 
 public class ParticleRenderer extends Thread {
     private int vboParticle;
@@ -43,6 +45,8 @@ public class ParticleRenderer extends Thread {
     private Vector3f position;
     private Vector3f center;
     private Vector3f up;
+
+    private ThreadPoolExecutor executor;
 
     private Wind wind;
     private PerlinNoise perlinNoise;
@@ -62,6 +66,8 @@ public class ParticleRenderer extends Thread {
         particleBuffer = BufferUtils.createFloatBuffer(MAX_PARTICLES * VERTEX_SIZE);
         particleData = new float[MAX_PARTICLES * VERTEX_SIZE];
         viewMatrix = new Matrix4f();
+
+        executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(16);
 
         position = new Vector3f(0, 0, -10);
         center = new Vector3f(0, 0, 0);
@@ -168,23 +174,27 @@ public class ParticleRenderer extends Thread {
             Particle p = particles[i];
             if (p != null) {
                 if (p.life > 0) {
-                    p.position = p.position.add(p.speed.scale(frameTime));
-                    p.rotation = p.rotation.add(p.speed.multiply(frameTime));
+                    final int index = length;
+                    executor.submit(() ->
+                    {
+                        p.position = p.position.add(p.speed.scale(frameTime));
+                        p.rotation = p.rotation.add(p.speed.multiply(frameTime));
 
-                    p.speed = p.speed.add(perlinNoise.perlin(p.position.x, p.position.y, p.position.z).scale(0.1f));
+                        p.speed = p.speed.add(perlinNoise.perlin(p.position.x, p.position.y, p.position.z).scale(0.1f));
 
-                    particleData[length * VERTEX_SIZE + 0] = p.position.x;
-                    particleData[length * VERTEX_SIZE + 1] = p.position.y;
-                    particleData[length * VERTEX_SIZE + 2] = p.position.z;
-                    particleData[length * VERTEX_SIZE + 3] = p.rotation.x;
-                    particleData[length * VERTEX_SIZE + 4] = p.rotation.y;
-                    particleData[length * VERTEX_SIZE + 5] = p.rotation.z;
-                    particleData[length * VERTEX_SIZE + 6] = p.dimensions.x;
-                    particleData[length * VERTEX_SIZE + 7] = p.dimensions.y;
-                    particleData[length * VERTEX_SIZE + 8] = p.scale;
+                        particleData[index * VERTEX_SIZE + 0] = p.position.x;
+                        particleData[index * VERTEX_SIZE + 1] = p.position.y;
+                        particleData[index * VERTEX_SIZE + 2] = p.position.z;
+                        particleData[index * VERTEX_SIZE + 3] = p.rotation.x;
+                        particleData[index * VERTEX_SIZE + 4] = p.rotation.y;
+                        particleData[index * VERTEX_SIZE + 5] = p.rotation.z;
+                        particleData[index * VERTEX_SIZE + 6] = p.dimensions.x;
+                        particleData[index * VERTEX_SIZE + 7] = p.dimensions.y;
+                        particleData[index * VERTEX_SIZE + 8] = p.scale;
+
+                        p.life -= frameTime;
+                    });
                     length++;
-
-                    p.life -= frameTime;
                 }
             }
         }

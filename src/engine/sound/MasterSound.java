@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
@@ -24,7 +25,7 @@ public class MasterSound {
 	private BeatDetect beatDetect;
 	private float bassGain = 0;
 	private float rawBassGain;
-	public static final int TESS_LEVEL = 16;
+	public static final int TESS_LEVEL = 4;
 
 	public String sketchPath(String fileName) {
 		return fileName;
@@ -45,7 +46,7 @@ public class MasterSound {
 		song = minim.loadFile(f.getAbsolutePath(), 2048);
 		song.loop();
 		fft = new FFT(song.bufferSize(), song.sampleRate());
-		MasterRenderer.NUM_SAMPLES = 128;
+		MasterRenderer.NUM_SAMPLES = 64;
 		values = new float[MasterRenderer.NUM_SAMPLES * TESS_LEVEL];
 		targets = new float[values.length];
 		bands = new float[MasterRenderer.NUM_SAMPLES];
@@ -62,16 +63,17 @@ public class MasterSound {
 	public void run() {
 		fft.forward(song.mix);
 		Arrays.fill(targets, 0);
-		for(int i = 0; i < MasterRenderer.NUM_SAMPLES; ++i)
+		for(int i = 0; i < bands.length; ++i)
 		{
 			bands[i] = fft.getBand(i)/1000f;
 		}
+
 		int offset = TESS_LEVEL / 2;
 		float j = -offset;
 		for(int i = 0; i < values.length; ++i)
 		{
 			float value = bands[i/TESS_LEVEL];
-			targets[i] = value;// Math.max((float)(value - Math.pow(j / TESS_LEVEL, 2.0f)), 0);
+			targets[i] = value;//Math.max((float)(value - Math.pow(j*1.f, 2.0f)), 0);
 			j++;
 			if(j >= offset)
 			{
@@ -80,14 +82,7 @@ public class MasterSound {
 		}
 		for(int i = 0; i < values.length; ++i)
 		{
-			if(targets[i] > values[i])
-			{
-				values[i] = targets[i];
-			}
-			else if(values[i] - targets[i] > 0.01f)
-			{
-				values[i] -= (values[i] - targets[i])*DisplayManager.getFrameTimeSeconds()*10f;
-			}
+			values[i] -= (values[i] - targets[i])*DisplayManager.getFrameTimeSeconds()*10f;
 		}
 		/*for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
 			float value = fft.getBand(i);

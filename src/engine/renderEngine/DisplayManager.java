@@ -101,7 +101,7 @@ public class DisplayManager {
 		double currentTime = glfwGetTime();
 		nbFrames++;
 		if (currentTime - lastPrintTime >= 1.0f) {
-			System.out.println(1000.0f / (double) nbFrames + " ms per frame");
+			//System.out.println(1000.0f / (double) nbFrames + " ms per frame");
 			nbFrames = 0;
 			lastPrintTime += 1.0f;
 		}
