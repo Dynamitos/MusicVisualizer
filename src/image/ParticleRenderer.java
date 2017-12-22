@@ -239,6 +239,9 @@ public class ParticleRenderer extends Thread {
 
     }
 
+    public void terminate() {
+        executor.shutdown();
+    }
     @Override
     public void run() {/*
      * while (false) { if (colorFlagx) { color.x +=
@@ -260,4 +263,5 @@ public class ParticleRenderer extends Thread {
      * (InterruptedException e) { interrupt(); } }
      */
     }
+
 }

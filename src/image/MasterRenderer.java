@@ -94,11 +94,12 @@ public class MasterRenderer {
 	}
 	public void terminate() {
 		sound.end();
+		particles.terminate();
 		DisplayManager.closeDisplay();
 	}
 
 	public static void main(String[] args) {
-		Profile currentProfile = new MusicController().loadProfile(new File("../Fractures.prof"));
+		Profile currentProfile = new MusicController().loadProfile(new File("../Zig Zag.prof"));
 		DisplayManager.setDimension(currentProfile.getResolution());
 		MasterRenderer renderer = new MasterRenderer(currentProfile);
 		while (!Input.keys[GLFW.GLFW_KEY_ESCAPE] && !DisplayManager.shouldClose()) {

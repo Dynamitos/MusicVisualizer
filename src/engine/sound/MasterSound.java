@@ -19,6 +19,7 @@ public class MasterSound {
 	private float[] values;
 	private float[] targets;
 	private float[] bands;
+	private float[] beats;
 	private Minim minim;
 	private AudioPlayer song;
 	private FFT fft;
@@ -46,10 +47,11 @@ public class MasterSound {
 		song = minim.loadFile(f.getAbsolutePath(), 2048);
 		song.loop();
 		fft = new FFT(song.bufferSize(), song.sampleRate());
-		MasterRenderer.NUM_SAMPLES = 64;
+		MasterRenderer.NUM_SAMPLES = 32;
 		values = new float[MasterRenderer.NUM_SAMPLES * TESS_LEVEL];
 		targets = new float[values.length];
 		bands = new float[MasterRenderer.NUM_SAMPLES];
+		beats = new float[bands.length];
 		beatDetect = new BeatDetect();
 		beatDetect.detectMode(BeatDetect.FREQ_ENERGY);
 
@@ -67,13 +69,27 @@ public class MasterSound {
 		{
 			bands[i] = fft.getBand(i)/1000f;
 		}
-
+		for(int i = 1; i < bands.length - 1; ++i)
+		{
+			if(bands[i-1] < bands[i] && bands[i+1] < bands[i])
+			{
+				beats[i] = bands[i];
+				for(int j = 0; j < bands.length; ++j)
+				{
+					bands[i] = distribution(j, i, beats[i]);
+				}
+			}
+			else
+			{
+				beats[i] = 0;
+			}
+		}
 		int offset = TESS_LEVEL / 2;
 		float j = -offset;
 		for(int i = 0; i < values.length; ++i)
 		{
 			float value = bands[i/TESS_LEVEL];
-			targets[i] = value;//Math.max((float)(value - Math.pow(j*1.f, 2.0f)), 0);
+			targets[i] = value;//(float) (value*Math.pow(Math.E, 2));
 			j++;
 			if(j >= offset)
 			{
@@ -82,7 +98,7 @@ public class MasterSound {
 		}
 		for(int i = 0; i < values.length; ++i)
 		{
-			values[i] -= (values[i] - targets[i])*DisplayManager.getFrameTimeSeconds()*10f;
+			values[i] -= (values[i] - targets[i])*(DisplayManager.getFrameTimeSeconds()*20f);
 		}
 		/*for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
 			float value = fft.getBand(i);
