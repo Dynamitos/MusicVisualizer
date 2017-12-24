@@ -1,7 +1,7 @@
 package image;
 
 import engine.math.Vector3f;
-import engine.renderEngine.DisplayManager;
+import engine.toolbox.Maths;
 
 public class PerlinNoise {
     private float[][][][] grid;
@@ -75,9 +75,9 @@ public class PerlinNoise {
         for (int x = 0; x < dimensions; ++x) {
             for (int y = 0; y < dimensions; ++y) {
                 for(int z = 0; z < dimensions; ++z) {
-                    grid[x][y][z][0] = ParticleRenderer.random(-1, 1);
-                    grid[x][y][z][1] = ParticleRenderer.random(-1, 1);
-                    grid[x][y][z][1] = ParticleRenderer.random(-1, 1);
+                    grid[x][y][z][0] = Maths.random(-1, 1);
+                    grid[x][y][z][1] = Maths.random(-1, 1);
+                    grid[x][y][z][1] = Maths.random(-1, 1);
                 }
             }
         }

@@ -16,5 +16,5 @@ void main(void)
 	texCoords_FS_in = texCoords;
 	vec4 worldPos = transformationMatrix * vec4(position, 1);
 	worldPos_FS_in = worldPos.xyz;
-	gl_Position = worldPos;
+	gl_Position = viewMatrix * worldPos;
 }

@@ -44,8 +44,8 @@ public class MasterRenderer {
 		lines = new ArrayList<>(8);
 		columns = new ArrayList<>(8);
 		for (int i = 0; i < p.getLines().size(); i++) {
-			lines.add(new LineRenderer(NUM_SAMPLES * MasterSound.TESS_LEVEL, p.getLines().get(i)));
-			columns.add(new ColumnRenderer(NUM_SAMPLES * MasterSound.TESS_LEVEL, p.getLines().get(i)));
+			lines.add(new LineRenderer(sound.getDataLength(), p.getLines().get(i)));
+			columns.add(new ColumnRenderer(sound.getDataLength(), p.getLines().get(i)));
 		}
 		particles = new ParticleRenderer(loader);
 		if (p.getOverlay() == null) {
@@ -56,7 +56,7 @@ public class MasterRenderer {
 		glClearColor(0, 0, 0, 1f);
 		glLineWidth(2f);
 		//glCullFace(GL_NONE);
-		musicBuffer = BufferUtils.createFloatBuffer(NUM_SAMPLES * MasterSound.TESS_LEVEL);
+		musicBuffer = BufferUtils.createFloatBuffer(sound.getDataLength());
 		//sound.play();
 	}
 
@@ -97,9 +97,8 @@ public class MasterRenderer {
 		particles.terminate();
 		DisplayManager.closeDisplay();
 	}
-
 	public static void main(String[] args) {
-		Profile currentProfile = new MusicController().loadProfile(new File("../Zig Zag.prof"));
+		Profile currentProfile = new MusicController().loadProfile(new File("../Fractures.prof"));
 		DisplayManager.setDimension(currentProfile.getResolution());
 		MasterRenderer renderer = new MasterRenderer(currentProfile);
 		while (!Input.keys[GLFW.GLFW_KEY_ESCAPE] && !DisplayManager.shouldClose()) {

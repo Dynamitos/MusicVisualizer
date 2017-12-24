@@ -76,4 +76,8 @@ public class Maths {
         Matrix4f.translate(translation, transformationMatrix, transformationMatrix);
         Matrix4f.scale(scale, transformationMatrix, transformationMatrix);
     }
+
+    public static float random(float min, float max) {
+        return (float) (Math.random() * (max - min)) + min;
+    }
 }

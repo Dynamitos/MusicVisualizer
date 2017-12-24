@@ -29,7 +29,6 @@ import org.lwjgl.BufferUtils;
 import engine.math.Matrix4f;
 import engine.math.Vector3f;
 import engine.renderEngine.DisplayManager;
-import sun.nio.ch.ThreadPool;
 
 public class ParticleRenderer extends Thread {
     private int vboParticle;
@@ -146,8 +145,8 @@ public class ParticleRenderer extends Thread {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         Maths.lookAt(viewMatrix, position, center, up);
         shader.loadViewMatrix(viewMatrix);
-        attractor.x += random(-5 * frameTime, 5 * frameTime);
-        attractor.y += random(-5 * frameTime, 5 * frameTime);
+        attractor.x += Maths.random(-5 * frameTime, 5 * frameTime);
+        attractor.y += Maths.random(-5 * frameTime, 5 * frameTime);
         attractor = attractor.normalize();
 
         counter+=frameTime*10;
@@ -161,8 +160,8 @@ public class ParticleRenderer extends Thread {
             Particle p = particles[index];
             if (p == null)
                 p = new Particle();
-            p.position = new Vector3f(random(-5, 5), -10, random(-5, 5));
-            p.speed = new Vector3f(random(-0.5f, 0.5f), 2, random(-0.5f, 0.5f));
+            p.position = new Vector3f(Maths.random(-5, 5), -10, Maths.random(-5, 5));
+            p.speed = new Vector3f(Maths.random(-0.5f, 0.5f), 2, Maths.random(-0.5f, 0.5f));
             p.rotation = new Vector3f(0, 0, 0);
             p.dimensions = new Vector2f(1, 1);
             p.scale = 0.1f;
@@ -180,7 +179,7 @@ public class ParticleRenderer extends Thread {
                         p.position = p.position.add(p.speed.scale(frameTime));
                         p.rotation = p.rotation.add(p.speed.multiply(frameTime));
 
-                        p.speed = p.speed.add(perlinNoise.perlin(p.position.x, p.position.y, p.position.z).scale(0.1f));
+                        p.speed = p.speed.add(perlinNoise.perlin(p.position.x, p.position.y, p.position.z).scale(10f*DisplayManager.getFrameTimeSeconds()));
 
                         particleData[index * VERTEX_SIZE + 0] = p.position.x;
                         particleData[index * VERTEX_SIZE + 1] = p.position.y;
@@ -217,10 +216,6 @@ public class ParticleRenderer extends Thread {
             maxParticles = length;
         }
         glDisable(GL_BLEND);
-    }
-
-    public static float random(float min, float max) {
-        return (float) (Math.random() * (max - min)) + min;
     }
 
     private void createProjectionMatrix() {

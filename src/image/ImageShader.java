@@ -54,7 +54,7 @@ public class ImageShader extends ShaderProgram {
 		location_numLines = super.getUniformLocation("numLines");
 		location_array = super.getUniformLocation("music");
 		location_projection = super.getUniformLocation("projection");
-		location_view = super.getUniformLocation("view");
+		location_view = super.getUniformLocation("viewMatrix");
 	}
 
 	public void loadIntensity(float intensityScale, float intensityOffset) {

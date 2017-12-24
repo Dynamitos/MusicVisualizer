@@ -49,7 +49,7 @@ public class ImageRenderer extends Thread {
 		rawModel = loader.loadToVAO(MasterRenderer.vertices, MasterRenderer.texCoords);
 		texID = loader.loadTexture(image);
 		arrayID = glGenTextures();
-		cam = new Camera(new Vector3f(0, 0, -1));
+		cam = new Camera(new Vector3f(0, 0, -1f));
 		createProjectionMatrix();
 		shader = new ImageShader();
 		shader.start();

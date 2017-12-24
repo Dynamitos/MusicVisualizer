@@ -26,7 +26,7 @@ public class MasterSound {
 	private BeatDetect beatDetect;
 	private float bassGain = 0;
 	private float rawBassGain;
-	public static final int TESS_LEVEL = 4;
+	public static final int TESS_LEVEL = 16;
 
 	public String sketchPath(String fileName) {
 		return fileName;
@@ -41,15 +41,28 @@ public class MasterSound {
 		}
 		return is;
 	}
-
+	private void smooth(float[] data, float distribution)
+	{
+		for(int i = 1; i < data.length; ++i)
+		{
+			data[i] = data[i-1]*distribution + data[i]*(1-distribution);
+		}
+	}
+	private void reversesmooth(float[] data, float distribution)
+	{
+		for(int i = data.length-2; i >= 0; --i)
+		{
+			data[i] = data[i+1]*distribution + data[i]*(1-distribution);
+		}
+	}
 	public MasterSound(File f) {
 		minim = new Minim(this);
 		song = minim.loadFile(f.getAbsolutePath(), 2048);
 		song.loop();
 		fft = new FFT(song.bufferSize(), song.sampleRate());
 		MasterRenderer.NUM_SAMPLES = 32;
-		values = new float[MasterRenderer.NUM_SAMPLES * TESS_LEVEL];
-		targets = new float[values.length];
+		targets = new float[MasterRenderer.NUM_SAMPLES * TESS_LEVEL];
+		values = new float[targets.length*2];
 		bands = new float[MasterRenderer.NUM_SAMPLES];
 		beats = new float[bands.length];
 		beatDetect = new BeatDetect();
@@ -67,39 +80,31 @@ public class MasterSound {
 		Arrays.fill(targets, 0);
 		for(int i = 0; i < bands.length; ++i)
 		{
-			bands[i] = fft.getBand(i)/1000f;
+			bands[i] = fft.getBand(i-2)/1000f;
 		}
-		for(int i = 1; i < bands.length - 1; ++i)
-		{
-			if(bands[i-1] < bands[i] && bands[i+1] < bands[i])
-			{
-				beats[i] = bands[i];
-				for(int j = 0; j < bands.length; ++j)
-				{
-					bands[i] = distribution(j, i, beats[i]);
-				}
-			}
-			else
-			{
-				beats[i] = 0;
-			}
-		}
+		float prevValue, nextValue;
 		int offset = TESS_LEVEL / 2;
-		float j = -offset;
-		for(int i = 0; i < values.length; ++i)
+		int prevIndex = 0, nextIndex = offset, bandIndex = 0;
+		prevValue = bands[bandIndex];
+		nextValue = bands[++bandIndex];
+		for(int i = 0; i < targets.length; ++i)
 		{
-			float value = bands[i/TESS_LEVEL];
-			targets[i] = value;//(float) (value*Math.pow(Math.E, 2));
-			j++;
-			if(j >= offset)
+			float weight = (1.f * i - prevIndex) / (nextIndex - prevIndex);
+			targets[i] = prevValue * (1-weight) + nextValue * weight;
+			if(i == nextIndex)
 			{
-				j = -offset;
+				prevValue = nextValue;
+				nextValue = (++bandIndex < bands.length) ? bands[bandIndex] : 0;
+				prevIndex = nextIndex;
+				nextIndex += TESS_LEVEL;
 			}
 		}
-		for(int i = 0; i < values.length; ++i)
+		for(int i = 0; i < values.length/2; ++i)
 		{
-			values[i] -= (values[i] - targets[i])*(DisplayManager.getFrameTimeSeconds()*20f);
+			values[i] -= (values[i] - targets[i])*(DisplayManager.getFrameTimeSeconds()*10f);
+			values[values.length-i-1] = values[i];
 		}
+		smooth(values, 0.1f);
 		/*for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
 			float value = fft.getBand(i);
 			bands[i] = value / 1000;
@@ -131,7 +136,10 @@ public class MasterSound {
 			bassGain = tempGain;
 
 	}
-
+	public int getDataLength()
+	{
+		return values.length;
+	}
 	public float getBass() {
 		return bassGain;
 	}
