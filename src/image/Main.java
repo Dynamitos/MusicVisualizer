@@ -28,12 +28,10 @@ public class Main extends Application{
         } catch (IOException e) {
             e.printStackTrace();
             return;
-
         }
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
 
     }
-
 }

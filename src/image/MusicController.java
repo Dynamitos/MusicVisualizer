@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -71,7 +72,7 @@ public class MusicController{
         chooser = new FileChooser();
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPEG3 Files (*.mp3)", "*.mp3"));
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront Files (*.wav)", "*.wav"));
-        currentProfile = loadProfile(new File("../Stardust.prof"));
+        currentProfile = loadProfile(Class.class.getResourceAsStream("/tex/Unknown.prof"));
 
 		java.awt.Dimension temp = Toolkit.getDefaultToolkit().getScreenSize();
 		Set<Dimension> dimensions = new HashSet<>();
@@ -87,7 +88,6 @@ public class MusicController{
         profiles = new HashMap<>();
         updateComponents();
     }
-
 
 	@FXML
 	public void onOverlayAction(ActionEvent e){
@@ -124,7 +124,11 @@ public class MusicController{
 		File file = profileSaver.showOpenDialog(null);
 		if (file == null)
 			return;
-		currentProfile = loadProfile(file);
+		try {
+			currentProfile = loadProfile(new FileInputStream(file));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
 
 		cbProfileNames.getItems().add(currentProfile.getName());
 		profiles.put(currentProfile.getName(), currentProfile);
@@ -142,9 +146,8 @@ public class MusicController{
 		File f = profileOpener.showSaveDialog(null);
 		if (f == null)
 			return;
-		System.out.println(f);
-		saveProfile(currentProfile, f);
 
+		saveProfile(currentProfile, f);
 	}
 	@FXML
 	public void onFinishAction(ActionEvent e){
@@ -159,7 +162,6 @@ public class MusicController{
 	public void onCloseWindowAction(ActionEvent e){
 		OverlayManager.close();
 		System.exit(0);
-
 	}
 
 	private void updateRenderer() {
@@ -181,39 +183,38 @@ public class MusicController{
 	}
 
 	private boolean checkProfile() {
-		if (currentProfile.getMusicFile() == null || currentProfile.getMusicFile().getPath().isEmpty()) {
-			// JOptionPane.showMessageDialog(null, "Please choose a song with
-			// the 'Browse' Button.");
-			System.out.println("Please select a file");
-			return false;
+		Alert alert = null;
+		boolean result = true;
+    	if (currentProfile.getMusicFile() == null || currentProfile.getMusicFile().getPath().isEmpty()) {
+			alert = new Alert(Alert.AlertType.WARNING, "Please choose a song with the 'Browse' Button");
+			result =  false;
 		}
 		if (currentProfile.getImage() == null || currentProfile.getImage().isEmpty()) {
-			System.out.println("Please select a background");
-			// JOptionPane.showConfirmDialog(null, "Please select a background
-			// image with the 'Browse' Button");
-			return false;
+			alert = new Alert(Alert.AlertType.WARNING, "Please select a background image with the 'Browse' Button");
+			result = false;
 		}
 		if (currentProfile.getOverlay() == null || currentProfile.getOverlay().isEmpty()) {
-			System.out.println("Please select an overlay");
-			// JOptionPane.showMessageDialog(null, "Please select an overlay
-			// image from the Overlay Manager");
-			return false;
+			alert = new Alert(Alert.AlertType.WARNING, "Please select an overlay image from the Overlay Manager");
+			result =  false;
 		}
-		return true;
+		if(!result)
+		{
+			alert.showAndWait();
+		}
+		return result;
 	}
 
-	public Profile loadProfile(File f) {
+	public Profile loadProfile(InputStream in) {
     	Profile p = null;
 		try {
 			JAXBContext context = JAXBContext.newInstance(Profile.class);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
-			p = (Profile)unmarshaller.unmarshal(f);
-		} catch(Exception e)
+			p = (Profile)unmarshaller.unmarshal(in);
+		}
+		catch(Exception e)
 		{
-			e.printStackTrace();
 			try {
-
-				BufferedReader br = new BufferedReader(new FileReader(f));
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
 				String data = br.readLine();
 				String[] tokens = data.split("#");
 				int counter = 0;
@@ -269,7 +270,6 @@ public class MusicController{
 		}
 		catch (Exception e)
 		{
-		    e.printStackTrace();
 			try {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(f));
 				String data = "";

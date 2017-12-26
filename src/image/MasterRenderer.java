@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glLineWidth;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,8 +99,8 @@ public class MasterRenderer {
 		particles.terminate();
 		DisplayManager.closeDisplay();
 	}
-	public static void main(String[] args) {
-		Profile currentProfile = new MusicController().loadProfile(new File("../Fractures.prof"));
+	public static void main(String[] args) throws FileNotFoundException {
+		Profile currentProfile = new MusicController().loadProfile(new FileInputStream(new File("../Fractures.prof")));
 		DisplayManager.setDimension(currentProfile.getResolution());
 		MasterRenderer renderer = new MasterRenderer(currentProfile);
 		while (!Input.keys[GLFW.GLFW_KEY_ESCAPE] && !DisplayManager.shouldClose()) {

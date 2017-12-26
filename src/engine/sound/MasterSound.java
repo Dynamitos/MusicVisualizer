@@ -26,7 +26,7 @@ public class MasterSound {
 	private BeatDetect beatDetect;
 	private float bassGain = 0;
 	private float rawBassGain;
-	public static final int TESS_LEVEL = 16;
+	public static final int TESS_LEVEL = 32;
 
 	public String sketchPath(String fileName) {
 		return fileName;
@@ -58,16 +58,15 @@ public class MasterSound {
 	public MasterSound(File f) {
 		minim = new Minim(this);
 		song = minim.loadFile(f.getAbsolutePath(), 2048);
-		song.loop();
 		fft = new FFT(song.bufferSize(), song.sampleRate());
-		MasterRenderer.NUM_SAMPLES = 32;
+		MasterRenderer.NUM_SAMPLES = 16;
 		targets = new float[MasterRenderer.NUM_SAMPLES * TESS_LEVEL];
 		values = new float[targets.length*2];
 		bands = new float[MasterRenderer.NUM_SAMPLES];
 		beats = new float[bands.length];
 		beatDetect = new BeatDetect();
 		beatDetect.detectMode(BeatDetect.FREQ_ENERGY);
-
+		song.play();
 	}
 	private float distribution(float x, float mue, float signum)
 	{
@@ -80,7 +79,7 @@ public class MasterSound {
 		Arrays.fill(targets, 0);
 		for(int i = 0; i < bands.length; ++i)
 		{
-			bands[i] = fft.getBand(i-2)/1000f;
+			bands[i] = fft.getBand(i*2)/1000f;
 		}
 		float prevValue, nextValue;
 		int offset = TESS_LEVEL / 2;
@@ -99,30 +98,12 @@ public class MasterSound {
 				nextIndex += TESS_LEVEL;
 			}
 		}
-		for(int i = 0; i < values.length/2; ++i)
+		smooth(targets, 0.9f);
+		for(int i = 0; i < targets.length; ++i)
 		{
 			values[i] -= (values[i] - targets[i])*(DisplayManager.getFrameTimeSeconds()*10f);
 			values[values.length-i-1] = values[i];
 		}
-		smooth(values, 0.1f);
-		/*for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
-			float value = fft.getBand(i);
-			bands[i] = value / 1000;
-			if (value > values[i * TESS_LEVEL]) {
-				values[i * TESS_LEVEL + TESS_LEVEL / 2] = value;
-			} else {
-				values[i * TESS_LEVEL + TESS_LEVEL / 2] -= 0.0001f;
-			}
-		}
-		for (int i = 0; i < MasterRenderer.NUM_SAMPLES; i++) {
-			float value = values[i * TESS_LEVEL + TESS_LEVEL / 2];
-			for (int j = -TESS_LEVEL / 2; j <= TESS_LEVEL / 2-1; j++) {
-				float temp = value;//(float) (value - Math.pow(j * 1.0f, 2f));
-				if (j != 0)
-					values[i * TESS_LEVEL + TESS_LEVEL / 2 + j] = Math.max(temp,
-							values[i * TESS_LEVEL + TESS_LEVEL / 2 + j]);
-			}
-		}*/
 		float tempGain = 0;
 		for (int i = 0; i < bands.length; i++) {
 			tempGain += bands[i] / (1 + i * i);

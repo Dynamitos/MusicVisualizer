@@ -1,1 +1,33 @@
-Unknown###1920#1080#1.9408284#0.73254436#false#true#/tex/Overlay.png#0#1#0.2546875#0.8324074#0.74635416#0.8324074#0.1#0.2509804#0.8784314#0.8156863#1.0#
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<profile>
+    <image></image>
+    <intensityOffset>0.73254436</intensityOffset>
+    <intensityScale>1.9408284</intensityScale>
+    <lines>
+        <start>
+            <x>0.2546875</x>
+            <y>0.8324074</y>
+        </start>
+        <end>
+            <x>0.74635416</x>
+            <y>0.8324074</y>
+        </end>
+        <height>0.1</height>
+        <color>
+            <x>0.2509804</x>
+            <y>0.8784314</y>
+            <z>0.8156863</z>
+            <w>1.0</w>
+        </color>
+    </lines>
+    <musicFile></musicFile>
+    <name>Unknown</name>
+    <numSamples>0</numSamples>
+    <overlay>/tex/Overlay.png</overlay>
+    <resolution>
+        <HEIGHT>1080</HEIGHT>
+        <WIDTH>1920</WIDTH>
+    </resolution>
+    <scaling>false</scaling>
+    <vSync>true</vSync>
+</profile>
