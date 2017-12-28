@@ -1,6 +1,5 @@
 package image;
 
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glLineWidth;
 
@@ -20,27 +19,20 @@ import engine.renderEngine.Loader;
 import engine.sound.MasterSound;
 import engine.toolbox.Input;
 
-public class MasterRenderer {
-	private ImageRenderer image;
-	private List<LineRenderer> lines;
-	private List<ColumnRenderer> columns;
-	private PostRenderer postRenderer;
-	private ParticleRenderer particles;
-	private MasterSound sound;
-	private Loader loader;
+public class MasterRenderer extends RenderMode{
 	public static final float[] vertices = { -1f, -1f, -1f, 1f, -1f, -1f, -1f, 1f, -1f, 1f, 1f, -1f, };
 	public static final float[] texCoords = { 0, 1, 1, 1, 0, 0, 1, 0 };
-	public static int NUM_SAMPLES;
-	private FloatBuffer musicBuffer;
 	private boolean paused = false;
 	private int currentText;
 
-	public MasterRenderer(Profile p) {
-		NUM_SAMPLES = p.getNumSamples();
-		sound = new MasterSound(p.getMusicFile());
+	public MasterRenderer(){
+
+	}
+	public void init(Profile p) {
 		DisplayManager.createDisplay(p.isvSync());
+		sound = new MasterSound(p.getMusicFile());
 		loader = new Loader();
-		image = new ImageRenderer(loader, p.getImage(), p.getLines(), p.isScaling(), p.getIntensityScale(),
+		image = new ImageRenderer(loader, p.getImage(), p.isScaling(), p.getIntensityScale(),
 				p.getIntensityOffset());
 		List<String> lyrics = p.getText();
 		lines = new ArrayList<>(8);
@@ -58,23 +50,36 @@ public class MasterRenderer {
 		glClearColor(0, 0, 0, 1f);
 		glLineWidth(2f);
 		//glCullFace(GL_NONE);
-		musicBuffer = BufferUtils.createFloatBuffer(sound.getDataLength());
-		//sound.play();
+		sound.play();
+		DisplayManager.showWindow();
+	}
+
+	@Override
+	public void launch() {
+		while (!Input.keys[GLFW.GLFW_KEY_ESCAPE] && !DisplayManager.shouldClose() && !shouldTerminate) {
+			render();
+		}
+		Input.keys[GLFW.GLFW_KEY_ESCAPE] = false;
 	}
 
 	public void render() {
-		sound.run();
-		float[] data = sound.getValues();
-		float bassGain = sound.getBass();
-		musicBuffer.put(data);
-		musicBuffer.flip();
-		postRenderer.bindPostProcessor();
+		float[] bands = sound.calcFFT();
+		float[] data = sound.smoothFFT(bands);
+		float bassGain = sound.calcBass(bands);
 
-		image.render(bassGain, musicBuffer);
+		postRenderer.beginMainPass();
+		image.render(bassGain);
 		particles.render(sound.getRawBassGain());
-		for (ColumnRenderer f : columns) {
-			f.render(data);
+
+		for (ColumnRenderer c : columns) {
+			c.render(data);
 		}
+
+		for(LineRenderer l : lines)
+		{
+			l.render(data);
+		}
+		postRenderer.unbindCurrentFramebuffer();
 		postRenderer.render();
 
 		if (Input.keys[GLFW.GLFW_KEY_SPACE]) {
@@ -86,9 +91,7 @@ public class MasterRenderer {
 			}
 			Input.keys[GLFW.GLFW_KEY_SPACE] = false;
 		}
-		//System.out.println(currentText);
 		DisplayManager.updateDisplay();
-		data = null;
 	}
 	public static void updateProfile(Profile currentProfile) {
 		// TODO Auto-generated method stub
@@ -100,13 +103,11 @@ public class MasterRenderer {
 		DisplayManager.closeDisplay();
 	}
 	public static void main(String[] args) throws FileNotFoundException {
-		Profile currentProfile = new MusicController().loadProfile(new FileInputStream(new File("../Fractures.prof")));
+		Profile currentProfile = new MusicController().loadProfile(new FileInputStream(new File("../Badman.prof")));
 		DisplayManager.setDimension(currentProfile.getResolution());
-		MasterRenderer renderer = new MasterRenderer(currentProfile);
-		while (!Input.keys[GLFW.GLFW_KEY_ESCAPE] && !DisplayManager.shouldClose()) {
-			renderer.render();
-		}
+		MasterRenderer renderer = new MasterRenderer();
+		renderer.init(currentProfile);
+		renderer.launch();
 		renderer.terminate();
-		Input.keys[GLFW.GLFW_KEY_ESCAPE] = false;
 	}
 }

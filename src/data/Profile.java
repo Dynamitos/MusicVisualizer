@@ -24,6 +24,7 @@ public class Profile {
 	private String overlay;
 	private List<Line> lines;
 	private int numSamples;
+	private boolean isRecording;
 	//private FontType font;
 	@XmlTransient
 	private List<String> texts;
@@ -43,7 +44,7 @@ public class Profile {
 	 * @param numSamples The number of points per fft-line
 	 */
 	public Profile(String name, File musicFile, List<Line> lines, String image, String overlay, Dimension resolution,
-			float intensityScale, float intensityOffset, boolean scaling, boolean vSync, int numSamples) {
+			float intensityScale, float intensityOffset, boolean isRecording, boolean scaling, boolean vSync, int numSamples) {
 		this.numSamples = numSamples;
 		this.musicFile = musicFile;
 		this.image = image;
@@ -55,6 +56,7 @@ public class Profile {
 		this.scaling = scaling;
 		this.vSync = vSync;
 		this.name = name;
+		this.isRecording = isRecording;
 		texts = Arrays.asList(lyrics);
 	}
 
@@ -154,7 +156,15 @@ public class Profile {
 		this.overlay = overlay;
 	}
 
-		String lyrics[] = {"You were the shadow to my light",
+	public boolean isRecording() {
+		return isRecording;
+	}
+
+	public void setRecording(boolean recording) {
+		isRecording = recording;
+	}
+
+	String lyrics[] = {"You were the shadow to my light",
 				"Did you feel us",
 				"Another Start",
 				"You fade away",

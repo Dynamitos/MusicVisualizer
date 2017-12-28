@@ -1,27 +1,7 @@
 package engine.renderEngine;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
-import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
-import static org.lwjgl.glfw.GLFW.GLFW_SAMPLES;
-import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
-import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
-import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
-import static org.lwjgl.glfw.GLFW.glfwGetMouseButton;
-import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
-import static org.lwjgl.glfw.GLFW.glfwGetTime;
-import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
-import static org.lwjgl.glfw.GLFW.glfwInit;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwSetCursorPos;
-import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
-import static org.lwjgl.glfw.GLFW.glfwShowWindow;
-import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
-import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
-import static org.lwjgl.glfw.GLFW.glfwTerminate;
-import static org.lwjgl.glfw.GLFW.glfwWindowHint;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -29,6 +9,8 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import java.nio.DoubleBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.Callbacks;
+import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
@@ -58,22 +40,25 @@ public class DisplayManager {
 	public static Input input;
 	public static MouseInput mouseWheel;
 	public static Vector3f lightPosition;
+	public static GLFWErrorCallback errorCallback;
 
 	public static float deltaX, deltaY;
-	public static boolean buffering = false;
 
 	public static void setDimension(Dimension dimension) {
 		WIDTH = dimension.getWIDTH();
 		HEIGHT = dimension.getHEIGHT();
 	}
-
-	public static void createDisplay(boolean b) {
-		// System.setProperty("java.library.path", "C:\\Program
-		// Files\\Java\\lwjgl\\native");
+	public static void initContext()
+	{
 		if (!glfwInit())
 			throw new IllegalStateException();
+	}
+	public static void createDisplay(boolean isVSync) {
+		errorCallback = GLFWErrorCallback.createPrint();
+		glfwSetErrorCallback(errorCallback);
+		initContext();
 		glfwWindowHint(GLFW_SAMPLES, 4);
-		// glfwWindowHint(GLFW_STEREO, GL_TRUE);
+		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 
 		GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		boolean full = false;
@@ -84,18 +69,19 @@ public class DisplayManager {
 		input = new Input();
 		glfwSetKeyCallback(window, input);
 		glfwSetScrollCallback(window, mouseWheel);
-		// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		glfwShowWindow(window);
+
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
-		glfwSwapInterval(b ? 1 : 0);
+		glfwSwapInterval(isVSync ? 1 : 0);
 		glEnable(GL_MULTISAMPLE);
 		lastFrameTime = System.currentTimeMillis();
 		lightPosition = new Vector3f(0, 0, -1);
 		lastPrintTime = (float) glfwGetTime();
-
 	}
-
+    public static void showWindow()
+    {
+        glfwShowWindow(window);
+    }
 	public static void updateDisplay() {
 		glfwPollEvents();
 		double currentTime = glfwGetTime();

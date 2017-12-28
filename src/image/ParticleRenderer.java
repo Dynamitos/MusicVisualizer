@@ -47,7 +47,6 @@ public class ParticleRenderer extends Thread {
 
     private ThreadPoolExecutor executor;
 
-    private Wind wind;
     private PerlinNoise perlinNoise;
     private Vector3f attractor;
 
@@ -73,8 +72,6 @@ public class ParticleRenderer extends Thread {
         up = new Vector3f(0, 1, 0);
 
         perlinNoise = new PerlinNoise(20);
-        wind = new Wind(new Vector3f(-20, 0, 0), new Vector3f(20, 0, 0));
-        attractor = new Vector3f(0, 1, 0);
 
         particleModel = loader.loadToVAO(vertices, 2);
 
@@ -145,10 +142,6 @@ public class ParticleRenderer extends Thread {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         Maths.lookAt(viewMatrix, position, center, up);
         shader.loadViewMatrix(viewMatrix);
-        attractor.x += Maths.random(-5 * frameTime, 5 * frameTime);
-        attractor.y += Maths.random(-5 * frameTime, 5 * frameTime);
-        attractor = attractor.normalize();
-
         counter+=frameTime*10;
 
         int numParticles = (int) counter;

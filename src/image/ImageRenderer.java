@@ -35,7 +35,6 @@ public class ImageRenderer extends Thread {
 	private boolean isScaling;
 	private RawModel rawModel;
 	private int texID;
-	private int arrayID;
 	private Camera cam;
 
 	private static final float FOV = 70;
@@ -43,46 +42,36 @@ public class ImageRenderer extends Thread {
 	private static final float FAR_PLANE = 1000f;
 
 	// Nekomonogatari
-	public ImageRenderer(Loader loader, String image, List<Line> lines, boolean isScaling, float intensityScale,
+	public ImageRenderer(Loader loader, String image, boolean isScaling, float intensityScale,
 			float intensityOffset) {
 		this.isScaling = isScaling;
 		rawModel = loader.loadToVAO(MasterRenderer.vertices, MasterRenderer.texCoords);
 		texID = loader.loadTexture(image);
-		arrayID = glGenTextures();
 		cam = new Camera(new Vector3f(0, 0, -1f));
 		createProjectionMatrix();
 		shader = new ImageShader();
 		shader.start();
-		shader.loadLines(lines);
 		shader.loadProjection(projectionMatrix);
 		shader.loadIntensity(intensityScale, intensityOffset);
 		shader.stop();
 		transformationMatrix = new Matrix4f();
 	}
 
-	public void render(float mean, FloatBuffer data) {
+	public void render(float mean) {
 		shader.start();
 		cam.move();
 		if (isScaling) {
 			Maths.createTransformationMatrix(transformationMatrix, 0, 0, 1 + mean, 1 + mean);
-			//transformationMatrix = Maths.createTransformationMatrix(new Vector2f(0, 0),
-			//		new Vector2f(1 + mean, 1 + mean));
 		} else {
 			Maths.createTransformationMatrix(transformationMatrix, 0, 0, 1, 1);
-			//transformationMatrix = Maths.createTransformationMatrix(new Vector2f(0, 0), new Vector2f(1, 1));
 		}
 		shader.loadTransformationMatrix(transformationMatrix);
 		shader.loadViewMatrix(Maths.createViewMatrix(cam));
 
-
-		// System.out.println(String.format("%.5f | %.5f", minAVG, maxAVG));
 		glBindVertexArray(rawModel.getVaoID());
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texID);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_1D, arrayID);
-		glTexImage1D(GL_TEXTURE_1D, 0, GL_RED, MasterRenderer.NUM_SAMPLES * MasterSound.TESS_LEVEL, 0, GL_RED, GL_FLOAT,
-				data);
+
 
 		shader.loadTextures();
 		shader.loadIntensity(mean);
@@ -93,7 +82,6 @@ public class ImageRenderer extends Thread {
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		glBindTexture(GL_TEXTURE_1D, 0);
 		glBindVertexArray(0);
 		shader.stop();
 	}

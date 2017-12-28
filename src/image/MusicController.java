@@ -172,14 +172,9 @@ public class MusicController{
 		if (!checkProfile())
 			return;
 		DisplayManager.setDimension(currentProfile.getResolution());
-		MasterRenderer renderer = new MasterRenderer(currentProfile);
-		isRunning = true;
-		while (!Input.keys[GLFW.GLFW_KEY_ESCAPE] && !DisplayManager.shouldClose()) {
-			renderer.render();
-		}
-		renderer.terminate();
-		isRunning = false;
-		Input.keys[GLFW.GLFW_KEY_ESCAPE] = false;
+		RenderMode renderMode = RenderModeFactory.createRenderMode(currentProfile);
+		renderMode.launch();
+		renderMode.terminate();
 	}
 
 	private boolean checkProfile() {
@@ -248,7 +243,7 @@ public class MusicController{
 					line.color = new Vector4f(colorX, colorY, colorZ, colorW);
 					lines.add(line);
 				}
-				p = new Profile(name, music, lines, image, overlay, resolution, intensityScale, intensityOffset, scaling,
+				p = new Profile(name, music, lines, image, overlay, resolution, intensityScale, intensityOffset, false, scaling,
 						vSync, numSamples);
 				br.close();
 			} catch (IOException ex) {

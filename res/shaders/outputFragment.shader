@@ -3,7 +3,7 @@
 in vec3 position_FS_in;
 in vec2 texCoords_FS_in;
 
-out vec4 out_Color;
+layout(location = 0) out vec4 out_Color;
 
 uniform sampler2D textureSampler;
 
