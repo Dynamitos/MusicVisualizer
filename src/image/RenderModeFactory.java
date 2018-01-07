@@ -9,7 +9,7 @@ public class RenderModeFactory {
     public static RenderMode createRenderMode(Profile p)
     {
         RenderMode result;
-        if(true || p.isRecording())
+        if(p.isRecording())
         {
             result = new RecordingRenderer();
         }

@@ -29,8 +29,10 @@ public class MasterRenderer extends RenderMode{
 
 	}
 	public void init(Profile p) {
-		DisplayManager.createDisplay(p.isvSync());
+		DisplayManager.createDisplay(p.isvSync(), p.isRecording());
+
 		sound = new MasterSound(p.getMusicFile());
+
 		loader = new Loader();
 		image = new ImageRenderer(loader, p.getImage(), p.isScaling(), p.getIntensityScale(),
 				p.getIntensityOffset());
