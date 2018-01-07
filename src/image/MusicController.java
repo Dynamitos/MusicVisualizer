@@ -14,9 +14,13 @@ import javax.xml.bind.Unmarshaller;
 import data.Profile;
 import engine.math.Vector2f;
 import engine.math.Vector4f;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
@@ -48,7 +52,7 @@ public class MusicController{
 	@FXML
     private Button btDefaultCover;
 	@FXML
-    private Button btOverlay;
+    private Button btRecording;
 	@FXML
     private TextField tfProfile;
 	@FXML
@@ -90,8 +94,24 @@ public class MusicController{
     }
 
 	@FXML
-	public void onOverlayAction(ActionEvent e){
-		OverlayManager.startManager(currentProfile);
+	public void onRecordingAction(ActionEvent ev){
+		Stage primaryStage = new Stage();
+    	Parent root;
+		try {
+			FXMLLoader loader = new FXMLLoader(MusicController.class.getResource("/gui/MusicMain.fxml"));
+			root = loader.load();
+			((MusicController)loader.getController()).init();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		Scene scene = new Scene(root);
+		primaryStage.setScene(scene);
+		primaryStage.show();
+	}
+	@FXML
+	public void onRecordingFinish(ActionEvent e)
+	{
 
 	}
 	@FXML

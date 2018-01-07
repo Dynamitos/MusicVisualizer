@@ -53,7 +53,7 @@ public class DisplayManager {
 		if (!glfwInit())
 			throw new IllegalStateException();
 	}
-	public static void createDisplay(boolean isVSync) {
+	public static void createDisplay(boolean isVSync, boolean recording) {
 		errorCallback = GLFWErrorCallback.createPrint();
 		glfwSetErrorCallback(errorCallback);
 		initContext();
@@ -64,7 +64,7 @@ public class DisplayManager {
 		boolean full = false;
 		if (vidMode.width() == WIDTH && vidMode.height() == HEIGHT)
 			full = true;
-		window = glfwCreateWindow(WIDTH, HEIGHT, "Music Visualizer", (full) ? glfwGetPrimaryMonitor() : NULL, NULL);
+		window = glfwCreateWindow(WIDTH, HEIGHT, "Music Visualizer", (full && !recording) ? glfwGetPrimaryMonitor() : NULL, NULL);
 		mouseWheel = new MouseInput();
 		input = new Input();
 		glfwSetKeyCallback(window, input);
@@ -169,4 +169,7 @@ public class DisplayManager {
 		DisplayManager.mouseSpeed = mouseSpeed;
 	}
 
+	public static void setFrameTime(float frameTime) {
+		delta = frameTime;
+	}
 }

@@ -5,12 +5,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import com.xuggle.xuggler.*;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
-import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
 import engine.renderEngine.DisplayManager;
+import javafx.scene.control.Alert;
+
+import javax.sound.sampled.*;
 
 public class MasterSound {
     private long duration;
@@ -23,7 +28,8 @@ public class MasterSound {
 	private float bassGain = 0;
 	private float rawBassGain;
 	public static final int TESS_LEVEL = 32;
-	public static int NUM_SAMPLES = 16;
+	public static int NUM_BANDS = 16;
+	public static int NUM_SAMPLES = 2048;
 
 	public String sketchPath(String fileName) {
 		return fileName;
@@ -55,12 +61,12 @@ public class MasterSound {
 
 	public MasterSound(File f) {
 		minim = new Minim(this);
-		song = minim.loadFile(f.getAbsolutePath(), 2048);
+		song = minim.loadFile(f.getAbsolutePath(), NUM_SAMPLES);
 		fft = new FFT(song.bufferSize(), song.sampleRate());
-		targets = new float[NUM_SAMPLES * TESS_LEVEL];
-		values = new float[targets.length*2];
-		bands = new float[NUM_SAMPLES];
-		duration = song.getMetaData().length();
+		targets = new float[NUM_BANDS * TESS_LEVEL];
+		values = new float[targets.length];
+		bands = new float[NUM_BANDS];
+		duration = song.length();
 	}
 	public float[] calcFFT()
 	{
@@ -89,11 +95,11 @@ public class MasterSound {
 				nextIndex += TESS_LEVEL;
 			}
 		}
-		smooth(targets, 0.9f);
+		reversesmooth(targets, 0.95f);
 		for(int i = 0; i < targets.length; ++i)
 		{
 			values[i] -= (values[i] - targets[i])*(DisplayManager.getFrameTimeSeconds()*10f);
-			values[values.length-i-1] = values[i];
+			//values[values.length-i-1] = values[i];
 		}
 
 		return values;
@@ -123,10 +129,9 @@ public class MasterSound {
 	}
 
 	public void play() {
+		song.rewind();
 		song.play();
 	}
-
-
 	public long getDuration() {
 		return duration;
 	}
@@ -141,5 +146,9 @@ public class MasterSound {
 
 	public void resume() {
 		song.play();
+	}
+
+	public boolean isPlaying() {
+		return song.isPlaying();
 	}
 }
