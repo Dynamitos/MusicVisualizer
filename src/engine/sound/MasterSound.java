@@ -28,8 +28,9 @@ public class MasterSound {
 	private float bassGain = 0;
 	private float rawBassGain;
 	public static final int TESS_LEVEL = 32;
-	public static int NUM_BANDS = 16;
+	public static int NUM_BANDS = 32;
 	public static int NUM_SAMPLES = 2048;
+	public static int NUM_COLS = 128;
 
 	public String sketchPath(String fileName) {
 		return fileName;
@@ -56,6 +57,14 @@ public class MasterSound {
 		for(int i = data.length-2; i >= 0; --i)
 		{
 			data[i] = data[i+1]*distribution + data[i]*(1-distribution);
+		}
+	}
+	private void generateCols(float[] data, int numCols)
+	{
+		int valuesPerCol = data.length/numCols;
+		for(int i = 0; i < data.length; ++i)
+		{
+			data[i] = data[valuesPerCol*(i/valuesPerCol)];
 		}
 	}
 
@@ -95,7 +104,8 @@ public class MasterSound {
 				nextIndex += TESS_LEVEL;
 			}
 		}
-		reversesmooth(targets, 0.95f);
+		reversesmooth(targets, 0.9f);
+		//generateCols(targets, NUM_COLS);
 		for(int i = 0; i < targets.length; ++i)
 		{
 			values[i] -= (values[i] - targets[i])*(DisplayManager.getFrameTimeSeconds()*10f);

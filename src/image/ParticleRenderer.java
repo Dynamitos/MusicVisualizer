@@ -142,7 +142,7 @@ public class ParticleRenderer extends Thread {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         Maths.lookAt(viewMatrix, position, center, up);
         shader.loadViewMatrix(viewMatrix);
-        counter+=frameTime*10;
+        counter+=frameTime*10000*intensity;
 
         int numParticles = (int) counter;
 
@@ -156,7 +156,7 @@ public class ParticleRenderer extends Thread {
             p.position = new Vector3f(Maths.random(-5, 5), -10, Maths.random(-5, 5));
             p.speed = new Vector3f(Maths.random(-0.5f, 0.5f), 2, Maths.random(-0.5f, 0.5f));
             p.rotation = new Vector3f(0, 0, 0);
-            p.dimensions = new Vector2f(1, 1);
+            p.dimensions = new Vector2f(1f, 1f);
             p.scale = 0.1f;
             p.life = 10f;
         }
@@ -169,7 +169,7 @@ public class ParticleRenderer extends Thread {
                     final int index = length;
                     executor.submit(() ->
                     {
-                        p.position = p.position.add(p.speed.scale(frameTime));
+                        p.position = p.position.add(p.speed.scale(frameTime * 10.f));
                         p.rotation = p.rotation.add(p.speed.multiply(frameTime));
 
                         p.speed = p.speed.add(perlinNoise.perlin(p.position.x, p.position.y, p.position.z).scale(10f*DisplayManager.getFrameTimeSeconds()));

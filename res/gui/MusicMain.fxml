@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="553.0" prefWidth="381.0" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1" fx:controller="image.MusicController">
+<BorderPane prefHeight="553.0" prefWidth="381.0" stylesheets="@../css/bootstrap3.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="image.MusicController">
    <center>
       <GridPane prefHeight="490.0" prefWidth="428.0" BorderPane.alignment="CENTER">
         <columnConstraints>
