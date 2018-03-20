@@ -79,7 +79,7 @@ public class MasterRenderer extends RenderMode{
 
 		for(LineRenderer l : lines)
 		{
-			l.render(data);
+		//	l.render(data);
 		}
 		postRenderer.unbindCurrentFramebuffer();
 		postRenderer.render();

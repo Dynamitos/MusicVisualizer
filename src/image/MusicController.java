@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -26,11 +25,9 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.datatype.Artwork;
-import org.lwjgl.glfw.GLFW;
 
 import engine.renderEngine.Dimension;
 import engine.renderEngine.DisplayManager;
-import engine.toolbox.Input;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
@@ -38,13 +35,16 @@ import javafx.stage.FileChooser.ExtensionFilter;
 
 public class MusicController{
 	private FileChooser imageChooser;
-	private FileChooser chooser;
+	private FileChooser songChooser;
 	private boolean isRunning = false;
 	public static String SHADER_PATH = "";
 	private File musicFile;
 	private String image;
 	private Profile currentProfile;
 	private Map<String, Profile> profiles;
+	private Stage recordingStage = new Stage();
+	private RenderMode renderMode;
+
 	@FXML
 	private Button btMusic;
 	@FXML
@@ -68,14 +68,14 @@ public class MusicController{
 	@FXML
     private ComboBox<Dimension> cbResolution;
 
-    public void init()
+	public void init()
     {
         imageChooser = new FileChooser();
         imageChooser.setInitialDirectory(new File("./"));
         imageChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Portable Network Graphics (*.png)", "*.png"));
-        chooser = new FileChooser();
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPEG3 Files (*.mp3)", "*.mp3"));
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront Files (*.wav)", "*.wav"));
+        songChooser = new FileChooser();
+        songChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPEG3 Files (*.mp3)", "*.mp3"));
+        songChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Wavefront Files (*.wav)", "*.wav"));
         currentProfile = loadProfile(Class.class.getResourceAsStream("/tex/Unknown.prof"));
 
 		java.awt.Dimension temp = Toolkit.getDefaultToolkit().getScreenSize();
@@ -92,31 +92,24 @@ public class MusicController{
         profiles = new HashMap<>();
         updateComponents();
     }
-
 	@FXML
 	public void onRecordingAction(ActionEvent ev){
-		Stage primaryStage = new Stage();
     	Parent root;
 		try {
-			FXMLLoader loader = new FXMLLoader(MusicController.class.getResource("/gui/MusicMain.fxml"));
+			FXMLLoader loader = new FXMLLoader(MusicController.class.getResource("/gui/Recording.fxml"));
 			root = loader.load();
-			((MusicController)loader.getController()).init();
+			((RecordingController)loader.getController()).setCurrentProfile(currentProfile);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
 		}
 		Scene scene = new Scene(root);
-		primaryStage.setScene(scene);
-		primaryStage.show();
-	}
-	@FXML
-	public void onRecordingFinish(ActionEvent e)
-	{
-
+		recordingStage.setScene(scene);
+		recordingStage.show();
 	}
 	@FXML
 	public void onMusicAction(ActionEvent e){
-		setMusicFile(chooser.showOpenDialog(null));
+		setMusicFile(songChooser.showOpenDialog(null));
 		update();
 
 	}
@@ -181,6 +174,7 @@ public class MusicController{
 	@FXML
 	public void onCloseWindowAction(ActionEvent e){
 		OverlayManager.close();
+		renderMode.terminate();
 		System.exit(0);
 	}
 
@@ -192,9 +186,8 @@ public class MusicController{
 		if (!checkProfile())
 			return;
 		DisplayManager.setDimension(currentProfile.getResolution());
-		RenderMode renderMode = RenderModeFactory.createRenderMode(currentProfile);
+		renderMode = RenderModeFactory.createRenderMode(currentProfile);
 		renderMode.launch();
-		renderMode.terminate();
 	}
 
 	private boolean checkProfile() {
@@ -324,8 +317,8 @@ public class MusicController{
 		// System.out.println("Music: " + currentProfile.getMusicFile());
 		tfProfile.setText(currentProfile.getName());
 		if (currentProfile.getMusicFile() != null) {
-			chooser.setInitialDirectory(currentProfile.getMusicFile().getAbsoluteFile().getParentFile());
-			chooser.setInitialFileName(currentProfile.getMusicFile().getAbsoluteFile().getName());
+			songChooser.setInitialDirectory(currentProfile.getMusicFile().getAbsoluteFile().getParentFile());
+			songChooser.setInitialFileName(currentProfile.getMusicFile().getAbsoluteFile().getName());
 		}
 		if (currentProfile.getImage() != null) {
 			imageChooser.setInitialDirectory(new File(currentProfile.getImage()).getAbsoluteFile().getParentFile());

@@ -132,7 +132,7 @@ public class RecordingRenderer extends RenderMode {
             }
             particles = new ParticleRenderer(loader);
             postRenderer = new PostRenderer(loader, p.getOverlay());
-            outputRenderer = new OutputRenderer(loader, musicFile.getAbsolutePath());
+            outputRenderer = new OutputRenderer(loader, musicFile.getAbsolutePath(), p.getOutputPath());
             bandQueue = new BandQueue();
             //DisplayManager.showWindow();
         });
@@ -174,7 +174,7 @@ public class RecordingRenderer extends RenderMode {
                 updateLoadingScreen((b.getTimeStamp() / Math.pow(10, 6)) / sound.getDuration());
                 render(b);
                 long end = System.nanoTime();
-                System.out.println("Render time: " + (end-start)/Math.pow(10,9));
+                //System.out.println("Render time: " + (end-start)/Math.pow(10,9));
             }
             System.out.println("Finish rendering");
             outputRenderer.encodeAudio();

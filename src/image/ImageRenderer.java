@@ -41,7 +41,6 @@ public class ImageRenderer extends Thread {
 	private static final float NEAR_PLANE = 1f;
 	private static final float FAR_PLANE = 1000f;
 
-	// Nekomonogatari
 	public ImageRenderer(Loader loader, String image, boolean isScaling, float intensityScale,
 			float intensityOffset) {
 		this.isScaling = isScaling;
@@ -61,7 +60,7 @@ public class ImageRenderer extends Thread {
 		shader.start();
 		cam.move();
 		if (isScaling) {
-			Maths.createTransformationMatrix(transformationMatrix, 0, 0, 1 + mean, 1 + mean);
+			Maths.createTransformationMatrix(transformationMatrix, 0, 0, 1 + mean/10f, 1 + mean/10f);
 		} else {
 			Maths.createTransformationMatrix(transformationMatrix, 0, 0, 1, 1);
 		}
@@ -71,7 +70,6 @@ public class ImageRenderer extends Thread {
 		glBindVertexArray(rawModel.getVaoID());
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texID);
-
 
 		shader.loadTextures();
 		shader.loadIntensity(mean);
@@ -85,6 +83,7 @@ public class ImageRenderer extends Thread {
 		glBindVertexArray(0);
 		shader.stop();
 	}
+
 	private void createProjectionMatrix() {
 		float aspectRatio = (float)DisplayManager.WIDTH/(float)DisplayManager.HEIGHT;
 		float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
@@ -98,6 +97,5 @@ public class ImageRenderer extends Thread {
 		projectionMatrix.m23 = -1;
 		projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustrum_length);
 		projectionMatrix.m33 = 0;
-
 	}
 }

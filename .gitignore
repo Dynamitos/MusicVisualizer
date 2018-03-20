@@ -1,1 +1,6 @@
 target/
+*.png
+*.prof
+out/
+log/
+*.log

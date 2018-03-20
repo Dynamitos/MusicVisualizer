@@ -27,10 +27,10 @@ public class MasterSound {
 	private FFT fft;
 	private float bassGain = 0;
 	private float rawBassGain;
-	public static final int TESS_LEVEL = 32;
-	public static int NUM_BANDS = 32;
+	public static final int TESS_LEVEL = 64;
+	public static int NUM_BANDS = 64;
 	public static int NUM_SAMPLES = 2048;
-	public static int NUM_COLS = 128;
+	public static int NUM_COLS = 64;
 
 	public String sketchPath(String fileName) {
 		return fileName;
@@ -64,7 +64,10 @@ public class MasterSound {
 		int valuesPerCol = data.length/numCols;
 		for(int i = 0; i < data.length; ++i)
 		{
-			data[i] = data[valuesPerCol*(i/valuesPerCol)];
+			if(i%valuesPerCol!=0)
+			{
+				data[i] = 0;
+			}
 		}
 	}
 
@@ -73,7 +76,7 @@ public class MasterSound {
 		song = minim.loadFile(f.getAbsolutePath(), NUM_SAMPLES);
 		fft = new FFT(song.bufferSize(), song.sampleRate());
 		targets = new float[NUM_BANDS * TESS_LEVEL];
-		values = new float[targets.length];
+		values = new float[targets.length*2];
 		bands = new float[NUM_BANDS];
 		duration = song.length();
 	}
@@ -82,7 +85,7 @@ public class MasterSound {
 		fft.forward(song.mix);
 		for(int i = 0; i < bands.length; ++i)
 		{
-			bands[i] = fft.getBand(i)/1000f;
+			bands[i] = fft.getBand(i)/2000f;
 		}
 		return bands;
 	}
@@ -109,7 +112,7 @@ public class MasterSound {
 		for(int i = 0; i < targets.length; ++i)
 		{
 			values[i] -= (values[i] - targets[i])*(DisplayManager.getFrameTimeSeconds()*10f);
-			//values[values.length-i-1] = values[i];
+			values[values.length-i-1] = values[i];
 		}
 
 		return values;

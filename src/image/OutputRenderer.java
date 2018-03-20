@@ -42,8 +42,8 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 public class OutputRenderer {
     private int targetBuffer;
     private int targetTexture;
-    private static final float[] vertices = { -1f, -1f, 0f, 1f, -1f, 0f, -1f, 1f, 0.0f, 1f, 1f, 0f, };
-    private static final float[] texCoords = { 0, 1, 1, 1, 0, 0, 1, 0 };
+    private static final float[] vertices = {-1f, -1f, 0f, 1f, -1f, 0f, -1f, 1f, 0.0f, 1f, 1f, 0f,};
+    private static final float[] texCoords = {0, 1, 1, 1, 0, 0, 1, 0};
     private RawModel model;
     private OutputShader output;
     private ByteBuffer buffer;
@@ -56,8 +56,7 @@ public class OutputRenderer {
     private ThreadPoolExecutor executor;
     private byte[] texBuffer;
 
-    public OutputRenderer(Loader loader, String song)
-    {
+    public OutputRenderer(Loader loader, String song, String outputLocation) {
         output = new OutputShader();
         model = loader.loadToVAO(vertices, texCoords);
 
@@ -68,46 +67,46 @@ public class OutputRenderer {
 
         resolution = new Dimension(DisplayManager.WIDTH, DisplayManager.HEIGHT);
 
+        createAudioStream(song);
+
+        writer = ToolFactory.makeWriter(outputLocation);
+        writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_MPEG4, resolution.getWIDTH(), resolution.getHEIGHT());
+        writer.addAudioStream(1, 1, ICodec.ID.CODEC_ID_MP3, audioCoder.getChannels(), audioCoder.getSampleRate());
+
+        //IStream stream = writer.getContainer().getStream(0);
+        //IStreamCoder coder = stream.getStreamCoder();
+
+
+        executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
+        texBuffer = new byte[DisplayManager.WIDTH * DisplayManager.HEIGHT * 4];
+
+    }
+
+    public void createAudioStream(String song) {
         container = IContainer.make();
         container.open(song, IContainer.Type.READ, null);
         int numStreams = container.getNumStreams();
 
         // and iterate through the streams to find the first audio stream
-        for(int i = 0; i < numStreams; i++)
-        {
+        for (int i = 0; i < numStreams; i++) {
             // Find the stream object
             IStream stream = container.getStream(i);
             // Get the pre-configured decoder that can decode this stream;
             IStreamCoder coder = stream.getStreamCoder();
 
-            if (audioStreamId == -1 && coder.getCodecType() == ICodec.Type.CODEC_TYPE_AUDIO)
-            {
+            if (audioStreamId == -1 && coder.getCodecType() == ICodec.Type.CODEC_TYPE_AUDIO) {
                 audioStreamId = i;
                 audioCoder = coder;
             }
         }
         audioCoder.open(container.getMetaData(), null);
-
-        writer = ToolFactory.makeWriter("D:\\General\\Files\\test.mp4");
-        writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_MPEG4, resolution.getWIDTH(), resolution.getHEIGHT());
-        writer.addAudioStream(1, 0, ICodec.ID.CODEC_ID_MP3, audioCoder.getChannels(), audioCoder.getSampleRate());
-
-        executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-        texBuffer = new byte[DisplayManager.WIDTH * DisplayManager.HEIGHT * 4];
-
-        /*frame = new JFrame();
-        JPanel panel = new JPanel();
-        GridLayout layout = new GridLayout();
-        frame.add(panel);
-        frame.setLayout(layout);
-        frame.setSize(1280, 720);
-        frame.setVisible(true);
-        g = panel.getGraphics();*/
     }
+
     public void bindTarget() {
         bindFrameBuffer(targetBuffer, DisplayManager.WIDTH, DisplayManager.HEIGHT);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
+
     private void bindFrameBuffer(int frameBuffer, int width, int height) {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);// To make sure the texture
         // isn't bound
@@ -135,45 +134,84 @@ public class OutputRenderer {
         GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0, texture, 0);
         return texture;
     }
-
+    private int counter = 0;
     public void render(long timeStamp) {
-        int width  = DisplayManager.WIDTH;
+        int width = DisplayManager.WIDTH;
         int height = DisplayManager.HEIGHT;
-        glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
+        glReadPixels(0, 0, width, height, GL_RGB, GL_BYTE, buffer);
 
         //BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
         //texBuffer = ((DataBufferInt)(img.getData().getDataBuffer()
 
-        for(int x = 0; x < width; ++x)
+        int length = convertRGBToYUV420(buffer, texBuffer, width, height);
+
+        IVideoPicture picture = IVideoPicture.make(IPixelFormat.Type.YUV420P, width, height);
+        picture.put(texBuffer, 0, 0, length);
+        //picture.setKeyFrame(true);
+        picture.setComplete(true, IPixelFormat.Type.YUV420P, width, height, timeStamp/1000/*Convert nano to micro*/);
+        //img.setRGB(0, 0, img.getWidth(), img.getHeight(), texBuffer, 0, img.getWidth())
+
+        writer.encodeVideo(0, picture);
+    }
+
+    private int convertRGBToYUV420(ByteBuffer buffer, byte[] texBuffer, int width, int height) {
+
+        int image_size = width * height;
+        int upos = image_size;
+        int vpos = upos + upos / 4;
+        int i = 0;
+
+
+        for( int line = 0; line < height; ++line )
         {
-            for(int y = 0; y < height; ++y)
+            int actualLine = height - line - 1;
+            if( line % 2 == 0 )
             {
-                int index = (x+(width * y)) * 3;
-                byte r = buffer.get(index);
-                byte g = buffer.get(index + 1);
-                byte b = buffer.get(index + 2);
-                //texBuffer[x + (width * (height - y - 1))] = (r << 16) + (g << 8) + b;
-                texBuffer[index] = -127;
-                texBuffer[index+1] = r;
-                texBuffer[index+2] = g;
-                texBuffer[index+3] = b;
+                for( int x = 0; x < width; x += 2 )
+                {
+                    int lineIndex = i % width;
+                    int pixelIndex = lineIndex + (width * actualLine);
+                    int r = buffer.get(3 * pixelIndex);
+                    int g = buffer.get(3 * pixelIndex + 1);
+                    int b = buffer.get(3 * pixelIndex + 2);
+
+                    texBuffer[i++] = (byte) (((66*r + 129*g + 25*b) >> 8));
+
+                    texBuffer[upos++] = (byte) ((((-38*r) + (-74*g) + 112*b) >> 8) + 128);
+                    texBuffer[vpos++] = (byte) (((112*r + (-94*g) + (-18*b)) >> 8) + 128);
+
+                    lineIndex = i%width;
+                    pixelIndex = lineIndex + (width * actualLine);
+
+                    r = buffer.get(3 * pixelIndex);
+                    g = buffer.get(3 * pixelIndex + 1);
+                    b = buffer.get(3 * pixelIndex + 2);
+
+                    texBuffer[i++] = (byte) (((66*r + 129*g + 25*b) >> 8));
+                }
+            }
+            else
+            {
+                for( int x = 0; x < width; x += 1 )
+                {
+                    int lineIndex = i % width;
+                    int pixelIndex = lineIndex + (width * actualLine);
+                    int r = buffer.get(3 * pixelIndex);
+                    int g = buffer.get(3 * pixelIndex + 1);
+                    int b = buffer.get(3 * pixelIndex + 2);
+
+                    texBuffer[i++] = (byte) (((66*r + 129*g + 25*b) >> 8));
+                }
             }
         }
-        IVideoPicture picture = IVideoPicture.make(IPixelFormat.Type.ARGB, width, height);
-        picture.put(texBuffer, 0, 0, texBuffer.length);
-        //picture.setKeyFrame(true);
-        picture.setComplete(true, IPixelFormat.Type.ARGB, width, height, timeStamp);
-        //img.setRGB(0, 0, img.getWidth(), img.getHeight(), texBuffer, 0, img.getWidth());
-        writer.encodeVideo(0, picture);
+        return width*height*3/2;
     }
 
     public void encodeAudio() {
         executor.shutdown();
         IPacket packet = IPacket.make();
-        while(container.readNextPacket(packet) >= 0)
-        {
-            if (packet.getStreamIndex() == audioStreamId)
-            {
+        while (container.readNextPacket(packet) >= 0) {
+            if (packet.getStreamIndex() == audioStreamId) {
                 /*
                  * We allocate a set of samples with the same number of channels as the
                  * coder tells us is in this buffer.
@@ -193,31 +231,30 @@ public class OutputRenderer {
                 /*
                  * Keep going until we've processed all data
                  */
-                while(offset < packet.getSize())
-                {
+                while (offset < packet.getSize()) {
                     int bytesDecoded = audioCoder.decodeAudio(samples, packet, offset);
                     if (bytesDecoded < 0)
-                        throw new RuntimeException("got error decoding audio in");
+                        System.out.println("got error decoding audio in");
                     offset += bytesDecoded;
                     /*
                      * Some decoder will consume data in a packet, but will not be able to construct
                      * a full set of samples yet.  Therefore you should always check if you
                      * got a complete set of samples from the decoder
                      */
-                    if (samples.isComplete())
-                    {
+                    if (samples.isComplete()) {
                         // note: this call will block if Java's sound buffers fill up, and we're
                         // okay with that.  That's why we have the video "sleeping" occur
                         // on another thread.
                         writer.encodeAudio(1, samples);
+                        System.out.println("Encoding audio");
                     }
                 }
             }
         }
         System.out.println("Finished encoding audio");
     }
-    public void finish()
-    {
+
+    public void finish() {
         writer.close();
         System.out.println("Finish");
     }

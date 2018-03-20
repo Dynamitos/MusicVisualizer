@@ -25,6 +25,7 @@ public class Profile {
 	private List<Line> lines;
 	private int numSamples;
 	private boolean isRecording;
+	private String outputPath;
 	//private FontType font;
 	@XmlTransient
 	private List<String> texts;
@@ -164,6 +165,15 @@ public class Profile {
 		isRecording = recording;
 	}
 
+	public void setOutputPath(String outputPath)
+	{
+		this.outputPath = outputPath;
+	}
+
+	public String getOutputPath() {
+		return outputPath;
+	}
+
 	String lyrics[] = {"You were the shadow to my light",
 				"Did you feel us",
 				"Another Start",
@@ -224,4 +234,5 @@ public class Profile {
 				"I'm faded",
 				"So lost,",
 				"I'm faded."};
+
 }

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1" fx:controller="image.RecordingController">
    <top>
       <Label text="Recording" BorderPane.alignment="CENTER">
          <font>
@@ -16,4 +22,26 @@
    <bottom>
       <Button mnemonicParsing="false" onAction="#onRecordingFinish" text="Finish" BorderPane.alignment="CENTER" />
    </bottom>
+   <center>
+      <SplitPane dividerPositions="0.2572347266881029" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <CheckBox fx:id="cbRecording" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Enable Recording" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Output Path" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="tfOutputPath" alignment="CENTER" HBox.hgrow="SOMETIMES" />
+                  <Button fx:id="btOutputPath" mnemonicParsing="false" onAction="#onBrowseOutputPath" text="Browse" />
+               </children>
+            </HBox>
+        </items>
+      </SplitPane>
+   </center>
 </BorderPane>

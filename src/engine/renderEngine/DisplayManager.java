@@ -8,6 +8,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.nio.DoubleBuffer;
 
+import image.RenderMode;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -129,6 +130,8 @@ public class DisplayManager {
 	}
 
 	public static void closeDisplay() {
+
+
 		glfwDestroyWindow(window);
 		glfwTerminate();
 	}
