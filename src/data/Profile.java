@@ -1,9 +1,5 @@
 package data;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
 import engine.renderEngine.Dimension;
 import image.Line;
 
@@ -11,6 +7,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 @XmlRootElement
 public class Profile {
@@ -26,6 +25,8 @@ public class Profile {
 	private int numSamples;
 	private boolean isRecording;
 	private String outputPath;
+	private String serverAddress;
+	private int serverPort;
 	//private FontType font;
 	@XmlTransient
 	private List<String> texts;
@@ -172,6 +173,18 @@ public class Profile {
 
 	public String getOutputPath() {
 		return outputPath;
+	}
+
+	public String getServerAddress() { return serverAddress; }
+
+	public void setServerAddress(String serverAddress) { this.serverAddress = serverAddress; }
+
+	public int getServerPort() {
+		return serverPort;
+	}
+
+	public void setServerPort(int serverPort) {
+		this.serverPort = serverPort;
 	}
 
 	String lyrics[] = {"You were the shadow to my light",

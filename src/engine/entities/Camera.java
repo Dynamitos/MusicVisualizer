@@ -1,11 +1,8 @@
 package engine.entities;
 
 import engine.math.Matrix4f;
-import engine.math.Vector2f;
 import engine.math.Vector3f;
-import engine.renderEngine.DisplayManager;
 import engine.toolbox.Maths;
-import image.MasterRenderer;
 
 public class Camera {
 

@@ -1,8 +1,8 @@
 package engine.model;
 
-import java.io.Serializable;
-
 import engine.textures.ModelTexture;
+
+import java.io.Serializable;
 
 public class TexturedModel implements Serializable{
 	/**

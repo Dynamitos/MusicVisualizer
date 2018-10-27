@@ -1,22 +1,15 @@
 package image;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_LINE_STRIP;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import engine.math.Vector4f;
+import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
 
-import org.lwjgl.BufferUtils;
-
-import engine.math.Vector4f;
-import engine.sound.MasterSound;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class LineRenderer {
 	private int vaoID;

@@ -1,19 +1,12 @@
 package image;
 
 import data.Profile;
-import ddf.minim.AudioBuffer;
 import engine.renderEngine.DisplayManager;
 import engine.renderEngine.Loader;
 import engine.sound.MasterSound;
-import engine.toolbox.Input;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -23,8 +16,6 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import static org.lwjgl.glfw.GLFW.*;
 
 public class RecordingRenderer extends RenderMode {
     private static class BandSample implements Comparable<BandSample>
@@ -119,7 +110,7 @@ public class RecordingRenderer extends RenderMode {
         Future f = renderExecutor.submit(() -> {
             DisplayManager.createDisplay(p.isvSync(), p.isRecording());
 
-            sound = new MasterSound(p.getMusicFile());
+            sound = new MasterSound(p);
             musicFile = p.getMusicFile();
 
             loader = new Loader();

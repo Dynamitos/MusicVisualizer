@@ -1,24 +1,20 @@
 package image;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-
-import javax.imageio.ImageIO;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 import data.Profile;
 import engine.math.Vector2f;
 import engine.math.Vector4f;
+import engine.renderEngine.Dimension;
+import engine.renderEngine.DisplayManager;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
@@ -26,12 +22,14 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.datatype.Artwork;
 
-import engine.renderEngine.Dimension;
-import engine.renderEngine.DisplayManager;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
+import javax.imageio.ImageIO;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+import java.util.List;
 
 public class MusicController{
 	private FileChooser imageChooser;

@@ -1,23 +1,20 @@
 package image;
 
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glLineWidth;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.List;
-
 import data.Profile;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFW;
-
 import engine.renderEngine.DisplayManager;
 import engine.renderEngine.Loader;
 import engine.sound.MasterSound;
 import engine.toolbox.Input;
+import org.lwjgl.glfw.GLFW;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glLineWidth;
 
 public class MasterRenderer extends RenderMode{
 	public static final float[] vertices = { -1f, -1f, -1f, 1f, -1f, -1f, -1f, 1f, -1f, 1f, 1f, -1f, };
@@ -31,7 +28,7 @@ public class MasterRenderer extends RenderMode{
 	public void init(Profile p) {
 		DisplayManager.createDisplay(p.isvSync(), p.isRecording());
 
-		sound = new MasterSound(p.getMusicFile());
+		sound = new MasterSound(p);
 
 		loader = new Loader();
 		image = new ImageRenderer(loader, p.getImage(), p.isScaling(), p.getIntensityScale(),

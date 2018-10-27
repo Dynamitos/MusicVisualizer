@@ -1,23 +1,20 @@
 package engine.renderEngine;
 
+import engine.math.Vector3f;
+import engine.toolbox.Input;
+import engine.toolbox.MouseInput;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
+
+import java.nio.DoubleBuffer;
+
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 import static org.lwjgl.system.MemoryUtil.NULL;
-
-import java.nio.DoubleBuffer;
-
-import image.RenderMode;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.Callbacks;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
-
-import engine.math.Vector3f;
-import engine.toolbox.Input;
-import engine.toolbox.MouseInput;
 
 public class DisplayManager {
 

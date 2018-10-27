@@ -1,32 +1,19 @@
 package image;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_RED;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_1D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLE_STRIP;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.glTexImage1D;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-
-import java.nio.FloatBuffer;
-import java.util.List;
-
 import engine.entities.Camera;
 import engine.math.Matrix4f;
 import engine.math.Vector3f;
 import engine.model.RawModel;
 import engine.renderEngine.DisplayManager;
 import engine.renderEngine.Loader;
-import engine.sound.MasterSound;
 import engine.toolbox.Maths;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 public class ImageRenderer extends Thread {
 	private Matrix4f transformationMatrix;

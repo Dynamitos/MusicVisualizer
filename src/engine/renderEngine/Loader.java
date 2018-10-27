@@ -1,36 +1,10 @@
 package engine.renderEngine;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_LINEAR;
-import static org.lwjgl.opengl.GL11.GL_LINEAR_MIPMAP_LINEAR;
-import static org.lwjgl.opengl.GL11.GL_RGBA;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glDeleteTextures;
-import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
-import static org.lwjgl.opengl.GL11.glTexParameterf;
-import static org.lwjgl.opengl.GL11.glTexParameteri;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL14.GL_TEXTURE_LOD_BIAS;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glDeleteBuffers;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.opengl.GL30.glGenerateMipmap;
+import de.matthiasmann.twl.utils.PNGDecoder;
+import de.matthiasmann.twl.utils.PNGDecoder.Format;
+import engine.model.RawModel;
+import engine.textures.TextureData;
+import org.lwjgl.BufferUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,12 +21,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.BufferUtils;
-
-import de.matthiasmann.twl.utils.PNGDecoder;
-import de.matthiasmann.twl.utils.PNGDecoder.Format;
-import engine.model.RawModel;
-import engine.textures.TextureData;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL14.GL_TEXTURE_LOD_BIAS;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.*;
 
 public class Loader {
 

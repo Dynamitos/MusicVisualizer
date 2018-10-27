@@ -1,13 +1,12 @@
 package image;
 
-import java.awt.Graphics;
+import engine.math.Vector2f;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import engine.math.Vector2f;
 
 public class EdgeDetector {
 	public static Vector2f[] calculate(File f){

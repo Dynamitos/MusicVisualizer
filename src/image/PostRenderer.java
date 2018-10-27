@@ -1,30 +1,20 @@
 package image;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLE_STRIP;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glDrawArrays;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE2;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-
-import java.nio.ByteBuffer;
-
+import engine.model.RawModel;
+import engine.renderEngine.DisplayManager;
+import engine.renderEngine.Loader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
-import engine.model.RawModel;
-import engine.renderEngine.DisplayManager;
-import engine.renderEngine.Loader;
+import java.nio.ByteBuffer;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT32;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 public class PostRenderer {
 	private int mainPassBuffer;

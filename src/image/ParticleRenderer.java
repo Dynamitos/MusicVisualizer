@@ -1,34 +1,27 @@
 package image;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STREAM_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glBufferSubData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
-import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
+import engine.math.Matrix4f;
+import engine.math.Vector2f;
+import engine.math.Vector3f;
+import engine.model.RawModel;
+import engine.renderEngine.DisplayManager;
+import engine.renderEngine.Loader;
+import engine.toolbox.Maths;
+import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import engine.math.Vector2f;
-import engine.model.RawModel;
-import engine.renderEngine.Loader;
-import engine.toolbox.Maths;
-import org.lwjgl.BufferUtils;
-
-import engine.math.Matrix4f;
-import engine.math.Vector3f;
-import engine.renderEngine.DisplayManager;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
+import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 
 public class ParticleRenderer extends Thread {
     private int vboParticle;

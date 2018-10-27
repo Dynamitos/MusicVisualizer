@@ -1,11 +1,11 @@
 package image;
 
-import java.util.List;
-
 import engine.math.Matrix4f;
 import engine.math.Vector3f;
 import engine.math.Vector4f;
 import engine.shaders.ShaderProgram;
+
+import java.util.List;
 
 public class ImageShader extends ShaderProgram {
 	private class LineLocation {

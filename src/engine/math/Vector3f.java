@@ -1,9 +1,9 @@
 package engine.math;
 
+import org.lwjgl.BufferUtils;
+
 import java.io.Serializable;
 import java.nio.FloatBuffer;
-
-import org.lwjgl.BufferUtils;
 
 /**
  * This class represents a (x,y,z)-Vector. GLSL equivalent to vec3.

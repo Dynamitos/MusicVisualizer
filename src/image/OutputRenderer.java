@@ -1,16 +1,8 @@
 package image;
 
-import clojure.lang.IFn;
-import com.sun.org.apache.bcel.internal.generic.ICONST;
-import com.xuggle.ferry.IBuffer;
-import com.xuggle.ferry.RefCounted;
-import com.xuggle.mediatool.IMediaReader;
-import com.xuggle.mediatool.IMediaViewer;
 import com.xuggle.mediatool.IMediaWriter;
 import com.xuggle.mediatool.ToolFactory;
 import com.xuggle.xuggler.*;
-import com.xuggle.xuggler.video.IConverter;
-import ddf.minim.AudioBuffer;
 import engine.model.RawModel;
 import engine.renderEngine.Dimension;
 import engine.renderEngine.DisplayManager;
@@ -19,25 +11,15 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
-import org.lwjgl.system.MemoryUtil;
 
-import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.concurrent.*;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 public class OutputRenderer {
     private int targetBuffer;
@@ -68,6 +50,9 @@ public class OutputRenderer {
         resolution = new Dimension(DisplayManager.WIDTH, DisplayManager.HEIGHT);
 
         createAudioStream(song);
+
+        File f = new File(outputLocation);
+        f.getParentFile().mkdirs();
 
         writer = ToolFactory.makeWriter(outputLocation);
         writer.addVideoStream(0, 0, ICodec.ID.CODEC_ID_MPEG4, resolution.getWIDTH(), resolution.getHEIGHT());

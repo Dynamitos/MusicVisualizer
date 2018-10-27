@@ -1,7 +1,6 @@
 package image;
 
 import engine.math.Matrix4f;
-import engine.math.Vector4f;
 import engine.shaders.ShaderProgram;
 
 public class ParticleShader extends ShaderProgram {

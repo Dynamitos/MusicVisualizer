@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="399.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1" fx:controller="image.LoadingScreen">
    <bottom>
       <ProgressBar fx:id="progressBar" prefHeight="18.0" prefWidth="604.0" progress="0.0" BorderPane.alignment="CENTER" />

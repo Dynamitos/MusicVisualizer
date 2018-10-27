@@ -1,8 +1,8 @@
 package engine.entities;
 
-import java.io.Serializable;
-
 import engine.math.Vector3f;
+
+import java.io.Serializable;
 
 public class Light implements Serializable{
 	/**
